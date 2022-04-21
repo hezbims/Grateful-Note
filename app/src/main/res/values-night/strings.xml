@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="add_gratitude">Add New Gratitude</string>
+    <string name="what_made_grateful">What made you feel grateful today?</string>
+    <string name="why_made_grateful">Why it made you feel grateful?</string>
+    <string name="submit">Submit</string>
 </resources>
