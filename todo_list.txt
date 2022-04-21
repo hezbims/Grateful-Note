@@ -1,0 +1,4 @@
+- Nambahin data class untuk database
+- Nambahin room
+- Nambahin DAO
+- Nambahin fragment untuk submit
