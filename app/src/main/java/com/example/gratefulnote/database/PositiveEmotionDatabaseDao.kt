@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface Dao {
+interface PositiveEmotionDatabaseDao {
     @Insert
     fun insert(positiveEmotion : PositiveEmotion)
 

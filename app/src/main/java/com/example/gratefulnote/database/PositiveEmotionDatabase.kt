@@ -2,26 +2,27 @@ package com.example.gratefulnote.database
 
 import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [PositiveEmotion::class] , version = 1 , exportSchema = false)
-abstract class Room : RoomDatabase(){
+abstract class PositiveEmotionDatabase : RoomDatabase(){
 
-    abstract val dao : Dao
+    abstract val positiveEmotionDatabaseDao : PositiveEmotionDatabaseDao
 
     companion object {
         @Volatile
-        private var INSTANCE : Room? = null
+        private var INSTANCE : PositiveEmotionDatabase? = null
 
-        fun getInstance(context : Context) : Room{
+        fun getInstance(context : Context) : PositiveEmotionDatabase{
             synchronized(this) {
                 var instance = INSTANCE
 
                 if (instance == null) {
-                    instance = androidx.room.Room.databaseBuilder(
+                    instance = Room.databaseBuilder(
                         context.applicationContext,
-                        Room::class.java,
-                        "sleep_history_database"
+                        PositiveEmotionDatabase::class.java,
+                        "positive_emotion_database"
                     )
                         .fallbackToDestructiveMigration()
                         .build()

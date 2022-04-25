@@ -18,5 +18,9 @@
         android:id="@+id/addGratetitudeFragment"
         android:name="com.example.gratefulnote.addgratitudefragment.AddGratetitudeFragment"
         android:label="fragment_add_gratitude"
-        tools:layout="@layout/fragment_add_gratitude" />
+        tools:layout="@layout/fragment_add_gratitude" >
+        <action
+            android:id="@+id/action_addGratetitudeFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>
