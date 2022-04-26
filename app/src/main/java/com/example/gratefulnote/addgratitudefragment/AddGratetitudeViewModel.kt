@@ -6,6 +6,13 @@ import androidx.lifecycle.ViewModel
 import com.example.gratefulnote.database.PositiveEmotionDatabaseDao
 
 class AddGratetitudeViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewModel() {
+    companion object {
+        val typeOfPositiveEmotion = arrayOf(
+            "Joy", "Gratitude", "Serenity", "Interest", "Hope",
+            "Pride", "Amusement", "Inspiration", "Love"
+        )
+    }
+
     // TODO: Implement the ViewModel
     private val _navigateToMainFragment = MutableLiveData<Boolean>(false)
     val navigateToMainFragment : LiveData<Boolean>
