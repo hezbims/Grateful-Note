@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.gratefulnote.R
+import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.databinding.FragmentAddGratitudeBinding
 
@@ -23,15 +24,25 @@ class AddGratetitudeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_add_gratitude , container , false)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel = ViewModelProvider(this , getViewModelFactory())[AddGratetitudeViewModel::class.java]
         binding.viewModel = viewModel
 
-        setNavigateToMainObserver()
         setMenu()
+        setSubmitListener()
 
         return binding.root
+    }
+
+    private fun setSubmitListener(){
+        binding.submit.setOnClickListener {
+            findNavController().navigate(R.id.action_addGratetitudeFragment_to_mainFragment)
+            val newData = PositiveEmotion(binding.typeOfPositiveEmotionMenu.text.toString() ,
+                binding.whatValue.text.toString() ,
+                binding.whyValue.text.toString())
+            viewModel.insert(newData)
+        }
     }
 
     private fun getViewModelFactory() : AddGratitudeViewModelFactory{
@@ -40,14 +51,6 @@ class AddGratetitudeFragment : Fragment() {
         return AddGratitudeViewModelFactory(dataSource)
     }
 
-    private fun setNavigateToMainObserver(){
-        viewModel.navigateToMainFragment.observe(viewLifecycleOwner){
-            if (it == true){
-                findNavController().navigate(R.id.action_addGratetitudeFragment_to_mainFragment)
-                viewModel.doneNavigating()
-            }
-        }
-    }
 
     private fun setMenu(){
         val arrayAdapter = ArrayAdapter(requireContext() ,

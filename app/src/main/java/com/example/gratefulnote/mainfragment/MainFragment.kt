@@ -14,6 +14,7 @@ import com.example.gratefulnote.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
+    private lateinit var binding : FragmentMainBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,12 +22,12 @@ class MainFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        val binding : FragmentMainBinding =
+        binding =
             DataBindingUtil.inflate(inflater , R.layout.fragment_main , container , false)
 
         val viewModel : MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.eventMoveToAddGratitude.observe(viewLifecycleOwner){
             if (it == true){
@@ -37,6 +38,4 @@ class MainFragment : Fragment() {
 
         return binding.root
     }
-
-
 }

@@ -1,11 +1,12 @@
 package com.example.gratefulnote.addgratitudefragment
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabaseDao
+import kotlinx.coroutines.*
 
-class AddGratetitudeViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewModel() {
+class AddGratetitudeViewModel(private val database : PositiveEmotionDatabaseDao) : ViewModel() {
     companion object {
         val typeOfPositiveEmotion = arrayOf(
             "Joy", "Gratitude", "Serenity", "Interest", "Hope",
@@ -13,16 +14,18 @@ class AddGratetitudeViewModel(private val dataSource : PositiveEmotionDatabaseDa
         )
     }
 
-    // TODO: Implement the ViewModel
-    private val _navigateToMainFragment = MutableLiveData<Boolean>(false)
-    val navigateToMainFragment : LiveData<Boolean>
-        get() = _navigateToMainFragment
+    private val viewModelJob = Job()
 
-    fun onClickSubmit(){
-        _navigateToMainFragment.value = true
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    fun insert(newData : PositiveEmotion){
+        uiScope.launch {
+            database.insert(newData)
+        }
     }
 
-    fun doneNavigating(){
-        _navigateToMainFragment.value = false
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

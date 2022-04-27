@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface PositiveEmotionDatabaseDao {
     @Insert
-    fun insert(positiveEmotion : PositiveEmotion)
+    suspend fun insert(positiveEmotion : PositiveEmotion)
 
     @Query("SELECT * FROM positive_emotion_table")
     fun getAllPositiveEmotion() : LiveData<List<PositiveEmotion>>
