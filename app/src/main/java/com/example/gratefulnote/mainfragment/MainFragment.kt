@@ -1,7 +1,7 @@
 package com.example.gratefulnote.mainfragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +34,7 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // RecyclerView Adapter
-        adapter = PositiveAdapter()
+        adapter = PositiveAdapter(viewModel)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -59,6 +59,7 @@ class MainFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setRecyclerViewDataObserver(){
         viewModel.recyclerViewData.observe(viewLifecycleOwner){
             adapter.data = it

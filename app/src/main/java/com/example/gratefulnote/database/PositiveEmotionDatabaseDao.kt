@@ -13,4 +13,6 @@ interface PositiveEmotionDatabaseDao {
     @Query("SELECT * FROM positive_emotion_table")
     fun getAllPositiveEmotion() : LiveData<List<PositiveEmotion>>
 
+    @Query("DELETE FROM positive_emotion_table WHERE id=:id")
+    suspend fun delete(id : Long)
 }

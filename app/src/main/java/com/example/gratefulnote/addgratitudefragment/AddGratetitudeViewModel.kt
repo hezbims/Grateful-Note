@@ -1,10 +1,12 @@
 package com.example.gratefulnote.addgratitudefragment
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabaseDao
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class AddGratetitudeViewModel(private val database : PositiveEmotionDatabaseDao) : ViewModel() {
     companion object {
@@ -25,7 +27,7 @@ class AddGratetitudeViewModel(private val database : PositiveEmotionDatabaseDao)
     }
 
     override fun onCleared() {
-        super.onCleared()
         viewModelJob.cancel()
+        super.onCleared()
     }
 }

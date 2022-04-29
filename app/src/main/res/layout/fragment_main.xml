@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toTopOf="@+id/button"
-            tools:layout_editor_absoluteX="1dp"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="100dp"
+            tools:layout_editor_absoluteX="1dp" />
 
         <Button
             android:id="@+id/button"
@@ -31,7 +31,6 @@
             android:text="@string/add_gratitude"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             android:onClick="@{() -> viewModel.onClickAddNewGratitude()}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
