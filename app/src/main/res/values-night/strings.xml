@@ -7,4 +7,6 @@
     <string name="type_of_positive_emotion">Type</string>
     <string name="delete">delete</string>
     <string name="positive_emotion_type_formatting">(%1$s)</string>
+    <string name="empty_date">--/-/----</string>
+    <string name="date_selector_label">date</string>
 </resources>

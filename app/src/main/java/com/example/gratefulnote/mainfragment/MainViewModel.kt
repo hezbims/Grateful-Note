@@ -2,6 +2,7 @@ package com.example.gratefulnote.mainfragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.gratefulnote.database.PositiveEmotionDatabaseDao
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +14,7 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    /* Menghapus item kalau tong sampah dipencet */
     fun delete(id : Long){
         viewModelScope.launch {
             dataSource.delete(id)
@@ -20,8 +22,11 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
     }
 
 
+    /* Semua recyclerView Data */
     val recyclerViewData = dataSource.getAllPositiveEmotion()
 
+
+    /* Mengatur perpindahan fragment ke AddGratitude */
     private val _eventMoveToAddGratitude = MutableLiveData(false)
     val eventMoveToAddGratitude : LiveData<Boolean>
         get() = _eventMoveToAddGratitude
@@ -39,4 +44,15 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
         viewModelJob.cancel()
         super.onCleared()
     }
+
+
+    /* Mengatur Selected Date */
+    private val _selectedDateString = MutableLiveData<String>("--/-/----")
+    val selectedDateString : LiveData<String>
+        get() = _selectedDateString
+
+    fun setDateString(date : String) {
+        _selectedDateString.value = date
+    }
+
 }
