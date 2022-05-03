@@ -47,12 +47,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/date_selector_label"
-            app:hintAnimationEnabled="false"
             app:startIconDrawable="@drawable/ic_calendar"
             >
             <AutoCompleteTextView
                 android:id="@+id/selected_date_value"
-                android:text="@{viewModel.selectedDateString}"
+                android:text="@{viewModel.displayedDateString}"
                 android:padding="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

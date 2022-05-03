@@ -3,6 +3,7 @@ package com.example.gratefulnote.mainfragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -23,6 +24,7 @@ class MainFragment : Fragment() {
             .setTitleText("Select date")
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
+    private var datePickerShowed = false
     private lateinit var binding : FragmentMainBinding
     private lateinit var viewModel : MainViewModel
     private lateinit var adapter : PositiveAdapter
@@ -45,9 +47,10 @@ class MainFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
         setNavigateToAddGratitudeFragment()
-        setRecyclerViewDataObserver()
+        onChangeRecyclerViewData()
         addDatePickerListener()
         onClickDatePicker()
+        onChangeDateFilter()
 
         return binding.root
     }
@@ -67,10 +70,12 @@ class MainFragment : Fragment() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setRecyclerViewDataObserver(){
-        viewModel.recyclerViewData.observe(viewLifecycleOwner){
-            adapter.data = it
+    private fun onChangeRecyclerViewData(){
+        viewModel.recyclerViewDataUpdated.observe(viewLifecycleOwner){
+            if (it == true){
+                adapter.data = viewModel.recyclerViewData
+                viewModel.doneUpdatingRecyclerViewData()
+            }
         }
     }
 
@@ -79,21 +84,34 @@ class MainFragment : Fragment() {
             viewModel.setDateString(
                 SimpleDateFormat("dd/M/yyyy" , Locale.getDefault()).format(Date(selectedDate))
             )
+            datePickerShowed = false
         }
 
         datePicker.addOnCancelListener {
-            viewModel.setDateString(getString(R.string.empty_date))
+            viewModel.setDateString()
+            datePickerShowed = false
         }
 
         datePicker.addOnNegativeButtonClickListener {
-            viewModel.setDateString(getString(R.string.empty_date))
+            viewModel.setDateString()
+            datePickerShowed = false
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun onClickDatePicker(){
-        binding.selectedDateValue.setOnClickListener{
-            datePicker.show(parentFragmentManager  , "Ini Tag")
+        binding.selectedDateValue.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN && datePickerShowed == false) {
+                datePickerShowed = true
+                datePicker.show(parentFragmentManager, "Ini Tag")
+            }
+            false
+        }
+    }
 
+    private fun onChangeDateFilter(){
+        viewModel.selectedDateString.observe(viewLifecycleOwner){
+            viewModel.updateRecyclerViewData()
         }
     }
 
