@@ -20,6 +20,7 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
     fun delete(id : Long){
         viewModelScope.launch {
             dataSource.delete(id)
+            updateRecyclerViewData()
         }
     }
 
@@ -31,7 +32,6 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
 
     fun onClickAddNewGratitude(){
         _eventMoveToAddGratitude.value = true
-        viewModelJob.cancel()
     }
 
     fun doneNavigating(){
@@ -62,33 +62,20 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
 
 
     /* Semua recyclerView Data */
-    private val _recyclerViewDataUpdated = MutableLiveData(false)
-    val recyclerViewDataUpdated : LiveData<Boolean>
-        get() = _recyclerViewDataUpdated
-
-    private var _recyclerViewData = listOf<PositiveEmotion>()
-    val recyclerViewData : List<PositiveEmotion>
+    private val _recyclerViewData = MutableLiveData(listOf<PositiveEmotion>())
+    val recyclerViewData : LiveData<List<PositiveEmotion>>
         get() = _recyclerViewData
 
-    init {
-        getAllPositiveEmotion()
-
+    init{
+        updateRecyclerViewData()
     }
 
-    private fun getAllPositiveEmotion(){
-        viewModelScope.launch{
-            _recyclerViewData = dataSource.getAllPositiveEmotion(_selectedDateString.value!!)
-            Log.d("Debugging" , "${_recyclerViewData.size}")
-            Log.d("Debugging2" , "'%${selectedDateString.value!!}%'")
-            _recyclerViewDataUpdated.value = true
-        }
-    }
+    private suspend fun getAllPositiveEmotion() = dataSource.getAllPositiveEmotion(_selectedDateString.value!!)
 
     fun updateRecyclerViewData(){
-        getAllPositiveEmotion()
-    }
-
-    fun doneUpdatingRecyclerViewData(){
-        _recyclerViewDataUpdated.value = false
+        viewModelScope.launch {
+            Log.d("Debugging" , "Menquery data")
+            _recyclerViewData.value = getAllPositiveEmotion()
+        }
     }
 }

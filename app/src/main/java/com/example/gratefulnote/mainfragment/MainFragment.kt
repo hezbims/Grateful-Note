@@ -2,16 +2,19 @@ package com.example.gratefulnote.mainfragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gratefulnote.R
+import com.example.gratefulnote.TypeOfPositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.databinding.FragmentMainBinding
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -24,7 +27,6 @@ class MainFragment : Fragment() {
             .setTitleText("Select date")
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
-    private var datePickerShowed = false
     private lateinit var binding : FragmentMainBinding
     private lateinit var viewModel : MainViewModel
     private lateinit var adapter : PositiveAdapter
@@ -51,9 +53,36 @@ class MainFragment : Fragment() {
         addDatePickerListener()
         onClickDatePicker()
         onChangeDateFilter()
+        setMenu()
 
+        //Log.d("Debugging" , "onCreateView Dipanggil")
         return binding.root
     }
+
+    /*override fun onStart() {
+        super.onStart()
+        Log.d("Debugging" , "onStart Dipanggil")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Debugging" , "onResume dipanggil")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("Debugging" , "onStop dipanggil")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("Debugging" , "onPause dipanggil")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("Debugging" , "onDestroyView dipanggil")
+    }*/
 
     private fun getViewModelFactory() : MainViewModelFactory{
         val application = requireNotNull(this.activity).application
@@ -71,11 +100,9 @@ class MainFragment : Fragment() {
     }
 
     private fun onChangeRecyclerViewData(){
-        viewModel.recyclerViewDataUpdated.observe(viewLifecycleOwner){
-            if (it == true){
-                adapter.data = viewModel.recyclerViewData
-                viewModel.doneUpdatingRecyclerViewData()
-            }
+        viewModel.recyclerViewData.observe(viewLifecycleOwner){
+            Log.d("Debugging" , "RecyclerViewDataOberserver dijalankan")
+            adapter.data = viewModel.recyclerViewData.value!!
         }
     }
 
@@ -84,25 +111,21 @@ class MainFragment : Fragment() {
             viewModel.setDateString(
                 SimpleDateFormat("dd/M/yyyy" , Locale.getDefault()).format(Date(selectedDate))
             )
-            datePickerShowed = false
         }
 
         datePicker.addOnCancelListener {
             viewModel.setDateString()
-            datePickerShowed = false
         }
 
         datePicker.addOnNegativeButtonClickListener {
             viewModel.setDateString()
-            datePickerShowed = false
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun onClickDatePicker(){
-        binding.selectedDateValue.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN && datePickerShowed == false) {
-                datePickerShowed = true
+        binding.selectedDateValue.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN && !datePicker.isVisible) {
                 datePicker.show(parentFragmentManager, "Ini Tag")
             }
             false
@@ -111,8 +134,18 @@ class MainFragment : Fragment() {
 
     private fun onChangeDateFilter(){
         viewModel.selectedDateString.observe(viewLifecycleOwner){
+            Log.d("Debugging" , "Date Berubah menjadi ${viewModel.selectedDateString.value}")
             viewModel.updateRecyclerViewData()
         }
     }
 
+    private fun setMenu(){
+        val arrayAdapter = ArrayAdapter(requireContext() ,
+            R.layout.positive_emotion_menu_item ,
+            TypeOfPositiveEmotion.typeOfPositiveEmotion)
+        binding.positiveEmotionFilterValue.setAdapter(arrayAdapter)
+        binding.positiveEmotionFilterValue.setOnItemClickListener{_ , _ , _ , _->
+            Log.d("Debugging3" , "${binding.positiveEmotionFilterValue.listSelection}")
+        }
+    }
 }

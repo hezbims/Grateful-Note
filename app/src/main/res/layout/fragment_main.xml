@@ -21,7 +21,8 @@
             app:layout_constraintTop_toBottomOf="@id/selected_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginVertical="100dp"
+            android:layout_marginBottom="100dp"
+            android:layout_marginTop="150dp"
             tools:layout_editor_absoluteX="1dp" />
 
         <Button
@@ -40,25 +41,53 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/selected_date"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="6dp"
             android:hint="@string/date_selector_label"
-            app:startIconDrawable="@drawable/ic_calendar"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filter_title"
+            app:startIconDrawable="@drawable/ic_calendar">
+
             <AutoCompleteTextView
                 android:id="@+id/selected_date_value"
-                android:text="@{viewModel.displayedDateString}"
-                android:padding="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="none"
                 android:labelFor="@id/selected_date_value"
-                />
+                android:padding="18dp"
+                android:text="@{viewModel.displayedDateString}" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/positive_emotion_filter_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/selected_date"
+            app:layout_constraintEnd_toStartOf="@id/selected_date"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/type_of_positive_emotion">
+
+            <AutoCompleteTextView
+                android:id="@+id/positive_emotion_filter_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/filter_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_by"
+            android:textSize="18sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="@+id/positive_emotion_filter_layout"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
