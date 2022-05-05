@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -53,8 +54,8 @@ class MainFragment : Fragment() {
         addDatePickerListener()
         onClickDatePicker()
         onChangeDateFilter()
-        setMenu()
-        onMenuItemChange()
+        setSpinner()
+        onSpinnerValueChange()
 
         return binding.root
     }
@@ -113,17 +114,24 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setMenu(){
-        val arrayAdapter = ArrayAdapter(requireContext() ,
+    private fun setSpinner(){
+        ArrayAdapter(requireContext() ,
             R.layout.positive_emotion_menu_item ,
-            viewModel.typeOfPositiveEmotion)
-        binding.positiveEmotionFilterValue.setAdapter(arrayAdapter)
-        binding.positiveEmotionFilterValue.setOnItemClickListener{_ , _ , pos , _ ->
-            viewModel.setSelectedPositiveEmotion(viewModel.typeOfPositiveEmotion[pos])
+            viewModel.typeOfPositiveEmotion).also {
+            binding.spinner.adapter = it
+        }
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                viewModel.setSelectedPositiveEmotion(viewModel.typeOfPositiveEmotion[pos])
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                viewModel.setSelectedPositiveEmotion("All")
+            }
         }
     }
 
-    private fun onMenuItemChange(){
+    private fun onSpinnerValueChange(){
         viewModel.selectedPositiveEmotion.observe(viewLifecycleOwner){
             Log.d("Debugging" , "selected positive emotion : ${viewModel.selectedPositiveEmotion.value}")
             viewModel.updateRecyclerViewData()
