@@ -9,8 +9,8 @@ interface PositiveEmotionDatabaseDao {
     @Insert
     suspend fun insert(positiveEmotion : PositiveEmotion)
 
-    @Query("SELECT * FROM positive_emotion_table WHERE date LIKE '%' || :date || '%'")
-    suspend fun getAllPositiveEmotion(date : String) : List<PositiveEmotion>
+    @Query("SELECT * FROM positive_emotion_table WHERE date LIKE '%' || :date || '%' AND type LIKE '%' || :type || '%'")
+    suspend fun getAllPositiveEmotion(date : String , type : String) : List<PositiveEmotion>
 
     @Query("DELETE FROM positive_emotion_table WHERE id=:id")
     suspend fun delete(id : Long)

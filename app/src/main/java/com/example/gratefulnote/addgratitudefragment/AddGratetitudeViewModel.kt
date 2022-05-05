@@ -9,6 +9,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class AddGratetitudeViewModel(private val database : PositiveEmotionDatabaseDao) : ViewModel() {
+    val typeOfPositiveEmotion = arrayOf(
+        "Joy", "Gratitude", "Serenity", "Interest", "Hope",
+        "Pride", "Amusement", "Inspiration", "Love"
+    )
     private val viewModelJob = Job()
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)

@@ -13,6 +13,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewModel(){
+    val typeOfPositiveEmotion = arrayOf(
+        "All" , "Joy", "Gratitude", "Serenity", "Interest", "Hope",
+        "Pride", "Amusement", "Inspiration", "Love"
+    )
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -61,20 +65,35 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
     }
 
 
+    /* Mengatur data di menus */
+    private val _selectedPositiveEmotion = MutableLiveData("All")
+    val selectedPositiveEmotion : LiveData<String>
+        get() = _selectedPositiveEmotion
+    fun setSelectedPositiveEmotion(data : String){
+        _selectedPositiveEmotion.value = data
+    }
+
+
     /* Semua recyclerView Data */
     private val _recyclerViewData = MutableLiveData(listOf<PositiveEmotion>())
     val recyclerViewData : LiveData<List<PositiveEmotion>>
         get() = _recyclerViewData
 
+
     init{
         updateRecyclerViewData()
     }
 
-    private suspend fun getAllPositiveEmotion() = dataSource.getAllPositiveEmotion(_selectedDateString.value!!)
+    private suspend fun getAllPositiveEmotion() =
+        dataSource.getAllPositiveEmotion(_selectedDateString.value!! ,
+            if (_selectedPositiveEmotion.value!! == "All")
+                ""
+            else
+                _selectedPositiveEmotion.value!!
+        )
 
     fun updateRecyclerViewData(){
         viewModelScope.launch {
-            Log.d("Debugging" , "Menquery data")
             _recyclerViewData.value = getAllPositiveEmotion()
         }
     }

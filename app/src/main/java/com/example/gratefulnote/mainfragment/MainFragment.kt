@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gratefulnote.R
-import com.example.gratefulnote.TypeOfPositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.databinding.FragmentMainBinding
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -35,6 +34,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("Debugging" , "onCreateViewDipanggil")
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_main , container , false)
@@ -54,35 +54,11 @@ class MainFragment : Fragment() {
         onClickDatePicker()
         onChangeDateFilter()
         setMenu()
+        onMenuItemChange()
 
-        //Log.d("Debugging" , "onCreateView Dipanggil")
         return binding.root
     }
 
-    /*override fun onStart() {
-        super.onStart()
-        Log.d("Debugging" , "onStart Dipanggil")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Debugging" , "onResume dipanggil")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("Debugging" , "onStop dipanggil")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("Debugging" , "onPause dipanggil")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("Debugging" , "onDestroyView dipanggil")
-    }*/
 
     private fun getViewModelFactory() : MainViewModelFactory{
         val application = requireNotNull(this.activity).application
@@ -101,7 +77,6 @@ class MainFragment : Fragment() {
 
     private fun onChangeRecyclerViewData(){
         viewModel.recyclerViewData.observe(viewLifecycleOwner){
-            Log.d("Debugging" , "RecyclerViewDataOberserver dijalankan")
             adapter.data = viewModel.recyclerViewData.value!!
         }
     }
@@ -134,7 +109,6 @@ class MainFragment : Fragment() {
 
     private fun onChangeDateFilter(){
         viewModel.selectedDateString.observe(viewLifecycleOwner){
-            Log.d("Debugging" , "Date Berubah menjadi ${viewModel.selectedDateString.value}")
             viewModel.updateRecyclerViewData()
         }
     }
@@ -142,10 +116,17 @@ class MainFragment : Fragment() {
     private fun setMenu(){
         val arrayAdapter = ArrayAdapter(requireContext() ,
             R.layout.positive_emotion_menu_item ,
-            TypeOfPositiveEmotion.typeOfPositiveEmotion)
+            viewModel.typeOfPositiveEmotion)
         binding.positiveEmotionFilterValue.setAdapter(arrayAdapter)
-        binding.positiveEmotionFilterValue.setOnItemClickListener{_ , _ , _ , _->
-            Log.d("Debugging3" , "${binding.positiveEmotionFilterValue.listSelection}")
+        binding.positiveEmotionFilterValue.setOnItemClickListener{_ , _ , pos , _ ->
+            viewModel.setSelectedPositiveEmotion(viewModel.typeOfPositiveEmotion[pos])
+        }
+    }
+
+    private fun onMenuItemChange(){
+        viewModel.selectedPositiveEmotion.observe(viewLifecycleOwner){
+            Log.d("Debugging" , "selected positive emotion : ${viewModel.selectedPositiveEmotion.value}")
+            viewModel.updateRecyclerViewData()
         }
     }
 }
