@@ -9,8 +9,8 @@ class AddGratitudeViewModelFactory(private val dataSource : PositiveEmotionDatab
 
     @Suppress("unchecked_cast")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddGratetitudeViewModel::class.java))
-            return AddGratetitudeViewModel(dataSource) as T
+        if (modelClass.isAssignableFrom(AddGratitudeViewModel::class.java))
+            return AddGratitudeViewModel(dataSource) as T
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -14,9 +14,9 @@ import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.databinding.FragmentAddGratitudeBinding
 
-class AddGratetitudeFragment : Fragment() {
+class AddGratitudeFragment : Fragment() {
 
-    private lateinit var viewModel : AddGratetitudeViewModel
+    private lateinit var viewModel : AddGratitudeViewModel
     private lateinit var binding : FragmentAddGratitudeBinding
 
     override fun onCreateView(
@@ -26,7 +26,7 @@ class AddGratetitudeFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_add_gratitude , container , false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModel = ViewModelProvider(this , getViewModelFactory())[AddGratetitudeViewModel::class.java]
+        viewModel = ViewModelProvider(this , getViewModelFactory())[AddGratitudeViewModel::class.java]
         binding.viewModel = viewModel
 
         setMenu()

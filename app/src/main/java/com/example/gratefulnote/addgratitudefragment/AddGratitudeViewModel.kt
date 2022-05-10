@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class AddGratetitudeViewModel(private val database : PositiveEmotionDatabaseDao) : ViewModel() {
+class AddGratitudeViewModel(private val database : PositiveEmotionDatabaseDao) : ViewModel() {
     val typeOfPositiveEmotion = arrayOf(
         "Joy", "Gratitude", "Serenity", "Interest", "Hope",
         "Pride", "Amusement", "Inspiration", "Love"

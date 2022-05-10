@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/addGratetitudeFragment"
-        android:name="com.example.gratefulnote.addgratitudefragment.AddGratetitudeFragment"
+        android:name="com.example.gratefulnote.addgratitudefragment.AddGratitudeFragment"
         android:label="fragment_add_gratitude"
         tools:layout="@layout/fragment_add_gratitude" >
         <action

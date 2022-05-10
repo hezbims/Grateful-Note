@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.gratefulnote.addgratitudefragment.AddGratetitudeViewModel" />
+            type="com.example.gratefulnote.addgratitudefragment.AddGratitudeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".addgratitudefragment.AddGratetitudeFragment">
+        tools:context=".addgratitudefragment.AddGratitudeFragment">
 
 
         <com.google.android.material.textfield.TextInputLayout
