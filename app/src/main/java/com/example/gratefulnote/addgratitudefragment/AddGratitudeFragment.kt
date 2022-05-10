@@ -38,7 +38,7 @@ class AddGratitudeFragment : Fragment() {
     private fun setSubmitListener(){
         binding.submit.setOnClickListener {
             findNavController().navigate(R.id.action_addGratetitudeFragment_to_mainFragment)
-            val newData = PositiveEmotion(binding.typeOfPositiveEmotionMenu.text.toString() ,
+            val newData = PositiveEmotion(binding.addGratitudeSpinner.selectedItem.toString() ,
                 binding.whatValue.text.toString() ,
                 binding.whyValue.text.toString())
             viewModel.insert(newData)
@@ -56,7 +56,7 @@ class AddGratitudeFragment : Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext() ,
             R.layout.positive_emotion_menu_item ,
             viewModel.typeOfPositiveEmotion)
-        binding.typeOfPositiveEmotionMenu.setAdapter(arrayAdapter)
+        binding.addGratitudeSpinner.adapter = arrayAdapter
     }
 
 }

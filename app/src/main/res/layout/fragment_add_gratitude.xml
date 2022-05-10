@@ -54,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/menu_container">
+            app:layout_constraintTop_toBottomOf="@+id/add_gratitude_spinner_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/what_value"
@@ -64,24 +64,21 @@
                 android:textColorHint="@android:color/darker_gray" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/menu_container"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/add_gratitude_spinner_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:layout_marginStart="24dp"
-            android:hint="@string/type_of_positive_emotion"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-            <AutoCompleteTextView
-                android:id="@+id/type_of_positive_emotion_menu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none"
-                tools:ignore="TouchTargetSizeCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="48dp"
+            android:layout_marginStart="24dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth=".55dp">
+            <Spinner
+                android:id="@+id/add_gratitude_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
