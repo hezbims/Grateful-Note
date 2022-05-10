@@ -9,69 +9,73 @@
             type="com.example.gratefulnote.database.PositiveEmotion" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/solid_border"
         android:layout_margin="12dp">
-
-        <TextView
-            android:id="@+id/tanggal"
-            tanggal="@{positiveEmotion}"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="22-01-2013" />
+            >
 
-        <HorizontalScrollView
-                android:id="@+id/horizonal_scroll_view"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tanggal"
+                tanggal="@{positiveEmotion}"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/delete_positive_emotion"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginTop="12dp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tanggal">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="22-01-2013" />
+
+            <HorizontalScrollView
+                    android:id="@+id/horizonal_scroll_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/delete_positive_emotion"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tanggal">
+                <TextView
+                    android:id="@+id/penyebab"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    penyebab="@{positiveEmotion}"
+                    android:textSize="18sp"
+                    tools:text="Dapat duit dari tuhan"
+                    android:scrollbars="horizontal"/>
+            </HorizontalScrollView>
+
             <TextView
-                android:id="@+id/penyebab"
-                android:layout_height="wrap_content"
+                android:id="@+id/tipe"
+                tipe="@{positiveEmotion}"
                 android:layout_width="wrap_content"
-                android:layout_marginBottom="6dp"
-                penyebab="@{positiveEmotion}"
-                android:textSize="18sp"
-                tools:text="Dapat duit dari tuhan"
-                android:scrollbars="horizontal"/>
-        </HorizontalScrollView>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textSize="12sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tanggal"
+                app:layout_constraintStart_toEndOf="@+id/tanggal"
+                android:text="@string/positive_emotion_type_formatting"
+                tools:text="(Serenity)" />
 
-        <TextView
-            android:id="@+id/tipe"
-            tipe="@{positiveEmotion}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:textSize="12sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tanggal"
-            app:layout_constraintStart_toEndOf="@+id/tanggal"
-            android:text="@string/positive_emotion_type_formatting"
-            tools:text="(Serenity)" />
-
-        <ImageView
-            android:id="@+id/delete_positive_emotion"
-            android:layout_width="32dp"
-            android:layout_height="44dp"
-            android:layout_marginEnd="12dp"
-            android:contentDescription="@string/delete"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_trash_bin" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/delete_positive_emotion"
+                android:layout_width="23dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_trash_bin" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
