@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewModel(){
     val typeOfPositiveEmotion = arrayOf(
         "All" , "Joy", "Gratitude", "Serenity", "Interest", "Hope",
-        "Pride", "Amusement", "Inspiration", "Love"
+        "Pride", "Amusement", "Inspiration", "Awe", "Love", "Other"
     )
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -54,7 +54,7 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
         get() = _selectedDateString
     val displayedDateString = Transformations.map(_selectedDateString){
         if (it!!.isEmpty())
-            "--/-/----"
+            "All"
         else
             it
     }

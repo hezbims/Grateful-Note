@@ -22,5 +22,13 @@
         <action
             android:id="@+id/action_addGratetitudeFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_addGratetitudeFragment_to_topeHelpFragment"
+            app:destination="@id/topeHelpFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/topeHelpFragment"
+        android:name="com.example.gratefulnote.topehelpfragment.TopeHelpFragment"
+        android:label="TopeHelpFragment"
+        tools:layout="@layout/fragment_tope_help"/>
 </navigation>

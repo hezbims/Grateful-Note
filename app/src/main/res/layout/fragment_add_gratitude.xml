@@ -80,5 +80,17 @@
                 android:layout_height="wrap_content" />
         </com.google.android.material.card.MaterialCardView>
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="24dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/help"
+            app:layout_constraintBottom_toBottomOf="@id/add_gratitude_spinner_layout"
+            app:layout_constraintStart_toEndOf="@id/add_gratitude_spinner_layout"
+            app:layout_constraintTop_toTopOf="@id/add_gratitude_spinner_layout"
+            app:srcCompat="@drawable/ic_help"
+            android:onClick="@{() -> viewModel.onClickGetHelp()}"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -31,6 +31,7 @@ class AddGratitudeFragment : Fragment() {
 
         setMenu()
         setSubmitListener()
+        setNavigateToHelp()
 
         return binding.root
     }
@@ -45,7 +46,7 @@ class AddGratitudeFragment : Fragment() {
         }
     }
 
-    private fun getViewModelFactory() : AddGratitudeViewModelFactory{
+    private fun getViewModelFactory() : AddGratitudeViewModelFactory {
         val application = requireNotNull(this.activity).application
         val dataSource = PositiveEmotionDatabase.getInstance(application).positiveEmotionDatabaseDao
         return AddGratitudeViewModelFactory(dataSource)
@@ -57,6 +58,17 @@ class AddGratitudeFragment : Fragment() {
             R.layout.positive_emotion_menu_item ,
             viewModel.typeOfPositiveEmotion)
         binding.addGratitudeSpinner.adapter = arrayAdapter
+
+    }
+
+    private fun setNavigateToHelp(){
+        viewModel.navigateToHelp.observe(viewLifecycleOwner){
+            if (it == true) {
+                findNavController().navigate(R.id.action_addGratetitudeFragment_to_topeHelpFragment)
+                viewModel.doneNavigatingToHelp()
+            }
+        }
+
     }
 
 }

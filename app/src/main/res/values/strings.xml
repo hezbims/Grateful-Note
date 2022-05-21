@@ -12,4 +12,7 @@
     <string name="empty_date">--/-/----</string>
     <string name="date_selector_label">date</string>
     <string name="filter_by">Filter By :</string>
+    <string name="help">help</string>
+    <string name="positive_emotion_description">
+        Joy :\n\tPerasaan</string>
 </resources>
