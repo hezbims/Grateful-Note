@@ -22,8 +22,13 @@ class AddGratitudeViewModel(private val database : PositiveEmotionDatabaseDao) :
     fun insert(newData : PositiveEmotion){
         uiScope.launch {
             database.insert(newData)
+            _backToMain.value = true
         }
     }
+
+    private val _backToMain = MutableLiveData(false)
+    val backToMain : LiveData<Boolean>
+        get() = _backToMain
 
     override fun onCleared() {
         viewModelJob.cancel()

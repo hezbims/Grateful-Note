@@ -31,6 +31,7 @@ class AddGratitudeFragment : Fragment() {
 
         setMenu()
         setSubmitListener()
+        setBackToMain()
         setNavigateToHelp()
 
         return binding.root
@@ -38,11 +39,17 @@ class AddGratitudeFragment : Fragment() {
 
     private fun setSubmitListener(){
         binding.submit.setOnClickListener {
-            findNavController().navigate(R.id.action_addGratetitudeFragment_to_mainFragment)
             val newData = PositiveEmotion(binding.addGratitudeSpinner.selectedItem.toString() ,
                 binding.whatValue.text.toString() ,
                 binding.whyValue.text.toString())
             viewModel.insert(newData)
+        }
+    }
+
+    private fun setBackToMain(){
+        viewModel.backToMain.observe(viewLifecycleOwner){
+            if (it == true)
+                findNavController().navigateUp()
         }
     }
 

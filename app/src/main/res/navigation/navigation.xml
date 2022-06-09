@@ -20,9 +20,6 @@
         android:label="fragment_add_gratitude"
         tools:layout="@layout/fragment_add_gratitude" >
         <action
-            android:id="@+id/action_addGratetitudeFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
             android:id="@+id/action_addGratetitudeFragment_to_topeHelpFragment"
             app:destination="@id/topeHelpFragment" />
     </fragment>
