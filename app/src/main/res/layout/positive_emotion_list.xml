@@ -12,7 +12,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp">
+        android:layout_margin="12dp"
+        app:strokeWidth=".01dp"
+        app:strokeColor="@color/black">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,14 +36,13 @@
                     android:id="@+id/horizonal_scroll_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="36dp"
                     android:layout_marginBottom="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/delete_positive_emotion"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tanggal"
                     app:layout_constraintTop_toBottomOf="@id/tanggal">
                 <TextView
                     android:id="@+id/penyebab"
@@ -68,14 +69,23 @@
 
             <ImageView
                 android:id="@+id/delete_positive_emotion"
-                android:layout_width="23dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="12dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="6dp"
                 android:contentDescription="@string/delete"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_trash_bin" />
+                app:srcCompat="@drawable/ic_close"
+                android:background="@drawable/solid_border"/>
+
+            <ImageView
+                android:id="@+id/edit_positive_emotion"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/delete_positive_emotion"
+                app:srcCompat="@drawable/ic_edit"
+                android:background="@drawable/solid_border"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
