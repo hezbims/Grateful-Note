@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_gratitude">Add New Gratitude</string>
     <string name="what_made_grateful">What made you feel grateful today?</string>
-    <string name="why_made_grateful">Why it made you feel grateful?</string>
+    <string name="describe_your_positive_emotion">Detailed Description So You Can Feel It</string>
     <string name="submit">Submit</string>
     <string name="type_of_positive_emotion">Type</string>
     <string name="delete">delete</string>

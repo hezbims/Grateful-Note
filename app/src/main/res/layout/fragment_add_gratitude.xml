@@ -26,10 +26,13 @@
             app:layout_constraintTop_toBottomOf="@+id/what_make_grateful_layout">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:lines="3"
                 android:id="@+id/why_value"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/why_made_grateful" />
+                android:hint="@string/describe_your_positive_emotion" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
