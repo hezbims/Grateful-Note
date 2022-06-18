@@ -1,4 +1,2 @@
 Problem :
-- Cara agar edittext valuenya tidak hilang ketika sehabis 
-ditulis panjang-panjang dan rotate screen pada 
 - cara confirm ketika ingin save atau batal setelah edit
