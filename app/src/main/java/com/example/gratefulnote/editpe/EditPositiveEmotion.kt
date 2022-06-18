@@ -1,7 +1,6 @@
 package com.example.gratefulnote.editpe
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,7 +27,7 @@ class EditPositiveEmotion : Fragment() {
 
         binding = FragmentEditPositiveEmotionBinding.inflate(inflater , container , false)
 
-        if (viewModel.isFirstTimeCreated == true) {
+        if (viewModel.isFirstTimeCreated) {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                 val curPositiveEmotion = viewModel.curPositiveEmotion.await()
                 withContext(Dispatchers.Main) {
