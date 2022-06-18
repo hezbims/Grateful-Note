@@ -1,6 +1,0 @@
-- finish main fragment
-- Nambahin fragment untuk submit
-- Biar bisa pindah dari main ke addGratitude
-- Nambahin data class untuk database
-- Nambahin room
-- Nambahin DAO

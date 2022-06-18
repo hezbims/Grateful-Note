@@ -6,6 +6,7 @@
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/drawable/ic_trash_bin.xml" value="0.156" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/drawable/solid_border.xml" value="0.156" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/edit_positive_emotion_fragment.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/fragment_add_gratitude.xml" value="0.18306636155606407" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/fragment_main.xml" value="0.2" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/fragment_toe_help.xml" value="0.14635416666666667" />
@@ -13,6 +14,8 @@
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/main_fragment.xml" value="0.2" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/positive_emotion_list.xml" value="0.4" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/positive_emotion_menu_item.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/menu/edit_positive_emotion.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/menu/edit_positive_emotion_menu.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/hezbi/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.14635416666666667" />
       </map>
     </option>

@@ -3,6 +3,7 @@ package com.example.gratefulnote.mainfragment
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.databinding.PositiveEmotionListBinding
@@ -28,6 +29,10 @@ class PositiveAdapter(private val viewModel : MainViewModel) : RecyclerView.Adap
             binding.positiveEmotion = item
             binding.deletePositiveEmotion.setOnClickListener{
                 this@PositiveAdapter.viewModel.delete(item.id)
+            }
+            binding.editPositiveEmotion.setOnClickListener{
+                val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(item.id)
+                Navigation.findNavController(binding.root).navigate(action)
             }
             binding.executePendingBindings()
         }

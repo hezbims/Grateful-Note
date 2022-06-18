@@ -85,7 +85,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/delete_positive_emotion"
                 app:srcCompat="@drawable/ic_edit"
-                android:background="@drawable/solid_border"/>
+                android:background="@drawable/solid_border"
+                android:contentDescription="@string/edit"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

@@ -35,8 +35,6 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("Debugging" , "onCreateViewDipanggil")
-
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_main , container , false)
 
@@ -133,8 +131,9 @@ class MainFragment : Fragment() {
 
     private fun onSpinnerValueChange(){
         viewModel.selectedPositiveEmotion.observe(viewLifecycleOwner){
-            Log.d("Debugging" , "selected positive emotion : ${viewModel.selectedPositiveEmotion.value}")
             viewModel.updateRecyclerViewData()
         }
     }
+
+
 }

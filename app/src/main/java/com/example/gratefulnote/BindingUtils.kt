@@ -4,6 +4,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
+import com.google.android.material.textfield.TextInputEditText
 
 @BindingAdapter("tanggal")
 fun TextView.setTanggal(item : PositiveEmotion){

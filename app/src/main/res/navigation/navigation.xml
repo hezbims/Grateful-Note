@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainFragment_to_addGratetitudeFragment"
             app:destination="@id/addGratetitudeFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_editPositiveEmotion"
+            app:destination="@id/editPositiveEmotion" />
     </fragment>
     <fragment
         android:id="@+id/addGratetitudeFragment"
@@ -28,4 +31,13 @@
         android:name="com.example.gratefulnote.topehelpfragment.TopeHelpFragment"
         android:label="TopeHelpFragment"
         tools:layout="@layout/fragment_tope_help"/>
+    <fragment
+        android:id="@+id/editPositiveEmotion"
+        android:name="com.example.gratefulnote.editpe.EditPositiveEmotion"
+        android:label="edit_positive_emotion_fragment"
+        tools:layout="@layout/fragment_edit_positive_emotion" >
+        <argument
+            android:name="positive_emotion_id"
+            app:argType="long" />
+    </fragment>
 </navigation>
