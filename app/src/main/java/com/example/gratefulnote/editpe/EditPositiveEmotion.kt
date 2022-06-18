@@ -62,6 +62,8 @@ class EditPositiveEmotion : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+
+
     private fun getViewModelFactory() : EditPositiveEmotionViewModelFactory{
         val application = requireNotNull(this.activity).application
         val dataSource = PositiveEmotionDatabase.getInstance(application).positiveEmotionDatabaseDao
