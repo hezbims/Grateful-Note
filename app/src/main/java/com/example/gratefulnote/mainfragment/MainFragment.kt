@@ -84,7 +84,7 @@ class MainFragment : Fragment() {
 
     private fun onChangeRecyclerViewData(){
         viewModel.recyclerViewData.observe(viewLifecycleOwner){
-            adapter.data = viewModel.recyclerViewData.value!!
+            adapter.submitList(viewModel.recyclerViewData.value!!)
         }
     }
 
