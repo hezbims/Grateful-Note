@@ -2,7 +2,6 @@ package com.example.gratefulnote.mainfragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -12,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gratefulnote.R
@@ -43,7 +43,15 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // RecyclerView Adapter
-        adapter = PositiveAdapter(viewModel)
+        adapter = PositiveAdapter(PositiveAdapterClickListener(
+            {
+                viewModel.delete(it)
+            },
+            {
+                val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(it)
+                Navigation.findNavController(binding.root).navigate(action)
+            }
+        ))
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 

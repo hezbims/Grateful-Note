@@ -3,12 +3,11 @@ package com.example.gratefulnote.mainfragment
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.databinding.PositiveEmotionListBinding
 
-class PositiveAdapter(private val viewModel : MainViewModel) : RecyclerView.Adapter<PositiveAdapter.ViewHolder>(){
+class PositiveAdapter(private val clickListener: PositiveAdapterClickListener) : RecyclerView.Adapter<PositiveAdapter.ViewHolder>(){
     var data = listOf<PositiveEmotion>()
     @SuppressLint("NotifyDataSetChanged")
     set(value){
@@ -27,15 +26,18 @@ class PositiveAdapter(private val viewModel : MainViewModel) : RecyclerView.Adap
     inner class ViewHolder(private val binding : PositiveEmotionListBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(item : PositiveEmotion){
             binding.positiveEmotion = item
-            binding.deletePositiveEmotion.setOnClickListener{
-                this@PositiveAdapter.viewModel.delete(item.id)
-            }
-            binding.editPositiveEmotion.setOnClickListener{
-                val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(item.id)
-                Navigation.findNavController(binding.root).navigate(action)
-            }
+            binding.deletePositiveEmotion.setOnClickListener{ clickListener.onDelete(item.id) }
+            binding.editPositiveEmotion.setOnClickListener{ clickListener.onEdit(item.id) }
             binding.executePendingBindings()
         }
 
     }
+}
+
+class PositiveAdapterClickListener(
+    val delete : (itemId : Long) -> Unit,
+    val edit : (itemId : Long) -> Unit){
+
+    fun onDelete(itemId : Long) = delete(itemId)
+    fun onEdit(itemId : Long) = edit(itemId)
 }
