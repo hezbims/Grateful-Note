@@ -38,7 +38,8 @@ class DiffCallBack : DiffUtil.ItemCallback<PositiveEmotion>(){
 
 class PositiveAdapterClickListener(
     val delete : (itemId : Long) -> Unit,
-    val edit : (itemId : Long) -> Unit){
+    val edit : (itemId : Long) -> Unit
+){
 
     fun onDelete(itemId : Long) = delete(itemId)
     fun onEdit(itemId : Long) = edit(itemId)

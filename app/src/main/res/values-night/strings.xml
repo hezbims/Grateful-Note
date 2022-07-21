@@ -19,4 +19,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="set_password">Set Password</string>
+    <string name="switch_notification_text">Daily Notification</string>
+    <string name="muncul_setiap">Muncul Setiap</string>
+    <string name="shared_preferences_name">OnlySharedPreferences</string>
+    <string name="saved_notification_time">SavedNotificationTime</string>
+    <string name="default_notification_time">00:00</string>
+    <string name="saved_switch_status">SavedNotificationSwitchStatus</string>
+    <string name="set_notification">Set Notification</string>
 </resources>

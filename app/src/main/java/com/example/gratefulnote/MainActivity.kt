@@ -1,41 +1,44 @@
 package com.example.gratefulnote
 
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.navigateUp
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController : NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var drawerLayout : DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        drawerLayout = findViewById(R.id.drawer_layout)
         navController = findNavController(R.id.nav_host)
 
-        // parameter pertama : biar top destination itu yang paling awal di navigation graph
-        // parameter kedua : biar up button nanti punnya fungsionalitas dari drawerlayout (muncul bergeser) kalo dipencet pada di top destination
-        appBarConfiguration = AppBarConfiguration(navController.graph , findViewById<DrawerLayout>(R.id.drawer_layout))
 
-        // biar ada upbutton/drawer button
-        NavigationUI.setupActionBarWithNavController(this , navController , appBarConfiguration)
+        // biar ada upbutton(untuk di non-start destination) dan drawer button (di start destination)
+        // start destination bisa dilihat di navigation.xml, di bagian app:startDestination
+        NavigationUI.setupActionBarWithNavController(this , navController , drawerLayout)
+
+        // biar bisa navigate sesuai id dari menu item
+        NavigationUI.setupWithNavController(findViewById<NavigationView>(R.id.nav_view) , navController)
+
+        navController.addOnDestinationChangedListener{
+            nc , nd , _ ->
+            drawerLayout.setDrawerLockMode(
+                if (nd.id == nc.graph.startDestinationId)
+                    DrawerLayout.LOCK_MODE_UNLOCKED
+                else
+                    DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            )
+        }
     }
 
-    override fun onSupportNavigateUp() : Boolean{
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
+    override fun onSupportNavigateUp() =
+        NavigationUI.navigateUp(navController , drawerLayout)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.set_new_password)
-            Toast.makeText(this , "Mencoba ngeset password" , Toast.LENGTH_SHORT).show()
-        return super.onOptionsItemSelected(item)
-    }
 
 }
