@@ -17,12 +17,14 @@ class NotificationSettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this ,
+        viewModel = ViewModelProvider(requireActivity() ,
             getViewModelFactory())[NotificationViewModel::class.java]
         binding = FragmentNotificationSettingsBinding.inflate(inflater)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         setSwitchCheckedChangeListener()
+        setOpenDialogListener()
 
         return binding.root
     }
@@ -39,6 +41,18 @@ class NotificationSettingsFragment : Fragment() {
         }
         binding.switchNotification.setOnCheckedChangeListener{_ , isChecked ->
             viewModel.updateSwitchStatus(isChecked)
+        }
+    }
+
+    private fun setOpenDialogListener(){
+        binding.muculSetiap.setOnClickListener { openDialog() }
+        binding.notificationTimeText.setOnClickListener { openDialog() }
+    }
+
+    private fun openDialog(){
+        if (!viewModel.isDialogOpened){
+            viewModel.setDialogOpenedStatus(true)
+            NotificationDialogFragment().show(parentFragmentManager , "timePicker")
         }
     }
 

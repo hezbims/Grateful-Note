@@ -2,18 +2,19 @@ package com.example.gratefulnote.notification
 
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import java.util.Calendar
+import java.util.*
 
 class NotificationDialogFragment : DialogFragment() , TimePickerDialog.OnTimeSetListener{
     private lateinit var viewModel: NotificationViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewModel = ViewModelProvider(this ,
+        viewModel = ViewModelProvider(requireActivity() ,
             getViewModelFactory())[NotificationViewModel::class.java]
 
         val calendar = Calendar.getInstance()
@@ -24,7 +25,12 @@ class NotificationDialogFragment : DialogFragment() , TimePickerDialog.OnTimeSet
     }
 
     override fun onTimeSet(view : TimePicker?, hourOfDay : Int , minute : Int) {
-        TODO("Not yet implemented")
+        viewModel.setLiveClock(hourOfDay , minute)
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        viewModel.setDialogOpenedStatus(false)
     }
 
     private fun getViewModelFactory() = NotificationViewModelFactory(
