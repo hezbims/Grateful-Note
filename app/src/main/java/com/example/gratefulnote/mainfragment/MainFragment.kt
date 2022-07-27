@@ -1,7 +1,11 @@
 package com.example.gratefulnote.mainfragment
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -142,6 +146,5 @@ class MainFragment : Fragment() {
             viewModel.updateRecyclerViewData()
         }
     }
-
 
 }

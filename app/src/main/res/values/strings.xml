@@ -32,4 +32,8 @@
     <string name="set_notification">Set Notification</string>
     <string name="saved_hours">SavedHours</string>
     <string name="saved_minutes">SavedMinutes</string>
+    <string name="notification_content_text">Ayo bersyukur untuk hari ini!</string>
+    <string name="notification_channel_id">ChannelId</string>
+    <string name="notification_channel_name">Daily Reminder</string>
+    <string name="notification_description">Pengingat agar kamu bersyukur</string>
 </resources>

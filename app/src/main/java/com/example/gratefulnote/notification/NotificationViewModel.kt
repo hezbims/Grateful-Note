@@ -13,16 +13,6 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
         app.getString(R.string.shared_preferences_name) ,
         Context.MODE_PRIVATE)
 
-    class Clock(private val hours : Int, private val minutes : Int){
-        fun format() =
-            "${timeFormat(hours)}:${timeFormat(minutes)}"
-
-        private fun timeFormat(time : Int) =
-            if (time < 10) "0$time" else time.toString()
-    }
-
-    private val liveClock = MutableLiveData(getSavedClock())
-
     fun setLiveClock(hours : Int , minutes : Int){
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -38,19 +28,32 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
                     commit()
                 }
                 withContext(Dispatchers.Main) {
-                    liveClock.value = getSavedClock()
+                    _clockDisplay.value = Clock(hours , minutes).format()
+                    setAlarmNotification()
                     setDialogOpenedStatus(false)
                 }
             }
         }
     }
 
-    private fun getSavedClock() = Clock(
-            sharedPreferences.getInt(app.getString(R.string.saved_hours), 0),
-            sharedPreferences.getInt(app.getString(R.string.saved_minutes) , 0)
-        )
+    private val _clockDisplay = MutableLiveData(Clock.getSavedClock(
+            sharedPreferences ,
+            app.applicationContext
+        ).format()
+    )
+    val clockDisplay : LiveData<String>
+        get() = _clockDisplay
 
-    val clockDisplay = Transformations.map(liveClock){ it.format() }
+    private val alarmSetter = NotificationAlarmSetter(app.applicationContext)
+
+    fun setAlarmNotification(){
+        if (isSwitchChecked.value == true)
+            alarmSetter.setAlarm()
+        else
+            alarmSetter.cancel()
+    }
+
+
 
 
     private val _isSwitchChecked = MutableLiveData(sharedPreferences.getBoolean(
@@ -74,6 +77,9 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
             }
         }
     }
+
+
+
 
     private var _isDialogOpened = false
     val isDialogOpened : Boolean

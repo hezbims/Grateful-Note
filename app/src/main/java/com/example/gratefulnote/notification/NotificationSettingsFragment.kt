@@ -38,6 +38,7 @@ class NotificationSettingsFragment : Fragment() {
             binding.notificationTimeViewgroup.visibility =
                 if (it)View.VISIBLE
                 else View.GONE
+            viewModel.setAlarmNotification()
         }
         binding.switchNotification.setOnCheckedChangeListener{_ , isChecked ->
             viewModel.updateSwitchStatus(isChecked)
