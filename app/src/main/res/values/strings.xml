@@ -36,4 +36,8 @@
     <string name="notification_channel_id">ChannelId</string>
     <string name="notification_channel_name">Daily Reminder</string>
     <string name="notification_description">Pengingat agar kamu bersyukur</string>
+    <string name="ya">Ya</string>
+    <string name="confirm_save_content">Yakin ingin meyimpan perubahan?</string>
+    <string name="gak">Gak</string>
+    <string name="cancel_dialog_content">Yakin ingin membuang perubahan?</string>
 </resources>
