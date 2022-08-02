@@ -33,7 +33,7 @@
         tools:layout="@layout/fragment_tope_help" />
     <fragment
         android:id="@+id/editPositiveEmotion"
-        android:name="com.example.gratefulnote.editpe.EditPositiveEmotion"
+        android:name="com.example.gratefulnote.editpositiveemotion.EditPositiveEmotion"
         android:label="@string/edit"
         tools:layout="@layout/fragment_edit_positive_emotion">
         <argument

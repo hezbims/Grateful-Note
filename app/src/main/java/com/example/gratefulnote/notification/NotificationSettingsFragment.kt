@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.gratefulnote.R
 import com.example.gratefulnote.databinding.FragmentNotificationSettingsBinding
 
 class NotificationSettingsFragment : Fragment() {
@@ -13,12 +14,26 @@ class NotificationSettingsFragment : Fragment() {
     private lateinit var viewModel: NotificationViewModel
     private lateinit var binding : FragmentNotificationSettingsBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this ,
+            getViewModelFactory())[NotificationViewModel::class.java]
+
+        childFragmentManager.setFragmentResultListener(
+            getString(R.string.clock_picker_request_key),
+            this
+        ){_ , bundle ->
+            if (bundle.getBoolean(getString(R.string.clock_picker_cancel_key) , false))
+                viewModel.closeDialog()
+            else
+                viewModel.setSavedClock(bundle.getParcelable(getString(R.string.clock_picker_clock_key))!!)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(requireActivity() ,
-            getViewModelFactory())[NotificationViewModel::class.java]
         binding = FragmentNotificationSettingsBinding.inflate(inflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -52,8 +67,8 @@ class NotificationSettingsFragment : Fragment() {
 
     private fun openDialog(){
         if (!viewModel.isDialogOpened){
-            viewModel.setDialogOpenedStatus(true)
-            NotificationDialogFragment().show(parentFragmentManager , "timePicker")
+            viewModel.openDialog()
+            NotificationDialogFragment().show(childFragmentManager , "timePicker")
         }
     }
 

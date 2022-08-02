@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import com.example.gratefulnote.R
 
 const val BROADCAST_INTENT_ID = 0
@@ -24,11 +25,24 @@ class NotificationAlarmSetter(private val context: Context) {
         Context.MODE_PRIVATE
     )
 
-    fun setAlarm() =
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP ,
-                Clock.getSavedClock(sharedPreferences , context).timeInMillis(),
-                broadcastPendingIntent
+    fun setAlarm() {
+        val nowTime = sharedPreferences.getLong(
+            context.getString(R.string.saved_time_in_millis) , 0)
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            nowTime ,
+            broadcastPendingIntent
+        )
+
+        with(sharedPreferences.edit()){
+            putLong(
+                context.getString(R.string.saved_time_in_millis),
+                nowTime + 24L * 3600 * 1000
             )
+            commit()
+        }
+
+    }
 
     fun cancel() =
         alarmManager.cancel(broadcastPendingIntent)

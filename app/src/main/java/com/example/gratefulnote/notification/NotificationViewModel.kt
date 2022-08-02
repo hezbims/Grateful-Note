@@ -13,31 +13,26 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
         app.getString(R.string.shared_preferences_name) ,
         Context.MODE_PRIVATE)
 
-    fun setLiveClock(hours : Int , minutes : Int){
+    fun setSavedClock(inputClock : Clock){
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 with(sharedPreferences.edit()) {
-                    putInt(
-                        app.getString(R.string.saved_hours),
-                        hours
-                    )
-                    putInt(
-                        app.getString(R.string.saved_minutes),
-                        minutes
+                    putLong(
+                        app.applicationContext.getString(R.string.saved_time_in_millis),
+                        inputClock.timeInMillis()
                     )
                     commit()
                 }
                 withContext(Dispatchers.Main) {
-                    _clockDisplay.value = Clock(hours , minutes).format()
+                    _clockDisplay.value = inputClock.format()
                     setAlarmNotification()
-                    setDialogOpenedStatus(false)
+                    closeDialog()
                 }
             }
         }
     }
 
     private val _clockDisplay = MutableLiveData(Clock.getSavedClock(
-            sharedPreferences ,
             app.applicationContext
         ).format()
     )
@@ -84,9 +79,8 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
     private var _isDialogOpened = false
     val isDialogOpened : Boolean
         get() = _isDialogOpened
-    fun setDialogOpenedStatus(status : Boolean){
-        _isDialogOpened = status
-    }
+    fun openDialog(){_isDialogOpened = true}
+    fun closeDialog(){_isDialogOpened = false}
 }
 
 class NotificationViewModelFactory(private val application: Application) : ViewModelProvider.Factory{

@@ -6,17 +6,14 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.widget.TimePicker
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.setFragmentResult
+import com.example.gratefulnote.R
 import java.util.*
 
 class NotificationDialogFragment : DialogFragment() , TimePickerDialog.OnTimeSetListener{
-    private lateinit var viewModel: NotificationViewModel
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewModel = ViewModelProvider(requireActivity() ,
-            getViewModelFactory())[NotificationViewModel::class.java]
-
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
@@ -25,15 +22,17 @@ class NotificationDialogFragment : DialogFragment() , TimePickerDialog.OnTimeSet
     }
 
     override fun onTimeSet(view : TimePicker?, hourOfDay : Int , minute : Int) {
-        viewModel.setLiveClock(hourOfDay , minute)
+        setFragmentResult(
+            getString(R.string.clock_picker_request_key) ,
+            bundleOf(getString(R.string.clock_picker_clock_key) to Clock(hourOfDay , minute))
+        )
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        viewModel.setDialogOpenedStatus(false)
+        setFragmentResult(
+            getString(R.string.clock_picker_request_key),
+            bundleOf(getString(R.string.clock_picker_cancel_key) to true)
+        )
     }
-
-    private fun getViewModelFactory() = NotificationViewModelFactory(
-        requireNotNull(activity).application
-    )
 }

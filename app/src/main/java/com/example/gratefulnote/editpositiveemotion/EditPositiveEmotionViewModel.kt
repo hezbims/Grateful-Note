@@ -1,6 +1,6 @@
-package com.example.gratefulnote.editpe
+package com.example.gratefulnote.editpositiveemotion
 
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,13 +46,13 @@ class EditPositiveEmotionViewModel(private val database : PositiveEmotionDatabas
     }
 
     companion object{
-        fun getViewModel(activity: FragmentActivity) : EditPositiveEmotionViewModel{
-            val datasource = PositiveEmotionDatabase.getInstance(activity.application)
+        fun getViewModel(fragment : Fragment) : EditPositiveEmotionViewModel{
+            val datasource = PositiveEmotionDatabase.getInstance(fragment.requireActivity().application)
                 .positiveEmotionDatabaseDao
             val viewModelFactory = EditPositiveEmotionViewModelFactory(
                 datasource)
 
-            return ViewModelProvider(activity ,
+            return ViewModelProvider(fragment ,
                 viewModelFactory)[EditPositiveEmotionViewModel::class.java]
         }
     }

@@ -30,8 +30,6 @@
     <string name="default_notification_time">00:00</string>
     <string name="saved_switch_status">SavedNotificationSwitchStatus</string>
     <string name="set_notification">Set Notification</string>
-    <string name="saved_hours">SavedHours</string>
-    <string name="saved_minutes">SavedMinutes</string>
     <string name="notification_content_text">Ayo bersyukur untuk hari ini!</string>
     <string name="notification_channel_id">ChannelId</string>
     <string name="notification_channel_name">Daily Reminder</string>
@@ -40,4 +38,14 @@
     <string name="confirm_save_content">Yakin ingin meyimpan perubahan?</string>
     <string name="gak">Gak</string>
     <string name="cancel_dialog_content">Yakin ingin membuang perubahan?</string>
+    <string name="confirm_edit_save_key">ConfirmEditSaveKey</string>
+    <string name="confirm_edit_save_request_key">ConfirmEditSaveRequestKey</string>
+    <string name="confirm_edit_cancel_request_key">EditCancelRequestKey</string>
+    <string name="confirm_edit_cancel_key">EditCancelKey</string>
+    <string name="clock_picker_request_key">ClockPickerRequestKey</string>
+    <string name="clock_picker_cancel_key">ClockPickerCancelKey</string>
+    <string name="clock_picker_hour_key">ClockPickerHourKey</string>
+    <string name="clock_picker_minute_key">ClockPickerMinuteKey</string>
+    <string name="clock_picker_clock_key">ClockPickerClockKey</string>
+    <string name="saved_time_in_millis">SavedTimeInMillis</string>
 </resources>

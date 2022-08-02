@@ -1,11 +1,13 @@
 package com.example.gratefulnote.notification
 
 import android.content.Context
-import android.content.SharedPreferences
+import android.os.Parcelable
 import com.example.gratefulnote.R
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
-class Clock(private val hours : Int, private val minutes : Int){
+@Parcelize
+data class Clock(val hours : Int, val minutes : Int) : Parcelable{
     fun format() =
         "${timeFormat(hours)}:${timeFormat(minutes)}"
 
@@ -20,10 +22,24 @@ class Clock(private val hours : Int, private val minutes : Int){
         }.timeInMillis
 
     companion object{
-        fun getSavedClock(sharedPreferences: SharedPreferences, context: Context) =
-            Clock(
-                sharedPreferences.getInt(context.getString(R.string.saved_hours) , 0),
-                sharedPreferences.getInt(context.getString(R.string.saved_minutes) , 0)
+        fun getSavedClock(context: Context) : Clock{
+            val sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.shared_preferences_name),
+                Context.MODE_PRIVATE
             )
+
+            val timeInMillis = sharedPreferences.getLong(
+                context.getString(R.string.saved_time_in_millis),
+                Clock(0 , 0).timeInMillis()
+            )
+
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = timeInMillis
+
+            return Clock(
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE)
+            )
+        }
     }
 }

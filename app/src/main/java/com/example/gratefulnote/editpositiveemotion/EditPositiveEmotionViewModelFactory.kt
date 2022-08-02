@@ -1,4 +1,4 @@
-package com.example.gratefulnote.editpe
+package com.example.gratefulnote.editpositiveemotion
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
