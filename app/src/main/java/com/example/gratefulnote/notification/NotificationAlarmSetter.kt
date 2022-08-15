@@ -4,8 +4,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
+import android.util.Log
 import com.example.gratefulnote.R
+import java.util.*
 
 const val BROADCAST_INTENT_ID = 0
 
@@ -27,7 +28,8 @@ class NotificationAlarmSetter(private val context: Context) {
 
     fun setAlarm() {
         val nowTime = sharedPreferences.getLong(
-            context.getString(R.string.saved_time_in_millis) , 0)
+            context.getString(R.string.saved_time_in_millis) , Clock.getSavedClock(context).timeInMillis())
+
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
             nowTime ,
@@ -37,7 +39,7 @@ class NotificationAlarmSetter(private val context: Context) {
         with(sharedPreferences.edit()){
             putLong(
                 context.getString(R.string.saved_time_in_millis),
-                nowTime + 24L * 3600 * 1000
+                nowTime + AlarmManager.INTERVAL_DAY
             )
             commit()
         }

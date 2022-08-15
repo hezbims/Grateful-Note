@@ -1,14 +1,8 @@
 package com.example.gratefulnote.mainfragment
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabaseDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewModel(){
@@ -16,8 +10,6 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
         "All" , "Joy", "Gratitude", "Serenity", "Interest", "Hope",
         "Pride", "Amusement", "Inspiration", "Awe", "Love", "Other"
     )
-    private val viewModelJob = Job()
-    private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     /* Menghapus item kalau tong sampah dipencet */
     fun delete(id : Long){
@@ -39,11 +31,6 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
 
     fun doneNavigating(){
         _eventMoveToAddGratitude.value = false
-    }
-
-    override fun onCleared() {
-        viewModelJob.cancel()
-        super.onCleared()
     }
 
 
@@ -78,13 +65,21 @@ class MainViewModel(private val dataSource : PositiveEmotionDatabaseDao) : ViewM
     val recyclerViewData : LiveData<List<PositiveEmotion>>
         get() = _recyclerViewData
 
+    val isDataEmpty : Boolean
+        get(){
+            _recyclerViewData.value?.let {
+                return it.isEmpty()
+            }
+            return true
+        }
+
 
     init{
         updateRecyclerViewData()
     }
 
     private suspend fun getAllPositiveEmotion() =
-        dataSource.getAllPositiveEmotion(_selectedDateString.value!! ,
+        dataSource.getAllPositiveEmotion(
             if (_selectedPositiveEmotion.value!! == "All")
                 ""
             else

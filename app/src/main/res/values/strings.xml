@@ -48,4 +48,5 @@
     <string name="clock_picker_minute_key">ClockPickerMinuteKey</string>
     <string name="clock_picker_clock_key">ClockPickerClockKey</string>
     <string name="saved_time_in_millis">SavedTimeInMillis</string>
+    <string name="empty_data_text">Belum ada data</string>
 </resources>

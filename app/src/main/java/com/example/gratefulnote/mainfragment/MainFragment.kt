@@ -31,6 +31,11 @@ class MainFragment : Fragment() {
     private lateinit var viewModel : MainViewModel
     private lateinit var adapter : PositiveAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        viewModel = ViewModelProvider(this , getViewModelFactory())[MainViewModel::class.java]
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +43,6 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_main , container , false)
 
-        viewModel = ViewModelProvider(this , getViewModelFactory())[MainViewModel::class.java]
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -65,8 +69,6 @@ class MainFragment : Fragment() {
 
         return binding.root
     }
-
-
     private fun getViewModelFactory() : MainViewModelFactory{
         val application = requireNotNull(this.activity).application
         val dataSource = PositiveEmotionDatabase.getInstance(application).positiveEmotionDatabaseDao
@@ -85,6 +87,12 @@ class MainFragment : Fragment() {
     private fun onChangeRecyclerViewData(){
         viewModel.recyclerViewData.observe(viewLifecycleOwner){
             adapter.submitList(viewModel.recyclerViewData.value!!)
+
+            binding.emptyDataIndicator.visibility =
+                if (viewModel.isDataEmpty)
+                    View.VISIBLE
+                else
+                    View.GONE
         }
     }
 
@@ -142,5 +150,7 @@ class MainFragment : Fragment() {
             viewModel.updateRecyclerViewData()
         }
     }
+
+
 
 }
