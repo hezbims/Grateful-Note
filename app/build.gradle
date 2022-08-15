@@ -45,7 +45,7 @@ android {
 
     sourceSets {
         // Adds exported schema location as test app assets.
-        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+        androidTest.assets.srcDirs += "$projectDir/schemas".toString()
     }
 }
 

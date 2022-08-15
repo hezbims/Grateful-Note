@@ -28,7 +28,6 @@ val MIGRATION_1_2 : Migration by lazy {
                     )
                 }
             }
-
             with(database) {
                 execSQL("CREATE TABLE IF NOT EXISTS backup (" +
                         "type TEXT NOT NULL, " +
@@ -41,14 +40,24 @@ val MIGRATION_1_2 : Migration by lazy {
                         ")"
                 )
 
-                for (e in allPositiveEmotions)
-                    execSQL("INSERT INTO backup " +
-                        "VALUES('${e.type}' , '${e.what}' , '${e.why}' , " +
-                            "${e.day} , ${e.month} , ${e.year} , ${e.id})"
+                for (e in allPositiveEmotions) 
+                    execSQL(
+                        """
+                            INSERT INTO backup
+                            VALUES (
+                                '${e.type}',
+                                '${e.what.replace("'" , "''")}',
+                                '${e.why.replace("'" , "''")}',
+                                ${e.day},
+                                ${e.month},
+                                ${e.year},
+                                ${e.id}
+                            )
+                        """.trimIndent()
                     )
+
                 execSQL("DROP TABLE positive_emotion_table")
                 execSQL("ALTER TABLE backup RENAME TO positive_emotion_table")
-                close()
             }
         }
     }

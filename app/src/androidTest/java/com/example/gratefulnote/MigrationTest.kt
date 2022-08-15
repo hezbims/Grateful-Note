@@ -1,6 +1,7 @@
 package com.example.gratefulnote
 
 import androidx.room.testing.MigrationTestHelper
+import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.database.MIGRATION_1_2
@@ -17,7 +18,8 @@ class MigrationTest {
     @get:Rule
     val helper: MigrationTestHelper = MigrationTestHelper(
         InstrumentationRegistry.getInstrumentation(),
-        PositiveEmotionDatabase::class.java,
+        PositiveEmotionDatabase::class.java.canonicalName,
+        FrameworkSQLiteOpenHelperFactory()
     )
 
     @Test
@@ -27,8 +29,8 @@ class MigrationTest {
             // You cannot use DAO classes because they expect the latest schema.
             execSQL("""
                 INSERT INTO positive_emotion_table 
-                VALUES('Joy' , 'Dapet duit' , 'Dari tuhan' , '228/2022' , 22384729)
-            """)
+                VALUES('Joy' , 'Dapet duit' , 'Dari tuhan' , 0 , 22384729)
+            """.trimIndent())
 
             // Prepare for the next version.
             close()
@@ -42,4 +44,5 @@ class MigrationTest {
         // but you need to validate that the data was migrated properly.
 
     }
+
 }
