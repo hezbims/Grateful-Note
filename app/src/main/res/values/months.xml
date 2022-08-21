@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="months_list">
+        <item>Semua</item>
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>Mei</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Agu</item>
+        <item>Sep</item>
+        <item>Okt</item>
+        <item>Nov</item>
+        <item>Des</item>
+    </string-array>
+</resources>

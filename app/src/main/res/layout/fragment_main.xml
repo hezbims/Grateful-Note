@@ -14,77 +14,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            app:layout_constraintBottom_toTopOf="@+id/button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/selected_date" />
-
-        <Button
-            android:id="@+id/button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            android:text="@string/add_gratitude"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:onClick="@{() -> viewModel.onClickAddNewGratitude()}"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/selected_date"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:hint="@string/date_selector_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filter_title"
-            app:startIconDrawable="@drawable/ic_calendar">
-
-            <AutoCompleteTextView
-                android:id="@+id/selected_date_value"
-                android:textSize="14sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:labelFor="@id/selected_date_value"
-                android:padding="18dp"
-                android:text="@{viewModel.displayedDateString}" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/spinner_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/selected_date"
-            app:layout_constraintTop_toTopOf="@+id/selected_date"
-            app:layout_constraintEnd_toStartOf="@+id/selected_date"
-            app:strokeColor="@color/black"
-            app:strokeWidth=".55dp">
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/filter_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/filter_by"
-            android:textSize="14sp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintStart_toStartOf="@id/spinner_layout"
-            app:layout_constraintTop_toTopOf="parent" />
+            />
 
 
         <TextView

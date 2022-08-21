@@ -40,7 +40,7 @@ val MIGRATION_1_2 : Migration by lazy {
                         ")"
                 )
 
-                for (e in allPositiveEmotions) 
+                for (e in allPositiveEmotions)
                     execSQL(
                         """
                             INSERT INTO backup

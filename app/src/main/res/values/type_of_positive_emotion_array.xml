@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="type_of_positive_emotion_array">
+        <item>Joy</item>
+        <item>Gratitude</item>
+        <item>Serenity</item>
+        <item>Interest</item>
+        <item>Hope</item>
+        <item>Pride</item>
+        <item>Amusement</item>
+        <item>Inspiration</item>
+        <item>Awe</item>
+        <item>Love</item>
+        <item>Other</item>
+    </string-array>
+</resources>

@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                 else
                     DrawerLayout.LOCK_MODE_LOCKED_CLOSED
             )
+
         }
     }
 

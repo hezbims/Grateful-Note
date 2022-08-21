@@ -1,5 +1,6 @@
 package com.example.gratefulnote.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -9,8 +10,17 @@ interface PositiveEmotionDatabaseDao {
     @Insert
     suspend fun insert(positiveEmotion : PositiveEmotion)
 
-    @Query("SELECT * FROM positive_emotion_table WHERE type LIKE '%' || :type || '%'")
-    suspend fun getAllPositiveEmotion(type : String) : List<PositiveEmotion>
+    @Query("""
+        SELECT *
+        FROM positive_emotion_table
+        WHERE (:month = 0 OR month = :month) AND
+              (:year IS NULL OR year = :year) AND
+              (:type = 'Semua' OR type = :type)
+    """)
+    suspend fun getAllPositiveEmotion(month : Int , year : Int? , type : String) : List<PositiveEmotion>
+
+    @Query("SELECT DISTINCT year FROM positive_emotion_table")
+    fun getAllYear() : LiveData<List<Int>>
 
     @Query("SELECT * FROM positive_emotion_table WHERE id=:id")
     suspend fun getAPositiveEmotion(id : Long) : PositiveEmotion

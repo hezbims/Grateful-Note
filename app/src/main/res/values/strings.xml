@@ -49,4 +49,14 @@
     <string name="clock_picker_clock_key">ClockPickerClockKey</string>
     <string name="saved_time_in_millis">SavedTimeInMillis</string>
     <string name="empty_data_text">Belum ada data</string>
+    <string name="filter">Filter</string>
+    <string name="new_gratitude">New Gratitude</string>
+    <string name="feedback">Feedback</string>
+    <string name="terapkan">terapkan</string>
+    <string name="batal">batal</string>
+    <string name="bulan">Bulan</string>
+    <string name="pembatas">/</string>
+    <string name="tahun">Tahun</string>
+    <string name="date_switch_filter_label">Terbaru</string>
+    <string name="semua">Semua</string>
 </resources>

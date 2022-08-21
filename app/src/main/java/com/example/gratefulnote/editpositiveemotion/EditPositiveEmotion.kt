@@ -26,6 +26,7 @@ class EditPositiveEmotion : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         viewModel = EditPositiveEmotionViewModel.getViewModel(this)
         runBlocking {
@@ -44,8 +45,6 @@ class EditPositiveEmotion : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
-
         binding = FragmentEditPositiveEmotionBinding.inflate(inflater ,
             container , false)
 

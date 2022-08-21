@@ -1,39 +1,27 @@
 package com.example.gratefulnote.mainfragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gratefulnote.R
-import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.databinding.FragmentMainBinding
-import com.google.android.material.datepicker.MaterialDatePicker
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainFragment : Fragment() {
-    private val datePicker =
-        MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select date")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .build()
     private lateinit var binding : FragmentMainBinding
     private lateinit var viewModel : MainViewModel
     private lateinit var adapter : PositiveAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this , getViewModelFactory())[MainViewModel::class.java]
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        viewModel = MainViewModel.getInstance(
+            requireActivity().application,
+            this
+        )
     }
 
     override fun onCreateView(
@@ -61,18 +49,8 @@ class MainFragment : Fragment() {
 
         setNavigateToAddGratitudeFragment()
         onChangeRecyclerViewData()
-        addDatePickerListener()
-        onClickDatePicker()
-        onChangeDateFilter()
-        setSpinner()
-        onSpinnerValueChange()
 
         return binding.root
-    }
-    private fun getViewModelFactory() : MainViewModelFactory{
-        val application = requireNotNull(this.activity).application
-        val dataSource = PositiveEmotionDatabase.getInstance(application).positiveEmotionDatabaseDao
-        return MainViewModelFactory(dataSource)
     }
 
     private fun setNavigateToAddGratitudeFragment(){
@@ -86,8 +64,9 @@ class MainFragment : Fragment() {
 
     private fun onChangeRecyclerViewData(){
         viewModel.recyclerViewData.observe(viewLifecycleOwner){
-            adapter.submitList(viewModel.recyclerViewData.value!!)
-
+            adapter.submitList(viewModel.recyclerViewData.value!!){
+                binding.recyclerView.scrollToPosition(0)
+            }
             binding.emptyDataIndicator.visibility =
                 if (viewModel.isDataEmpty)
                     View.VISIBLE
@@ -96,61 +75,22 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun addDatePickerListener(){
-        datePicker.addOnPositiveButtonClickListener {selectedDate : Long ->
-            viewModel.setDateString(
-                SimpleDateFormat("dd/M/yyyy" , Locale.getDefault()).format(Date(selectedDate))
-            )
-        }
 
-        datePicker.addOnCancelListener {
-            viewModel.setDateString()
-        }
-
-        datePicker.addOnNegativeButtonClickListener {
-            viewModel.setDateString()
-        }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu , menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun onClickDatePicker(){
-        binding.selectedDateValue.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN && !datePicker.isVisible) {
-                datePicker.show(parentFragmentManager, "Ini Tag")
-            }
-            false
-        }
-    }
-
-    private fun onChangeDateFilter(){
-        viewModel.selectedDateString.observe(viewLifecycleOwner){
-            viewModel.updateRecyclerViewData()
-        }
-    }
-
-    private fun setSpinner(){
-        ArrayAdapter(requireContext() ,
-            R.layout.positive_emotion_menu_item ,
-            viewModel.typeOfPositiveEmotion).also {
-            binding.spinner.adapter = it
-        }
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                viewModel.setSelectedPositiveEmotion(viewModel.typeOfPositiveEmotion[pos])
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                viewModel.setSelectedPositiveEmotion("All")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.recycler_view_filter) {
+            if (viewModel.canShowFilterDialog) {
+                viewModel.cannotShowFilterDialog()
+                FilterDialogFragment().show(childFragmentManager, "TAG")
             }
         }
+        else if (item.itemId == R.id.add_new_gratitude)
+            viewModel.onClickAddNewGratitude()
+        return super.onOptionsItemSelected(item)
     }
-
-    private fun onSpinnerValueChange(){
-        viewModel.selectedPositiveEmotion.observe(viewLifecycleOwner){
-            viewModel.updateRecyclerViewData()
-        }
-    }
-
-
 
 }
