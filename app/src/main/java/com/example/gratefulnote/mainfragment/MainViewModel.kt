@@ -1,6 +1,7 @@
 package com.example.gratefulnote.mainfragment
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
@@ -59,49 +60,34 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
         updateRecyclerViewData()
     }
 
-    private fun updateRecyclerViewData(){
+    fun updateRecyclerViewData(){
         viewModelScope.launch(Dispatchers.Main) {
             _recyclerViewData.value =
                 withContext(Dispatchers.IO) {
                     with(
                         dataSource.getAllPositiveEmotion(
-                            _selectedMonth,
-                            _selectedYear,
-                            _selectedPositiveEmotion
+                            _filterState.value!!.selectedMonth,
+                            _filterState.value!!.selectedYear,
+                            _filterState.value!!.selectedPositiveEmotion
                         )
                     ) {
-                        if (switchState) reversed() else this
+                        if (_filterState.value!!.switchState) reversed() else this
                     }
                 }
         }
     }
 
-
-    private val months: Array<String> = app.applicationContext.resources.getStringArray(R.array.months_list)
-    private var _selectedMonth = 0
-    val selectedMonth : String
-        get() = months[_selectedMonth]
-
-
-    private var _selectedYear : Int? = null
-    val selectedYear : String
-        get() = _selectedYear?.toString() ?: getString(R.string.semua)
-
-    private var _switchState = true // Terbaru
-    val switchState : Boolean
-        get() = _switchState
-
-    private var _selectedPositiveEmotion = getString(R.string.semua)
-    val selectedPositiveEmotion : String
-        get() = _selectedPositiveEmotion
+    private val _filterState = MutableLiveData(FilterState(app.applicationContext))
+    val filterState : LiveData<FilterState>
+        get() = _filterState
 
     fun setFilterData(month : String , year : String ,
         typeOfPE : String , newSwitchState : Boolean){
-        _switchState = newSwitchState
-        _selectedMonth = months.indexOf(month)
-        _selectedPositiveEmotion = typeOfPE
-        _selectedYear = if (year == getString(R.string.semua)) null else year.toInt()
-        updateRecyclerViewData()
+        _filterState.value = FilterState.getInstance(
+            month , year ,
+            typeOfPE , newSwitchState ,
+            app.applicationContext
+        )
     }
 
 
@@ -136,5 +122,48 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
             ViewModelProvider(
                 owner , MainViewModelFactory(app)
             )[MainViewModel::class.java]
+    }
+
+    class FilterState(private val context : Context){
+        private val months: Array<String> = context.resources.getStringArray(R.array.months_list)
+
+        private var _selectedMonth = 0
+        val selectedMonth : Int
+            get() = _selectedMonth
+        val stringSelectedMonth : String
+            get() = months[_selectedMonth]
+
+        private var _selectedYear : Int? = null
+        val selectedYear : Int?
+            get() = _selectedYear
+        val stringSelectedYear : String
+            get() = _selectedYear?.toString() ?: getString(R.string.semua)
+
+        private var _selectedPositiveEmotion = getString(R.string.semua)
+        val selectedPositiveEmotion : String
+            get() = _selectedPositiveEmotion
+
+        private var _switchState = true
+        val switchState : Boolean
+            get() = _switchState
+
+        fun getString(id : Int) =
+            context.getString(id)
+
+        companion object{
+            fun getInstance(newSelectedMonth: String ,
+                            newSelectedYear : String ,
+                            newSelectedPositiveEmotion : String ,
+                            newSwitchState : Boolean,
+                            context: Context) =
+                FilterState(context).apply {
+                    _selectedMonth = months.indexOf(newSelectedMonth)
+                    _selectedYear =
+                        if (newSelectedYear == getString(R.string.semua)) null
+                        else newSelectedYear.toInt()
+                    _selectedPositiveEmotion = newSelectedPositiveEmotion
+                    _switchState = newSwitchState
+                }
+        }
     }
 }

@@ -40,6 +40,16 @@ class FilterDialogFragment : DialogFragment() {
             }
         }
 
+        viewModel.filterState.observe(viewLifecycleOwner){
+            if (viewModel.isDialogViewFirstTimeCreated){
+                binding.monthSpinner.setText(it.stringSelectedMonth , false)
+                binding.yearSpinner.setText(it.stringSelectedYear , false)
+                binding.typeOfPESpinner.setText(it.selectedPositiveEmotion , false)
+                binding.dateSwitchFilter.isChecked = it.switchState
+                viewModel.doneCreatingFirstViewDialog()
+            }
+        }
+
         return binding.root
     }
 
@@ -61,13 +71,6 @@ class FilterDialogFragment : DialogFragment() {
             binding.typeOfPESpinner.setAdapter(it)
         }
 
-        if (viewModel.isDialogViewFirstTimeCreated){
-            binding.monthSpinner.setText(viewModel.selectedMonth , false)
-            binding.yearSpinner.setText(viewModel.selectedYear , false)
-            binding.typeOfPESpinner.setText(viewModel.selectedPositiveEmotion , false)
-            binding.dateSwitchFilter.isChecked = viewModel.switchState
-            viewModel.doneCreatingFirstViewDialog()
-        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

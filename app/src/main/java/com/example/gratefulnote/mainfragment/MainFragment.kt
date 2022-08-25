@@ -49,6 +49,7 @@ class MainFragment : Fragment() {
 
         setNavigateToAddGratitudeFragment()
         onChangeRecyclerViewData()
+        onChangeFilterData()
 
         return binding.root
     }
@@ -72,6 +73,12 @@ class MainFragment : Fragment() {
                     View.VISIBLE
                 else
                     View.GONE
+        }
+    }
+
+    private fun onChangeFilterData(){
+        viewModel.filterState.observe(viewLifecycleOwner){
+            viewModel.updateRecyclerViewData()
         }
     }
 
