@@ -47,7 +47,6 @@
     <string name="clock_picker_hour_key">ClockPickerHourKey</string>
     <string name="clock_picker_minute_key">ClockPickerMinuteKey</string>
     <string name="clock_picker_clock_key">ClockPickerClockKey</string>
-    <string name="saved_time_in_millis">SavedTimeInMillis</string>
     <string name="empty_data_text">Belum ada data</string>
     <string name="filter">Filter</string>
     <string name="new_gratitude">New Gratitude</string>
@@ -59,4 +58,9 @@
     <string name="tahun">Tahun</string>
     <string name="date_switch_filter_label">Terbaru</string>
     <string name="semua">Semua</string>
+    <string name="email_address">aimanhezbi@gmail.com</string>
+    <string name="subject">Feedback Grateful Note</string>
+    <string name="email_uri">mailto:</string>
+    <string name="saved_hours">SavedHours</string>
+    <string name="saved_minutes">SavedMinutes</string>
 </resources>

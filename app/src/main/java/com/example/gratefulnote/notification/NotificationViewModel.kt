@@ -14,13 +14,10 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
         Context.MODE_PRIVATE)
 
     fun setSavedClock(inputClock : Clock){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
                 with(sharedPreferences.edit()) {
-                    putLong(
-                        app.applicationContext.getString(R.string.saved_time_in_millis),
-                        inputClock.timeInMillis()
-                    )
+                    putInt(app.getString(R.string.saved_hours) , inputClock.hours)
+                    putInt(app.getString(R.string.saved_minutes) , inputClock.minutes)
                     commit()
                 }
                 withContext(Dispatchers.Main) {
@@ -28,18 +25,16 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
                     setAlarmNotification()
                     closeDialog()
                 }
-            }
         }
     }
 
-    private val _clockDisplay = MutableLiveData(Clock.getSavedClock(
-            app.applicationContext
-        ).format()
+    private val _clockDisplay = MutableLiveData(
+        Clock.getSavedClock(app).format()
     )
     val clockDisplay : LiveData<String>
         get() = _clockDisplay
 
-    private val alarmSetter = NotificationAlarmSetter(app.applicationContext)
+    private val alarmSetter = NotificationAlarmSetter(app)
 
     fun setAlarmNotification(){
         if (isSwitchChecked.value == true)

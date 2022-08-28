@@ -1,6 +1,10 @@
 package com.example.gratefulnote
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -17,14 +21,12 @@ class MainActivity : AppCompatActivity() {
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navController = findNavController(R.id.nav_host)
+        val navView = findViewById<NavigationView>(R.id.nav_view)
 
 
         // biar ada upbutton(untuk di non-start destination) dan drawer button (di start destination)
         // start destination bisa dilihat di navigation.xml, di bagian app:startDestination
         NavigationUI.setupActionBarWithNavController(this , navController , drawerLayout)
-
-        // biar bisa navigate sesuai id dari menu item
-        NavigationUI.setupWithNavController(findViewById<NavigationView>(R.id.nav_view) , navController)
 
         navController.addOnDestinationChangedListener{
             nc , nd , _ ->
@@ -34,7 +36,24 @@ class MainActivity : AppCompatActivity() {
                 else
                     DrawerLayout.LOCK_MODE_LOCKED_CLOSED
             )
+        }
 
+        navView.setNavigationItemSelectedListener {
+            if (it.itemId == R.id.feedback){
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse(getString(R.string.email_uri)) // only email apps should handle this
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_address)))
+                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject))
+                }
+                try{
+                    startActivity(intent)
+                }catch (e : ActivityNotFoundException) {
+                    Toast.makeText(applicationContext , "Ada bug, lapor ke : aimanhezbi@gmail.com" , Toast.LENGTH_LONG).show()
+                }
+            }
+            else if (it.itemId == R.id.notificationSettingsFragment)
+                navController.navigate(it.itemId)
+            false
         }
     }
 
