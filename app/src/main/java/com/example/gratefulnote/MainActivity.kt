@@ -1,8 +1,11 @@
 package com.example.gratefulnote
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +15,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 
+const val STORAGE_PERMISSION_REQUEST_CODE = 0
+
 class MainActivity : AppCompatActivity() {
     private lateinit var navController : NavController
     private lateinit var drawerLayout : DrawerLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,20 +45,42 @@ class MainActivity : AppCompatActivity() {
         }
 
         navView.setNavigationItemSelectedListener {
-            if (it.itemId == R.id.feedback){
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse(getString(R.string.email_uri)) // only email apps should handle this
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_address)))
-                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject))
+            when (it.itemId) {
+                R.id.feedback -> {
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data =
+                            Uri.parse(getString(R.string.email_uri)) // only email apps should handle this
+                        putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email_address)))
+                        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject))
+                    }
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Ada bug, lapor ke : ${getString(R.string.email_address)}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-                try{
-                    startActivity(intent)
-                }catch (e : ActivityNotFoundException) {
-                    Toast.makeText(applicationContext , "Ada bug, lapor ke : aimanhezbi@gmail.com" , Toast.LENGTH_LONG).show()
+                R.id.notificationSettingsFragment -> navController.navigate(it.itemId)
+                R.id.backupRestoreFragment -> {
+                    val permissions = arrayOf(
+                        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        else
+                            Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED){
+                            requestPermissions(permissions , STORAGE_PERMISSION_REQUEST_CODE)
+                    }
+                    else
+                        navController.navigate(R.id.backupRestoreFragment)
+
                 }
             }
-            else if (it.itemId == R.id.notificationSettingsFragment)
-                navController.navigate(it.itemId)
             false
         }
     }
@@ -60,5 +88,21 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp() =
         NavigationUI.navigateUp(navController , drawerLayout)
 
-
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                navController.navigate(R.id.backupRestoreFragment)
+            else
+                Toast.makeText(
+                    application ,
+                    "Tolong izinkan akses penyimpanan!" ,
+                    Toast.LENGTH_LONG
+                ).show()
+        }
+    }
 }

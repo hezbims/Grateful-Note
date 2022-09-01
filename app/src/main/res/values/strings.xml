@@ -47,7 +47,7 @@
     <string name="clock_picker_hour_key">ClockPickerHourKey</string>
     <string name="clock_picker_minute_key">ClockPickerMinuteKey</string>
     <string name="clock_picker_clock_key">ClockPickerClockKey</string>
-    <string name="empty_data_text">Belum ada data</string>
+    <string name="belum_ada_data">Belum ada data</string>
     <string name="filter">Filter</string>
     <string name="new_gratitude">New Gratitude</string>
     <string name="feedback">Feedback</string>
@@ -63,4 +63,13 @@
     <string name="email_uri">mailto:</string>
     <string name="saved_hours">SavedHours</string>
     <string name="saved_minutes">SavedMinutes</string>
+    <string name="nama_file">Nama File</string>
+    <string name="gratefulNote">GratefulNote</string>
+    <string name="backup_restore"><![CDATA[Backup & Restore]]></string>
+    <string name="data_kosong">-</string>
+    <string name="last_time_backup">Last time backup :  %1$s</string>
+    <string name="file_size">Size : %1$s</string>
+    <string name="backup_file_name">backup.json</string>
+    <string name="backup_text">Backup</string>
+    <string name="restore_text">Restore</string>
 </resources>

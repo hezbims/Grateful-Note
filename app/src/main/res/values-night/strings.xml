@@ -30,5 +30,5 @@
     <string name="notification_channel_id">ChannelId</string>
     <string name="notification_channel_name">Daily Reminder</string>
     <string name="notification_description">Pengingat agar kamu bersyukur</string>
-    <string name="empty_data_text">Belum ada data</string>
+    <string name="belum_ada_data">Belum ada data</string>
 </resources>

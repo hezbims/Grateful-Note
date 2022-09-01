@@ -3,12 +3,16 @@ package com.example.gratefulnote.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
 interface PositiveEmotionDatabaseDao {
     @Insert
     suspend fun insert(positiveEmotion : PositiveEmotion)
+
+    @Insert ()
+    suspend fun insertAll(positiveEmotions : List<PositiveEmotion>)
 
     @Query("""
         SELECT *
@@ -28,6 +32,8 @@ interface PositiveEmotionDatabaseDao {
     @Query("DELETE FROM positive_emotion_table WHERE id=:id")
     suspend fun delete(id : Long)
 
+    @Query("DELETE FROM positive_emotion_table")
+    suspend fun deleteAll()
 
     @Query("UPDATE positive_emotion_table SET what = :what , why = :why WHERE id = :id")
     suspend fun updateData(what : String , why : String , id : Long)

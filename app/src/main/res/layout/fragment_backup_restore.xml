@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.gratefulnote.backuprestore.BackupRestoreViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".backuprestore.BackupRestoreFragment">
+        <TextView
+            android:id="@+id/last_time_backup_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp"
+            android:text="@{viewModel.lastTimeBackup}"
+            />
+        <TextView
+            android:id="@+id/file_size_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/last_time_backup_textview"
+            app:layout_constraintStart_toStartOf="@id/last_time_backup_textview"
+            android:text="@{viewModel.fileSize}"
+            android:layout_marginTop="24dp"
+            />
+        <Button
+            android:id="@+id/restore_button"
+            android:enabled="@{viewModel.isBackupFileExists()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/file_size_textview"
+            app:layout_constraintTop_toBottomOf="@id/file_size_textview"
+            android:text="@string/restore_text"
+            android:layout_marginTop="24dp"/>
+        <Button
+            android:id="@+id/backup_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backup_text"
+            app:layout_constraintStart_toEndOf="@id/restore_button"
+            app:layout_constraintTop_toTopOf="@id/restore_button"
+            app:layout_constraintBottom_toBottomOf="@id/restore_button"
+            android:layout_marginStart="24dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
