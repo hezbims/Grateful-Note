@@ -17,7 +17,7 @@ fun NotificationManager.sendNotification(context : Context){
     val openAppPendingIntent = PendingIntent.getActivity(context ,
             OPEN_APP_INTENT_ID ,
             openAppIntent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
     val builder = NotificationCompat.Builder(
