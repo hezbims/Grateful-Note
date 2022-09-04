@@ -1,21 +1,20 @@
 package com.example.gratefulnote.editpositiveemotion
 
+import android.app.Application
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.example.gratefulnote.database.PositiveEmotionDatabase
-import com.example.gratefulnote.database.PositiveEmotionDatabaseDao
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class EditPositiveEmotionViewModel(private val database : PositiveEmotionDatabaseDao) : ViewModel() {
+class EditPositiveEmotionViewModel(app : Application , private val id : Long) : AndroidViewModel(app) {
 
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
-    fun getCurrentPositiveEmotion(id : Long) = scope.async {
-        database.getAPositiveEmotion(id)
-    }
+    private val dao = PositiveEmotionDatabase.getInstance(app).positiveEmotionDatabaseDao
+
+    fun getCurrentPositiveEmotion() =
+        viewModelScope.async(Dispatchers.IO) { dao.getAPositiveEmotion(id) }
 
     private val _navigateBack = MutableLiveData(false)
     val navigateBack : LiveData<Boolean>
@@ -23,36 +22,24 @@ class EditPositiveEmotionViewModel(private val database : PositiveEmotionDatabas
     fun navigateBack(){_navigateBack.value = true}
     fun doneNavigateBack(){ _navigateBack.value = false }
 
-    var isFirstTimeFragmentCreated = true
-
-    fun updatePositiveEmotion(what : String , why : String , id : Long){
-        scope.launch{
-            database.updateData(what , why , id)
+    fun updatePositiveEmotion(what : String , why : String){
+        viewModelScope.launch(Dispatchers.IO){
+            dao.updateData(what , why , id)
             withContext(Dispatchers.Main) {
                 navigateBack()
             }
         }
     }
 
-    private var _isDialogOpened = false
-    val isDialogOpened : Boolean
-        get() = _isDialogOpened
-    fun closeDialog(){_isDialogOpened = false}
-    fun openDialog(){_isDialogOpened = true}
-
-    override fun onCleared() {
-        job.cancel()
-        super.onCleared()
-    }
-
     companion object{
         fun getViewModel(fragment : Fragment) : EditPositiveEmotionViewModel{
-            val datasource = PositiveEmotionDatabase.getInstance(fragment.requireActivity().application)
-                .positiveEmotionDatabaseDao
             val viewModelFactory = EditPositiveEmotionViewModelFactory(
-                datasource)
+                fragment.requireActivity().application,
+                EditPositiveEmotionArgs.fromBundle(fragment.requireArguments()).positiveEmotionId
+            )
 
-            return ViewModelProvider(fragment ,
+            return ViewModelProvider(
+                fragment ,
                 viewModelFactory)[EditPositiveEmotionViewModel::class.java]
         }
     }

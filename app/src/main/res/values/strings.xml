@@ -37,7 +37,7 @@
     <string name="ya">Ya</string>
     <string name="confirm_save_content">Yakin ingin meyimpan perubahan?</string>
     <string name="gak">Gak</string>
-    <string name="cancel_dialog_content">Yakin ingin membuang perubahan?</string>
+    <string name="confirm_cancel_content">Yakin ingin membuang perubahan?</string>
     <string name="confirm_edit_save_key">ConfirmEditSaveKey</string>
     <string name="confirm_edit_save_request_key">ConfirmEditSaveRequestKey</string>
     <string name="confirm_edit_cancel_request_key">EditCancelRequestKey</string>
@@ -72,4 +72,7 @@
     <string name="backup_file_name">backup.json</string>
     <string name="backup_text">Backup</string>
     <string name="restore_text">Restore</string>
+    <string name="message_bundle_key">MessageBundleKey</string>
+    <string name="requestkey_bundle_key">RequestKeyBundleKey</string>
+    <string name="valuekey_bundle_key">ValueKeyBundleKey</string>
 </resources>

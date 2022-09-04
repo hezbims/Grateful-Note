@@ -22,7 +22,7 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
 
     /* Menghapus item kalau tong sampah dipencet */
     fun delete(id : Long){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             dataSource.delete(id)
             updateRecyclerViewData()
         }

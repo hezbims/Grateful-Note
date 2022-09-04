@@ -6,39 +6,47 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.gratefulnote.R
+import com.example.gratefulnote.confirmdialog.ConfirmDialog
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.databinding.FragmentEditPositiveEmotionBinding
 import kotlinx.coroutines.runBlocking
 
 class EditPositiveEmotion : Fragment() {
-
     private lateinit var binding : FragmentEditPositiveEmotionBinding
-    private val newWhat : String
-        get() = binding.editPositiveEmotionTitleValue.text.toString()
-    private val newWhy : String
-        get() = binding.editPositiveEmotionDescriptionValue.text.toString()
 
     private lateinit var viewModel: EditPositiveEmotionViewModel
     private lateinit var curPositiveEmotion : PositiveEmotion
 
+    private val newWhat : String
+        get() = binding.editPositiveEmotionTitleValue.text.toString()
+    private val newWhy : String
+        get() = binding.editPositiveEmotionDescriptionValue.text.toString()
     private val isDataChanged : Boolean
-        get() = newWhat != curPositiveEmotion.what || newWhy != curPositiveEmotion.why
+        get() =
+            newWhat != curPositiveEmotion.what || newWhy != curPositiveEmotion.why
+
+    private lateinit var cancelDialog: ConfirmDialog
+    private lateinit var saveDialog : ConfirmDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
         viewModel = EditPositiveEmotionViewModel.getViewModel(this)
-        runBlocking {
-            curPositiveEmotion = viewModel.getCurrentPositiveEmotion(
-                EditPositiveEmotionArgs.fromBundle(requireArguments()).positiveEmotionId
-            ).await()
-        }
-    }
 
-    override fun onDestroy() {
-        viewModel.isFirstTimeFragmentCreated = true
-        super.onDestroy()
+        saveDialog = ConfirmDialog.getInstance(
+            getString(R.string.confirm_save_content),
+            getString(R.string.confirm_edit_save_request_key),
+            getString(R.string.confirm_edit_save_key),
+            requireActivity().application.applicationContext
+        )
+
+       cancelDialog = ConfirmDialog.getInstance(
+            getString(R.string.confirm_cancel_content),
+            getString(R.string.confirm_edit_cancel_request_key),
+            getString(R.string.confirm_edit_cancel_key),
+            requireActivity().application.applicationContext
+        )
     }
 
     override fun onCreateView(
@@ -47,19 +55,27 @@ class EditPositiveEmotion : Fragment() {
     ): View? {
         binding = FragmentEditPositiveEmotionBinding.inflate(inflater ,
             container , false)
-
-        if (viewModel.isFirstTimeFragmentCreated) {
-            binding.editPositiveEmotionTitleValue.setText(curPositiveEmotion.what)
-            binding.editPositiveEmotionDescriptionValue.setText(curPositiveEmotion.why)
-            viewModel.isFirstTimeFragmentCreated = false
-        }
         binding.lifecycleOwner = viewLifecycleOwner
 
         setOnBackPressedListener()
         setNavigateBack()
         setDialogResultListener()
+        setFirstTimeCreated(savedInstanceState == null)
 
         return binding.root
+    }
+
+    private fun setFirstTimeCreated(isFirstTimeCreated : Boolean){
+        curPositiveEmotion = runBlocking {
+            viewModel.getCurrentPositiveEmotion().await()
+        }
+
+        if (isFirstTimeCreated){
+            binding.apply {
+                editPositiveEmotionTitleValue.setText(curPositiveEmotion.what)
+                editPositiveEmotionDescriptionValue.setText(curPositiveEmotion.why)
+            }
+        }
     }
 
     private fun setNavigateBack(){
@@ -72,19 +88,14 @@ class EditPositiveEmotion : Fragment() {
     }
 
     private fun setDialogResultListener(){
-        val id = EditPositiveEmotionArgs.fromBundle(requireArguments()).positiveEmotionId
-
         childFragmentManager.setFragmentResultListener(getString(R.string.confirm_edit_save_request_key) , this){
                 _ , bundle ->
             if (bundle.getBoolean(getString(R.string.confirm_edit_save_key))) {
                 viewModel.updatePositiveEmotion(
                     binding.editPositiveEmotionTitleValue.text.toString(),
                     binding.editPositiveEmotionDescriptionValue.text.toString(),
-                    id
                 )
             }
-            else
-                viewModel.closeDialog()
         }
 
         childFragmentManager.setFragmentResultListener(
@@ -92,20 +103,18 @@ class EditPositiveEmotion : Fragment() {
             _ , bundle ->
             if (bundle.getBoolean(getString(R.string.confirm_edit_cancel_key)))
                 viewModel.navigateBack()
-            else
-                viewModel.closeDialog()
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (isDataChanged){
-            if (!viewModel.isDialogOpened) {
-                viewModel.openDialog()
-                if (item.itemId == R.id.save)
-                    ConfirmSaveDialog()
-                        .show(childFragmentManager, "TAG")
-                else
-                    ConfirmCancelDialog().show(childFragmentManager, "TAG")
+            if (item.itemId == R.id.save){
+                if (!saveDialog.isAdded)
+                    saveDialog.show(childFragmentManager , "TAG")
+            }
+            else{
+                if (!cancelDialog.isAdded)
+                    cancelDialog.show(childFragmentManager , "TAG")
             }
         }
         else
@@ -122,10 +131,8 @@ class EditPositiveEmotion : Fragment() {
     private fun setOnBackPressedListener(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
             if (isDataChanged){
-                if (!viewModel.isDialogOpened){
-                    viewModel.openDialog()
-                    ConfirmCancelDialog().show(childFragmentManager , "TAG")
-                }
+                if (!cancelDialog.isAdded)
+                    cancelDialog.show(childFragmentManager , "TAG")
             }
             else if (isEnabled){
                 isEnabled = false

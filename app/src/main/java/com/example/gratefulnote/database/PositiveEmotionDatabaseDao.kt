@@ -3,7 +3,6 @@ package com.example.gratefulnote.database
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
@@ -11,7 +10,7 @@ interface PositiveEmotionDatabaseDao {
     @Insert
     suspend fun insert(positiveEmotion : PositiveEmotion)
 
-    @Insert ()
+    @Insert
     suspend fun insertAll(positiveEmotions : List<PositiveEmotion>)
 
     @Query("""
