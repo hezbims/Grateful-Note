@@ -51,6 +51,30 @@
             app:layout_constraintBottom_toBottomOf="@id/restore_button"
             android:layout_marginStart="24dp"/>
 
+        <TextView
+            android:id="@+id/backup_restore_status_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/backup_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="72dp"
+            android:visibility="@{viewModel.loadingDisplayed}"
+            tools:text="Sedang melakukan proses backup..."
+            android:text="@{viewModel.processingStatusLabel}"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:minWidth="50dp"
+            android:minHeight="50dp"
+            android:visibility="@{viewModel.loadingDisplayed}"
+            app:layout_constraintTop_toBottomOf="@id/backup_restore_status_label"
+            app:layout_constraintStart_toStartOf="@id/backup_restore_status_label"
+            app:layout_constraintEnd_toEndOf="@id/backup_restore_status_label"
+            android:layout_margin="24dp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

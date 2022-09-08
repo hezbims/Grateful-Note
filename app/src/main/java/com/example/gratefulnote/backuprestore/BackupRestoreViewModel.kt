@@ -2,7 +2,7 @@ package com.example.gratefulnote.backuprestore
 
 import android.app.Application
 import android.os.Environment
-import android.widget.Toast
+import android.view.View
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
@@ -60,11 +60,27 @@ class BackupRestoreViewModel(app : Application) : AndroidViewModel(app) {
         )
     }
 
-    private var _isBackuping = false
+    private val _isProcessing = MutableLiveData(ProcessingStatus.NONE)
+    val isProcessing : Boolean
+        get() =
+            _isProcessing.value!! != ProcessingStatus.NONE
+
+    val loadingDisplayed = Transformations.map(_isProcessing){
+        if (it == ProcessingStatus.NONE)View.GONE
+        else View.VISIBLE
+    }
+
+    val processingStatusLabel = Transformations.map(_isProcessing){
+        getString(
+            R.string.backup_restore_process_status ,
+            if (it == ProcessingStatus.RESTORE) getString(R.string.restore_text)
+            else getString(R.string.backup_text)
+        )
+    }
 
     fun backup(){
-        if(!_isBackuping) {
-            _isBackuping = true
+        if(_isProcessing.value!! == ProcessingStatus.NONE) {
+            _isProcessing.value = ProcessingStatus.BACKUP
             viewModelScope.launch(Dispatchers.IO) {
                 val data = dao.getAllPositiveEmotion(
                     0,
@@ -76,16 +92,17 @@ class BackupRestoreViewModel(app : Application) : AndroidViewModel(app) {
                     it.write(Gson().toJson(data).toByteArray())
                 }
 
-                _isBackuping = false
                 withContext(Dispatchers.Main){
                     backupFile.value = getBackupFile()
+                    _isProcessing.value = ProcessingStatus.NONE
                 }
             }
         }
     }
 
     fun restore(){
-        if (backupFile.value!!.exists()) {
+        if (_isProcessing.value!! == ProcessingStatus.NONE) {
+            _isProcessing.value = ProcessingStatus.RESTORE
             val jsonString = FileInputStream(backupFile.value).bufferedReader().use {
                 it.readText()
             }
@@ -96,18 +113,21 @@ class BackupRestoreViewModel(app : Application) : AndroidViewModel(app) {
             viewModelScope.launch(Dispatchers.IO) {
                 dao.deleteAll()
                 dao.insertAll(positiveEmotions)
+                withContext(Dispatchers.Main) {
+                    _isProcessing.value = ProcessingStatus.NONE
+                }
             }
         }
-        else
-            Toast.makeText(
-                getApplication() ,
-                "Backup file gak ada" ,
-                Toast.LENGTH_SHORT
-            ).show()
     }
 
     private fun getString(id : Int , vararg arg : String) =
         getApplication<Application>().getString(id , *arg)
+
+    private companion object{
+        enum class ProcessingStatus{
+            BACKUP , RESTORE , NONE
+        }
+    }
 }
 
 class BackupRestoreViewModelFactory(private val app : Application): ViewModelProvider.Factory {
