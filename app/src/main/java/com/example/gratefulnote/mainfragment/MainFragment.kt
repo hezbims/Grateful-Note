@@ -17,6 +17,7 @@ class MainFragment : Fragment() {
     private lateinit var adapter : PositiveAdapter
 
     private lateinit var confirmDeleteDialog : ConfirmDialog
+    private val filterDialog = FilterDialogFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,7 @@ class MainFragment : Fragment() {
             valueKey = getString(R.string.confirm_delete_value_key),
             requireContext()
         )
+
     }
 
     override fun onCreateView(
@@ -48,7 +50,8 @@ class MainFragment : Fragment() {
         adapter = PositiveAdapter(PositiveAdapterClickListener(
             {itemId ->
                 viewModel.setDeletedItemId(itemId)
-                confirmDeleteDialog.show(childFragmentManager , "TAG")
+                if (!confirmDeleteDialog.isAdded)
+                    confirmDeleteDialog.show(childFragmentManager , "TAG")
             },
             {itemId ->
                 val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(itemId)
@@ -112,9 +115,8 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.recycler_view_filter) {
-            if (viewModel.canShowFilterDialog) {
-                viewModel.cannotShowFilterDialog()
-                FilterDialogFragment().show(childFragmentManager, "TAG")
+            if (!filterDialog.isAdded) {
+                filterDialog.show(childFragmentManager, "TAG")
             }
         }
         else if (item.itemId == R.id.add_new_gratitude)

@@ -101,21 +101,6 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
             listOf(getString(R.string.semua)) + l.map{it.toString()}
     }
 
-    private var _canShowFilterDialog = true
-    val canShowFilterDialog : Boolean
-        get() = _canShowFilterDialog
-    fun cannotShowFilterDialog(){_canShowFilterDialog = false}
-
-    private var _isDialogViewFirstTimeCreated = true
-    val isDialogViewFirstTimeCreated : Boolean
-        get() = _isDialogViewFirstTimeCreated
-    fun doneCreatingFirstViewDialog(){_isDialogViewFirstTimeCreated = false}
-
-    fun resetDialogState(){
-        _isDialogViewFirstTimeCreated = true
-        _canShowFilterDialog = true
-    }
-
     fun getString(id : Int) =
         app.applicationContext.getString(id)
 

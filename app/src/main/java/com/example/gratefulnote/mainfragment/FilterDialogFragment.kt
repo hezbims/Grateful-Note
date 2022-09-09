@@ -2,7 +2,6 @@ package com.example.gratefulnote.mainfragment
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +28,7 @@ class FilterDialogFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewModel.listOfYearToString.observe(viewLifecycleOwner) {listOfYearToString ->
             ArrayAdapter(
                 requireContext(),
@@ -41,12 +40,11 @@ class FilterDialogFragment : DialogFragment() {
         }
 
         viewModel.filterState.observe(viewLifecycleOwner){
-            if (viewModel.isDialogViewFirstTimeCreated){
+            if (savedInstanceState == null){
                 binding.monthSpinner.setText(it.stringSelectedMonth , false)
                 binding.yearSpinner.setText(it.stringSelectedYear , false)
                 binding.typeOfPESpinner.setText(it.selectedPositiveEmotion , false)
                 binding.dateSwitchFilter.isChecked = it.switchState
-                viewModel.doneCreatingFirstViewDialog()
             }
         }
 
@@ -89,18 +87,12 @@ class FilterDialogFragment : DialogFragment() {
                     binding.typeOfPESpinner.text.toString(),
                     binding.dateSwitchFilter.isChecked
                 )
-                viewModel.resetDialogState()
             }
             .setNegativeButton(R.string.batal){
                 _ , _ ->
-                viewModel.resetDialogState()
             }
             .create()
     }
 
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        viewModel.resetDialogState()
-    }
 }
 
