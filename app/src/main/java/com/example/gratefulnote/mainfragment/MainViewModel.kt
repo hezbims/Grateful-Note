@@ -1,7 +1,6 @@
 package com.example.gratefulnote.mainfragment
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
@@ -45,22 +44,13 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
 
 
     /* Semua recyclerView Data */
-    private val _recyclerViewData = MutableLiveData(listOf<PositiveEmotion>())
+    private var _recyclerViewData = MutableLiveData(listOf<PositiveEmotion>())
     val recyclerViewData : LiveData<List<PositiveEmotion>>
         get() = _recyclerViewData
-
-    val isDataEmpty : Boolean
-        get(){
-            _recyclerViewData.value?.let {
-                return it.isEmpty()
-            }
-            return true
-        }
-
-
-    init{
-        updateRecyclerViewData()
-    }
+    private val _isDataUpdated = MutableLiveData(false)
+    val isDataUpdated : LiveData<Boolean>
+        get() = _isDataUpdated
+    fun doneCreatingRecyclerView(){_isDataUpdated.value = false}
 
     fun updateRecyclerViewData(){
         viewModelScope.launch(Dispatchers.Main) {
@@ -76,12 +66,14 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
                         if (_filterState.value!!.switchState) reversed() else this
                     }
                 }
+            _isDataUpdated.value = true
         }
     }
 
     private val _filterState = MutableLiveData(FilterState(app.applicationContext))
     val filterState : LiveData<FilterState>
         get() = _filterState
+    var clickEdit = false
 
     fun setFilterData(month : String , year : String ,
         typeOfPE : String , newSwitchState : Boolean){
@@ -109,48 +101,5 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
             ViewModelProvider(
                 owner , MainViewModelFactory(app)
             )[MainViewModel::class.java]
-    }
-
-    class FilterState(private val context : Context){
-        private val months: Array<String> = context.resources.getStringArray(R.array.months_list)
-
-        private var _selectedMonth = 0
-        val selectedMonth : Int
-            get() = _selectedMonth
-        val stringSelectedMonth : String
-            get() = months[_selectedMonth]
-
-        private var _selectedYear : Int? = null
-        val selectedYear : Int?
-            get() = _selectedYear
-        val stringSelectedYear : String
-            get() = _selectedYear?.toString() ?: getString(R.string.semua)
-
-        private var _selectedPositiveEmotion = getString(R.string.semua)
-        val selectedPositiveEmotion : String
-            get() = _selectedPositiveEmotion
-
-        private var _switchState = true
-        val switchState : Boolean
-            get() = _switchState
-
-        fun getString(id : Int) =
-            context.getString(id)
-
-        companion object{
-            fun getInstance(newSelectedMonth: String ,
-                            newSelectedYear : String ,
-                            newSelectedPositiveEmotion : String ,
-                            newSwitchState : Boolean,
-                            context: Context) =
-                FilterState(context).apply {
-                    _selectedMonth = months.indexOf(newSelectedMonth)
-                    _selectedYear =
-                        if (newSelectedYear == getString(R.string.semua)) null
-                        else newSelectedYear.toInt()
-                    _selectedPositiveEmotion = newSelectedPositiveEmotion
-                    _switchState = newSwitchState
-                }
-        }
     }
 }

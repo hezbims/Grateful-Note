@@ -1,12 +1,14 @@
 package com.example.gratefulnote.mainfragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.gratefulnote.R
 import com.example.gratefulnote.confirmdialog.ConfirmDialog
 import com.example.gratefulnote.databinding.FragmentMainBinding
@@ -39,7 +41,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_main , container , false)
 
@@ -54,10 +56,13 @@ class MainFragment : Fragment() {
                     confirmDeleteDialog.show(childFragmentManager , "TAG")
             },
             {itemId ->
+                viewModel.clickEdit = true
                 val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(itemId)
                 Navigation.findNavController(binding.root).navigate(action)
             }
         ))
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -89,15 +94,22 @@ class MainFragment : Fragment() {
     }
 
     private fun onChangeRecyclerViewData(){
-        viewModel.recyclerViewData.observe(viewLifecycleOwner){
-            adapter.submitList(viewModel.recyclerViewData.value!!){
-                binding.recyclerView.scrollToPosition(0)
+        viewModel.isDataUpdated.observe(viewLifecycleOwner){
+            if (it) {
+                adapter.submitList(viewModel.recyclerViewData.value!!) {
+                    if (!viewModel.clickEdit) {
+                        binding.recyclerView.scrollToPosition(0)
+                    }
+                    viewModel.clickEdit = false
+                }
+
+                binding.emptyDataIndicator.visibility =
+                    if (viewModel.recyclerViewData.value!!.isEmpty())
+                        View.VISIBLE
+                    else
+                        View.GONE
+                viewModel.doneCreatingRecyclerView()
             }
-            binding.emptyDataIndicator.visibility =
-                if (viewModel.isDataEmpty)
-                    View.VISIBLE
-                else
-                    View.GONE
         }
     }
 
