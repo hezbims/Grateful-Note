@@ -20,10 +20,12 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
                 .resources
                 .getStringArray(R.array.type_of_positive_emotion_array)
 
+    private var deletedItemId = 0L
+    fun setDeletedItemId(id : Long){ deletedItemId = id }
     /* Menghapus item kalau tong sampah dipencet */
-    fun delete(id : Long){
+    fun delete(){
         viewModelScope.launch(Dispatchers.IO) {
-            dataSource.delete(id)
+            dataSource.delete(deletedItemId)
             updateRecyclerViewData()
         }
     }

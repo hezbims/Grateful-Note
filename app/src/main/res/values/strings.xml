@@ -76,4 +76,7 @@
     <string name="requestkey_bundle_key">RequestKeyBundleKey</string>
     <string name="valuekey_bundle_key">ValueKeyBundleKey</string>
     <string name="backup_restore_process_status">Sedang melakukan proses %1$s…</string>
+    <string name="confirm_delete_message">Yakin ingin menghapus data?</string>
+    <string name="confirm_delete_request_key">ConfirmDeleteRequestKey</string>
+    <string name="confirm_delete_value_key">Confirm Delete Value Key</string>
 </resources>

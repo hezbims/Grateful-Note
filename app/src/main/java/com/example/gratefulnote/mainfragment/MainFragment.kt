@@ -8,6 +8,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gratefulnote.R
+import com.example.gratefulnote.confirmdialog.ConfirmDialog
 import com.example.gratefulnote.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -15,12 +16,21 @@ class MainFragment : Fragment() {
     private lateinit var viewModel : MainViewModel
     private lateinit var adapter : PositiveAdapter
 
+    private lateinit var confirmDeleteDialog : ConfirmDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         viewModel = MainViewModel.getInstance(
             requireActivity().application,
             this
+        )
+
+        confirmDeleteDialog = ConfirmDialog.getInstance(
+            message = getString(R.string.confirm_delete_message),
+            requestKey = getString(R.string.confirm_delete_request_key),
+            valueKey = getString(R.string.confirm_delete_value_key),
+            requireContext()
         )
     }
 
@@ -36,11 +46,12 @@ class MainFragment : Fragment() {
 
         // RecyclerView Adapter
         adapter = PositiveAdapter(PositiveAdapterClickListener(
-            {
-                viewModel.delete(it)
+            {itemId ->
+                viewModel.setDeletedItemId(itemId)
+                confirmDeleteDialog.show(childFragmentManager , "TAG")
             },
-            {
-                val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(it)
+            {itemId ->
+                val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(itemId)
                 Navigation.findNavController(binding.root).navigate(action)
             }
         ))
@@ -50,8 +61,19 @@ class MainFragment : Fragment() {
         setNavigateToAddGratitudeFragment()
         onChangeRecyclerViewData()
         onChangeFilterData()
+        setConfirmDeleteDialogResultListener()
 
         return binding.root
+    }
+
+    private fun setConfirmDeleteDialogResultListener(){
+        childFragmentManager.setFragmentResultListener(
+            getString(R.string.confirm_delete_request_key),
+            this
+        ){ _ , bundle ->
+            if (bundle.getBoolean(getString(R.string.confirm_delete_value_key)))
+                viewModel.delete()
+        }
     }
 
     private fun setNavigateToAddGratitudeFragment(){
