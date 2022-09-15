@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        app:strokeWidth=".01dp"
-        app:strokeColor="@color/black">
+        app:cardElevation="20dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,17 +32,17 @@
                 tools:text="22-01-2013" />
 
             <HorizontalScrollView
-                    android:id="@+id/horizonal_scroll_view"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="36dp"
-                    android:layout_marginBottom="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/delete_positive_emotion"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@id/tanggal"
-                    app:layout_constraintTop_toBottomOf="@id/tanggal">
+                android:id="@+id/horizonal_scroll_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/delete_positive_emotion"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/tanggal"
+                app:layout_constraintTop_toBottomOf="@id/tanggal">
                 <TextView
                     android:id="@+id/penyebab"
                     android:layout_height="wrap_content"
@@ -71,22 +70,21 @@
                 android:id="@+id/delete_positive_emotion"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginStart="6dp"
+                android:layout_margin="6dp"
                 android:contentDescription="@string/delete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_close"
-                android:background="@drawable/solid_border"/>
+                app:srcCompat="@drawable/ic_close" />
 
             <ImageView
                 android:id="@+id/edit_positive_emotion"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:layout_margin="6dp"
+                android:contentDescription="@string/edit"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/delete_positive_emotion"
-                app:srcCompat="@drawable/ic_edit"
-                android:background="@drawable/solid_border"
-                android:contentDescription="@string/edit"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_edit" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

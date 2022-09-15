@@ -35,13 +35,13 @@
     <string name="notification_channel_name">Daily Reminder</string>
     <string name="notification_description">Pengingat agar kamu bersyukur</string>
     <string name="ya">Ya</string>
-    <string name="confirm_save_content">Yakin ingin meyimpan perubahan?</string>
+    <string name="confirm_edit_save_content">Yakin ingin meyimpan perubahan?</string>
     <string name="gak">Gak</string>
-    <string name="confirm_cancel_content">Yakin ingin membuang perubahan?</string>
-    <string name="confirm_edit_save_key">ConfirmEditSaveKey</string>
+    <string name="confirm_edit_cancel_content">Yakin ingin membuang perubahan?</string>
+    <string name="confirm_edit_save_value_key">ConfirmEditSaveKey</string>
     <string name="confirm_edit_save_request_key">ConfirmEditSaveRequestKey</string>
-    <string name="confirm_edit_cancel_request_key">EditCancelRequestKey</string>
-    <string name="confirm_edit_cancel_key">EditCancelKey</string>
+    <string name="confirm_edit_cancel_request_key">ConfirmEditCancelRequestKey</string>
+    <string name="confirm_edit_cancel_value_key">EditCancelValueKey</string>
     <string name="clock_picker_request_key">ClockPickerRequestKey</string>
     <string name="clock_picker_cancel_key">ClockPickerCancelKey</string>
     <string name="clock_picker_hour_key">ClockPickerHourKey</string>
@@ -79,4 +79,10 @@
     <string name="confirm_delete_message">Yakin ingin menghapus data?</string>
     <string name="confirm_delete_request_key">ConfirmDeleteRequestKey</string>
     <string name="confirm_delete_value_key">Confirm Delete Value Key</string>
+    <string name="confirm_add_cancel_message">Yakin ingin membuang data?</string>
+    <string name="confirm_add_cancel_request_key">ConfirmAddCancelRequestKey</string>
+    <string name="confirm_add_cancel_value_key">ConfirmAddCancelValueKey</string>
+    <string name="confirm_add_save_message">Yakin ingin menyimpan data?</string>
+    <string name="confirm_add_save_request_key">ConfirmAddSaveRequestKey</string>
+    <string name="confirm_add_save_value_key">ConfirmAddSaveValueKey</string>
 </resources>

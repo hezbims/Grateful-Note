@@ -39,18 +39,6 @@
                     android:hint="@string/describe_your_positive_emotion" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/submit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/submit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/positive_emotion_description_layout" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/what_make_grateful_layout"
                 android:layout_width="0dp"

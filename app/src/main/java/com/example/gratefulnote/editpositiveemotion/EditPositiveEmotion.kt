@@ -35,16 +35,16 @@ class EditPositiveEmotion : Fragment() {
         viewModel = EditPositiveEmotionViewModel.getViewModel(this)
 
         saveDialog = ConfirmDialog.getInstance(
-            getString(R.string.confirm_save_content),
+            getString(R.string.confirm_edit_save_content),
             getString(R.string.confirm_edit_save_request_key),
-            getString(R.string.confirm_edit_save_key),
+            getString(R.string.confirm_edit_save_value_key),
             requireActivity().application.applicationContext
         )
 
        cancelDialog = ConfirmDialog.getInstance(
-            getString(R.string.confirm_cancel_content),
+            getString(R.string.confirm_edit_cancel_content),
             getString(R.string.confirm_edit_cancel_request_key),
-            getString(R.string.confirm_edit_cancel_key),
+            getString(R.string.confirm_edit_cancel_value_key),
             requireActivity().application.applicationContext
         )
     }
@@ -90,7 +90,7 @@ class EditPositiveEmotion : Fragment() {
     private fun setDialogResultListener(){
         childFragmentManager.setFragmentResultListener(getString(R.string.confirm_edit_save_request_key) , this){
                 _ , bundle ->
-            if (bundle.getBoolean(getString(R.string.confirm_edit_save_key))) {
+            if (bundle.getBoolean(getString(R.string.confirm_edit_save_value_key))) {
                 viewModel.updatePositiveEmotion(
                     binding.editPositiveEmotionTitleValue.text.toString(),
                     binding.editPositiveEmotionDescriptionValue.text.toString(),
@@ -101,7 +101,7 @@ class EditPositiveEmotion : Fragment() {
         childFragmentManager.setFragmentResultListener(
             getString(R.string.confirm_edit_cancel_request_key) ,this){
             _ , bundle ->
-            if (bundle.getBoolean(getString(R.string.confirm_edit_cancel_key)))
+            if (bundle.getBoolean(getString(R.string.confirm_edit_cancel_value_key)))
                 viewModel.navigateBack()
         }
     }
