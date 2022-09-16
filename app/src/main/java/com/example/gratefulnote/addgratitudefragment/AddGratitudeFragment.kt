@@ -118,12 +118,15 @@ class AddGratitudeFragment : Fragment() {
     private fun allTextEmpty() =
         binding.whatValue.text!!.isEmpty() && binding.whyValue.text!!.isEmpty()
 
+    private fun showCancelDialog(){
+        if (!cancelDialog.isAdded)
+            cancelDialog.show(childFragmentManager , "TAG")
+    }
+
     private fun setOnBackPressedListener(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
-            if (!allTextEmpty()){
-                if (!cancelDialog.isAdded)
-                    cancelDialog.show(childFragmentManager , "TAG")
-            }
+            if (!allTextEmpty())
+                showCancelDialog()
             else if (isEnabled){
                 isEnabled = false
                 requireActivity().onBackPressed()
@@ -138,9 +141,9 @@ class AddGratitudeFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home){
-            if (!cancelDialog.isAdded){
-                cancelDialog.show(childFragmentManager , "TAG")
-            }
+            if (!allTextEmpty())
+                showCancelDialog()
+            else return super.onOptionsItemSelected(item)
         }
         else{
             if (!saveDialog.isAdded){
