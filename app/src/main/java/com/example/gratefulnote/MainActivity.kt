@@ -64,22 +64,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.notificationSettingsFragment -> navController.navigate(it.itemId)
-                R.id.backupRestoreFragment -> {
-                    val permissions = arrayOf(
-                        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q)
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        else
-                            Manifest.permission.MANAGE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    )
-                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                        PackageManager.PERMISSION_GRANTED){
-                            requestPermissions(permissions , STORAGE_PERMISSION_REQUEST_CODE)
-                    }
-                    else
-                        navController.navigate(R.id.backupRestoreFragment)
-
-                }
+                R.id.backupRestoreFragment -> navController.navigate(R.id.backupRestoreFragment)
             }
             false
         }

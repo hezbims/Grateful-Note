@@ -48,6 +48,6 @@
     <fragment
         android:id="@+id/backupRestoreFragment"
         android:name="com.example.gratefulnote.backuprestore.BackupRestoreFragment"
-        android:label="fragment_backup_restore"
+        android:label="Backup and Restore"
         tools:layout="@layout/fragment_backup_restore" />
 </navigation>

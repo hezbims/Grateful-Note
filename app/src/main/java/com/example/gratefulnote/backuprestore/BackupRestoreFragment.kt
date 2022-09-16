@@ -14,6 +14,19 @@ class BackupRestoreFragment : Fragment() {
     private lateinit var viewModel : BackupRestoreViewModel
     private lateinit var binding : FragmentBackupRestoreBinding
 
+
+    private val createJSONIntent = registerForActivityResult(
+        CreateJSON()
+    ){
+        viewModel.backup(it)
+    }
+
+    private val restoreJsonIntent = registerForActivityResult(
+        RestoreJSON()
+    ){
+        viewModel.restore(it)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -33,10 +46,10 @@ class BackupRestoreFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.restoreButton.setOnClickListener {
-            viewModel.restore()
+            restoreJsonIntent.launch("")
         }
         binding.backupButton.setOnClickListener {
-            viewModel.backup()
+            createJSONIntent.launch("")
         }
 
         setOnBackPressed()

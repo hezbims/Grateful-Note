@@ -1,7 +1,8 @@
 package com.example.gratefulnote.backuprestore
 
 import android.app.Application
-import android.os.Environment
+import android.net.Uri
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
@@ -12,53 +13,12 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
 
-class BackupRestoreViewModel(app : Application) : AndroidViewModel(app) {
+class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(app) {
+
     private val dao = PositiveEmotionDatabase
         .getInstance(app)
         .positiveEmotionDatabaseDao
-
-    private fun getBackupFile() : File{
-        val path = File(
-            Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS
-            ) ,
-            getString(R.string.gratefulNote)
-        )
-        path.mkdir()
-
-        return File(path , getString(R.string.backup_file_name))
-    }
-
-    private val backupFile = MutableLiveData(getBackupFile())
-
-    val isBackupFileExists = Transformations.map(backupFile){
-        it.exists()
-    }
-
-    val lastTimeBackup = Transformations.map(backupFile){
-        getString(
-            R.string.last_time_backup ,
-            if (it.exists()){
-                val formatter = SimpleDateFormat("d MMMM yyyy, HH:mm" , Locale.getDefault())
-                formatter.format(Date(it.lastModified()))
-            }
-            else getString(R.string.data_kosong)
-        )
-    }
-
-    val fileSize = Transformations.map(backupFile){
-        getString(
-            R.string.file_size,
-            if (it.exists()) String.format("%.2f KB" , it.length().toDouble() / 1024)
-            else getString(R.string.data_kosong)
-        )
-    }
 
     private val _isProcessing = MutableLiveData(ProcessingStatus.NONE)
     val isProcessing : Boolean
@@ -78,7 +38,7 @@ class BackupRestoreViewModel(app : Application) : AndroidViewModel(app) {
         )
     }
 
-    fun backup(){
+    fun backup(uri : Uri){
         if(_isProcessing.value!! == ProcessingStatus.NONE) {
             _isProcessing.value = ProcessingStatus.BACKUP
             viewModelScope.launch(Dispatchers.IO) {
@@ -88,22 +48,22 @@ class BackupRestoreViewModel(app : Application) : AndroidViewModel(app) {
                     getString(R.string.semua)
                 )
 
-                FileOutputStream(getBackupFile()).use {
+                app.contentResolver.openOutputStream(uri)!!.use {
                     it.write(Gson().toJson(data).toByteArray())
                 }
 
+
                 withContext(Dispatchers.Main){
-                    backupFile.value = getBackupFile()
                     _isProcessing.value = ProcessingStatus.NONE
                 }
             }
         }
     }
 
-    fun restore(){
+    fun restore(uri : Uri){
         if (_isProcessing.value!! == ProcessingStatus.NONE) {
             _isProcessing.value = ProcessingStatus.RESTORE
-            val jsonString = FileInputStream(backupFile.value).bufferedReader().use {
+            val jsonString = app.contentResolver.openInputStream(uri)!!.bufferedReader().use {
                 it.readText()
             }
 
@@ -121,7 +81,7 @@ class BackupRestoreViewModel(app : Application) : AndroidViewModel(app) {
     }
 
     private fun getString(id : Int , vararg arg : String) =
-        getApplication<Application>().getString(id , *arg)
+        app.getString(id , *arg)
 
     private companion object{
         enum class ProcessingStatus{
