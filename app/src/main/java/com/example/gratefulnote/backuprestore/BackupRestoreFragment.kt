@@ -18,13 +18,15 @@ class BackupRestoreFragment : Fragment() {
     private val createJSONIntent = registerForActivityResult(
         CreateJSON()
     ){
-        viewModel.backup(it)
+        if (it != null)
+            viewModel.backup(it)
     }
 
     private val restoreJsonIntent = registerForActivityResult(
         RestoreJSON()
     ){
-        viewModel.restore(it)
+        if (it != null)
+            viewModel.restore(it)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
