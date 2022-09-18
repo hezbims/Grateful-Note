@@ -1,6 +1,7 @@
 package com.example.gratefulnote.notification
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,15 +34,22 @@ class NotificationSettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNotificationSettingsBinding.inflate(inflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         setSwitchCheckedChangeListener()
         setOpenDialogListener()
+        setNotificationTimeViewGroupVisibility()
 
         return binding.root
+    }
+
+    private fun setNotificationTimeViewGroupVisibility(){
+        binding.notificationTimeViewgroup.visibility =
+            if (viewModel.isSwitchChecked)View.VISIBLE
+            else View.GONE
     }
 
     private fun getViewModelFactory() = NotificationViewModelFactory(
@@ -49,14 +57,10 @@ class NotificationSettingsFragment : Fragment() {
     )
 
     private fun setSwitchCheckedChangeListener(){
-        viewModel.isSwitchChecked.observe(viewLifecycleOwner){
-            binding.notificationTimeViewgroup.visibility =
-                if (it)View.VISIBLE
-                else View.GONE
-            viewModel.setAlarmNotification()
-        }
         binding.switchNotification.setOnCheckedChangeListener{_ , isChecked ->
             viewModel.updateSwitchStatus(isChecked)
+            setNotificationTimeViewGroupVisibility()
+            viewModel.setAlarmNotification()
         }
     }
 

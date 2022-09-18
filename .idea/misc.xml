@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/drawable/ic_check.xml" value="0.124" />
+        <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/drawable/ic_health_care.xml" value="0.196" />
+        <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/drawable/ic_health_note.xml" value="0.196" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/drawable/ic_trash_bin.xml" value="0.156" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/drawable/solid_border.xml" value="0.156" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/layout/activity_main.xml" value="0.125" />
@@ -25,6 +27,8 @@
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/menu/edit_positive_emotion.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/menu/edit_positive_emotion_menu.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/menu/main_menu.xml" value="0.16302083333333334" />
+        <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.124" />
+        <entry key="..\:/Users/hezbi/AndroidStudioProjects/GratefulNote/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.124" />
         <entry key="..\:/Users/hezbi/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/hezbi/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_item.xml" value="0.12364130434782608" />
       </map>

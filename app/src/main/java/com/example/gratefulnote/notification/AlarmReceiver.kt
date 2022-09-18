@@ -12,8 +12,6 @@ class AlarmReceiver : BroadcastReceiver() {
                 NotificationManager::class.java
             ) as NotificationManager
         notificationManager.sendNotification(context)
-
-        NotificationAlarmSetter(context).setAlarm()
     }
 
 }

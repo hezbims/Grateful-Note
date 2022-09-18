@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 
 const val BROADCAST_INTENT_ID = 0
 
@@ -26,9 +25,10 @@ class NotificationAlarmSetter(private val context: Context) {
         if (savedTime <= nowTime)
             savedTime += AlarmManager.INTERVAL_DAY
 
-        alarmManager.setExact(
+        alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
-            savedTime ,
+            savedTime,
+            AlarmManager.INTERVAL_DAY,
             broadcastPendingIntent
         )
     }

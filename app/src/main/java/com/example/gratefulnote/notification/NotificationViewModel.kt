@@ -37,7 +37,7 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
     private val alarmSetter = NotificationAlarmSetter(app)
 
     fun setAlarmNotification(){
-        if (isSwitchChecked.value == true)
+        if (isSwitchChecked)
             alarmSetter.setAlarm()
         else
             alarmSetter.cancel()
@@ -46,25 +46,20 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
 
 
 
-    private val _isSwitchChecked = MutableLiveData(sharedPreferences.getBoolean(
+    private var _isSwitchChecked = sharedPreferences.getBoolean(
         app.getString(R.string.saved_switch_status),
-        false))
-    val isSwitchChecked : LiveData<Boolean>
+        false
+    )
+    val isSwitchChecked : Boolean
         get() = _isSwitchChecked
     fun updateSwitchStatus(isChecked : Boolean){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                with(sharedPreferences.edit()) {
-                    putBoolean(
-                        app.getString(R.string.saved_switch_status),
-                        isChecked
-                    )
-                    commit()
-                }
-                withContext(Dispatchers.Main){
-                    _isSwitchChecked.value = isChecked
-                }
-            }
+        _isSwitchChecked = isChecked
+        with(sharedPreferences.edit()) {
+            putBoolean(
+                app.getString(R.string.saved_switch_status),
+                isChecked
+            )
+            apply()
         }
     }
 
