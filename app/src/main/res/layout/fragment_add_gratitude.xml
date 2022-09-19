@@ -20,23 +20,29 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/positive_emotion_description_layout"
-                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/what_make_grateful_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:gravity="top|start"
                     android:id="@+id/why_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="top|start"
                     android:hint="@string/describe_your_positive_emotion" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/what_make_grateful_layout"
-                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/add_gratitude_spinner_layout">
 
@@ -44,8 +50,8 @@
                     android:id="@+id/what_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lines="1"
                     android:hint="@string/what_made_grateful"
+                    android:lines="1"
                     android:textColorHint="@android:color/darker_gray" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,7 +62,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="@color/black"
-                app:strokeWidth=".55dp">
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="24dp"
+                app:cardElevation="24dp">
                 <Spinner
                     android:id="@+id/add_gratitude_spinner"
                     android:layout_width="wrap_content"
@@ -65,15 +73,15 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="24dp"
-                android:layout_height="0dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_marginStart="12dp"
                 android:contentDescription="@string/help"
+                android:onClick="@{() -> viewModel.onClickGetHelp()}"
                 app:layout_constraintBottom_toBottomOf="@id/add_gratitude_spinner_layout"
                 app:layout_constraintStart_toEndOf="@id/add_gratitude_spinner_layout"
                 app:layout_constraintTop_toTopOf="@id/add_gratitude_spinner_layout"
-                app:srcCompat="@drawable/ic_help"
-                android:onClick="@{() -> viewModel.onClickGetHelp()}"/>
+                app:srcCompat="@drawable/ic_help" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

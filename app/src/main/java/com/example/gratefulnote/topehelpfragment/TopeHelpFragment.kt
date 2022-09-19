@@ -27,11 +27,11 @@ class TopeHelpFragment : Fragment() {
     companion object{
         val positiveEmotionDescription = """
             1.) Joy :
-                Perasaan senang dan semangat akan hal yang sedang dilakukan yang berarti bagi kita
+                Perasaan menyenangkan dan semangat dari hal yang telah dilakukan
                 
                 
             2.) Gratitude :
-                Bersyukur terhadap apa yang telah terjadi
+                Bersyukur terhadap apa yang telah terjadi. Bisa juga dengan mencari sisi baik dari hal yang sebelumnya kita anggap buruk
                 
                 
             3.) Serenity :
@@ -39,7 +39,7 @@ class TopeHelpFragment : Fragment() {
                 
                 
             4.) Interest :
-                Ketertarikan terhadap suatu hal baru dan menarik
+                Ketertarikan terhadap suatu hal
                 
                 
             5.) Hope :
@@ -47,7 +47,7 @@ class TopeHelpFragment : Fragment() {
                 
                 
             6.) Pride :
-                Kebanggan terhadap apa yang dicapai
+                Kebanggaan terhadap apa yang dicapai
                 
                 
             7.) Amusement :
@@ -55,11 +55,11 @@ class TopeHelpFragment : Fragment() {
                 
                 
             8.) Inspiration :
-                Ingin melakukan suatu hal dengan lebih baik karena menyaksikan hal yang menakjubkan.
+                Terinspirasi dengan suatu hal.
                 
                 
             9.) Awe :
-                Takjub dengan suatu kebesaran. (Contoh : Melihat pegunungan atau gedung-gedung yang menjulang tinggi, melihat padang rumput yang luas, dsb)
+                Takjub dengan suatu keagungan. (Contoh : Melihat pegunungan atau gedung-gedung yang menjulang tinggi, melihat padang rumput yang luas, dsb)
                 
                 
             10.) Love :

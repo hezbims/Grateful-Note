@@ -25,6 +25,7 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
     fun delete(){
         viewModelScope.launch(Dispatchers.IO) {
             dataSource.delete(deletedItemId)
+            clickEdit = true
             updateRecyclerViewData()
         }
     }

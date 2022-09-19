@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,7 +56,7 @@ class MainFragment : Fragment() {
             {itemId ->
                 viewModel.clickEdit = true
                 val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(itemId)
-                Navigation.findNavController(binding.root).navigate(action)
+                findNavController().navigate(action)
             }
         ))
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
