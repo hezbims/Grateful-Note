@@ -85,4 +85,5 @@
     <string name="confirm_add_save_message">Yakin ingin menyimpan data?</string>
     <string name="confirm_add_save_request_key">ConfirmAddSaveRequestKey</string>
     <string name="confirm_add_save_value_key">ConfirmAddSaveValueKey</string>
+    <string name="invalid_file_name">(invalid)</string>
 </resources>

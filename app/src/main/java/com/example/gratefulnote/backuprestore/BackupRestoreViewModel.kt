@@ -2,7 +2,6 @@ package com.example.gratefulnote.backuprestore
 
 import android.app.Application
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
@@ -38,24 +37,26 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
         )
     }
 
+    val buttonEnabled = Transformations.map(_isProcessing){
+        it == ProcessingStatus.NONE
+    }
+
     fun backup(uri : Uri){
-        if(_isProcessing.value!! == ProcessingStatus.NONE) {
-            _isProcessing.value = ProcessingStatus.BACKUP
-            viewModelScope.launch(Dispatchers.IO) {
-                val data = dao.getAllPositiveEmotion(
-                    0,
-                    null,
-                    getString(R.string.semua)
-                )
+        _isProcessing.value = ProcessingStatus.BACKUP
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = dao.getAllPositiveEmotion(
+                0,
+                null,
+                getString(R.string.semua)
+            )
 
-                app.contentResolver.openOutputStream(uri)!!.use {
-                    it.write(Gson().toJson(data).toByteArray())
-                }
+            app.contentResolver.openOutputStream(uri)!!.use {
+                it.write(Gson().toJson(data).toByteArray())
+            }
 
 
-                withContext(Dispatchers.Main){
-                    _isProcessing.value = ProcessingStatus.NONE
-                }
+            withContext(Dispatchers.Main){
+                _isProcessing.value = ProcessingStatus.NONE
             }
         }
     }

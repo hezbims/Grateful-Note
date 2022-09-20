@@ -21,6 +21,7 @@
             android:gravity="center"
             android:layout_marginTop="48dp"
             android:text="@string/backup_text"
+            android:enabled="@{viewModel.buttonEnabled}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:text="@string/restore_text"
             android:gravity="center"
+            android:enabled="@{viewModel.buttonEnabled}"
             android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

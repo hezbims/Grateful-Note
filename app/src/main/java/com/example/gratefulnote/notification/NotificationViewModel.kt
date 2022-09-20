@@ -23,7 +23,6 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
                 withContext(Dispatchers.Main) {
                     _clockDisplay.value = inputClock.format()
                     setAlarmNotification()
-                    closeDialog()
                 }
         }
     }
@@ -62,15 +61,6 @@ class NotificationViewModel(private val app : Application) : AndroidViewModel(ap
             apply()
         }
     }
-
-
-
-
-    private var _isDialogOpened = false
-    val isDialogOpened : Boolean
-        get() = _isDialogOpened
-    fun openDialog(){_isDialogOpened = true}
-    fun closeDialog(){_isDialogOpened = false}
 }
 
 class NotificationViewModelFactory(private val application: Application) : ViewModelProvider.Factory{

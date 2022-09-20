@@ -1,7 +1,6 @@
 package com.example.gratefulnote.notification
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,8 @@ class NotificationSettingsFragment : Fragment() {
     private lateinit var viewModel: NotificationViewModel
     private lateinit var binding : FragmentNotificationSettingsBinding
 
+    private val timePicker = NotificationDialogFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this ,
@@ -24,9 +25,7 @@ class NotificationSettingsFragment : Fragment() {
             getString(R.string.clock_picker_request_key),
             this
         ){_ , bundle ->
-            if (bundle.getBoolean(getString(R.string.clock_picker_cancel_key) , false))
-                viewModel.closeDialog()
-            else
+            if (!bundle.getBoolean(getString(R.string.clock_picker_cancel_key) , false))
                 viewModel.setSavedClock(bundle.getParcelable(getString(R.string.clock_picker_clock_key))!!)
         }
     }
@@ -70,10 +69,8 @@ class NotificationSettingsFragment : Fragment() {
     }
 
     private fun openDialog(){
-        if (!viewModel.isDialogOpened){
-            viewModel.openDialog()
-            NotificationDialogFragment().show(childFragmentManager , "timePicker")
-        }
+        if (!timePicker.isAdded)
+            timePicker.show(childFragmentManager , "timePicker")
     }
 
 }
