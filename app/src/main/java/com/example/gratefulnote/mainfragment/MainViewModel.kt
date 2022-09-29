@@ -30,6 +30,12 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
         }
     }
 
+    fun normalUpdate(positiveEmotion: PositiveEmotion){
+        viewModelScope.launch(Dispatchers.IO) {
+            dataSource.normalUpdate(positiveEmotion)
+        }
+    }
+
     /* Mengatur perpindahan fragment ke AddGratitude */
     private val _eventMoveToAddGratitude = MutableLiveData(false)
     val eventMoveToAddGratitude : LiveData<Boolean>

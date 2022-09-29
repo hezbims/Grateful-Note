@@ -17,13 +17,13 @@ val MIGRATION_1_2 : Migration by lazy {
                     val date = getString(3).split('/').map { it.toInt() }
                     allPositiveEmotions.add(
                         PositiveEmotion(
-                            getString(0),
-                            getString(1),
-                            getString(2),
-                            date[0],
-                            date[1],
-                            date[2],
-                            getLong(4)
+                            type = getString(0),
+                            what = getString(1),
+                            why = getString(2),
+                            day = date[0],
+                            month = date[1],
+                            year = date[2],
+                            id = getLong(4)
                         )
                     )
                 }
@@ -63,7 +63,58 @@ val MIGRATION_1_2 : Migration by lazy {
     }
 }
 
-@Database(entities = [PositiveEmotion::class] , version = 2)
+val MIGRATION_2_3 = object : Migration(2 , 3){
+    override fun migrate(database: SupportSQLiteDatabase) {
+        val allPositiveEmotions = mutableListOf<PositiveEmotion>()
+        with(database.query("SELECT * FROM positive_emotion_table")){
+            while(moveToNext())
+                allPositiveEmotions.add(
+                    PositiveEmotion(
+                        type = getString(0),
+                        what = getString(1),
+                        why = getString(2),
+                        day = getInt(3),
+                        month = getInt(4),
+                        year = getInt(5),
+                        id = getLong(6)
+                    )
+                )
+        }
+
+        with(database){
+            execSQL("""CREATE TABLE IF NOT EXISTS backup (
+                type TEXT NOT NULL, 
+                what TEXT NOT NULL, 
+                why TEXT NOT NULL,
+                day INTEGER NOT NULL,
+                month INTEGER NOT NULL,
+                year INTEGER NOT NULL,
+                isFavorite INTEGER NOT NULL,
+                id INTEGER PRIMARY KEY NOT NULL
+                )
+            """.trimIndent())
+
+            for (p in allPositiveEmotions)
+                execSQL("""
+                    INSERT INTO backup
+                    VALUES (
+                    '${p.type}',
+                    '${p.what.replace("'" , "''")}', 
+                    '${p.why.replace("'" , "''")}',
+                    '${p.day}',
+                    '${p.month}',
+                    '${p.year}',
+                    '${p.isFavorite}',
+                    '${p.id}'                                        
+                    )""".trimIndent())
+
+            execSQL("DROP TABLE positive_emotion_table")
+            execSQL("ALTER TABLE backup RENAME TO positive_emotion_table")
+        }
+    }
+}
+
+@Database(entities = [PositiveEmotion::class] , version = 3)
 abstract class PositiveEmotionDatabase : RoomDatabase(){
 
     abstract val positiveEmotionDatabaseDao : PositiveEmotionDatabaseDao
@@ -83,6 +134,7 @@ abstract class PositiveEmotionDatabase : RoomDatabase(){
                         "positive_emotion_database"
                     )
                         .addMigrations(MIGRATION_1_2)
+                        .addMigrations(MIGRATION_2_3)
                         .build()
                     INSTANCE = instance
                 }

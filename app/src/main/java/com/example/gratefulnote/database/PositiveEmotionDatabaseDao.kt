@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface PositiveEmotionDatabaseDao {
@@ -36,4 +37,7 @@ interface PositiveEmotionDatabaseDao {
 
     @Query("UPDATE positive_emotion_table SET what = :what , why = :why WHERE id = :id")
     suspend fun updateData(what : String , why : String , id : Long)
+
+    @Update
+    suspend fun normalUpdate(positiveEmotion: PositiveEmotion)
 }

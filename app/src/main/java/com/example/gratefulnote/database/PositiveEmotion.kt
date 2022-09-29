@@ -19,6 +19,8 @@ data class PositiveEmotion(
 
     var year : Int = Calendar.getInstance().get(Calendar.YEAR),
 
+    val isFavorite : Boolean = false,
+
     @PrimaryKey(autoGenerate = true)
     val id : Long = 0L
 )

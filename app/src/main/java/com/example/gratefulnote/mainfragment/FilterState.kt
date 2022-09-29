@@ -26,6 +26,10 @@ class FilterState(private val context : Context){
     val switchState : Boolean
         get() = _switchState
 
+    private var _onlyFavorite = false
+    val onlyFavorite : Boolean
+        get() = _onlyFavorite
+
     fun getString(id : Int) =
         context.getString(id)
 
@@ -34,6 +38,7 @@ class FilterState(private val context : Context){
                         newSelectedYear : String ,
                         newSelectedPositiveEmotion : String ,
                         newSwitchState : Boolean,
+                        newOnlyFavorite : Boolean,
                         context: Context
         ) =
             FilterState(context).apply {
@@ -43,6 +48,7 @@ class FilterState(private val context : Context){
                     else newSelectedYear.toInt()
                 _selectedPositiveEmotion = newSelectedPositiveEmotion
                 _switchState = newSwitchState
+                _onlyFavorite = newOnlyFavorite
             }
     }
 }

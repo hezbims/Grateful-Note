@@ -57,6 +57,9 @@ class MainFragment : Fragment() {
                 viewModel.clickEdit = true
                 val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(itemId)
                 findNavController().navigate(action)
+            },
+            {
+                viewModel.normalUpdate(it)
             }
         ))
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
