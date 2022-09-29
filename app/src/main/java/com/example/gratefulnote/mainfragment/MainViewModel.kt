@@ -65,9 +65,10 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
                 withContext(Dispatchers.IO) {
                     with(
                         dataSource.getAllPositiveEmotion(
-                            _filterState.value!!.selectedMonth,
-                            _filterState.value!!.selectedYear,
-                            _filterState.value!!.selectedPositiveEmotion
+                            month = _filterState.value!!.selectedMonth,
+                            year = _filterState.value!!.selectedYear,
+                            type = _filterState.value!!.selectedPositiveEmotion,
+                            onlyFavorite = _filterState.value!!.onlyFavorite
                         )
                     ) {
                         if (_filterState.value!!.switchState) reversed() else this
@@ -83,11 +84,14 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
     var clickEdit = false
 
     fun setFilterData(month : String , year : String ,
-        typeOfPE : String , newSwitchState : Boolean){
+        typeOfPE : String , newSwitchState : Boolean , onlyFavorite : Boolean){
         _filterState.value = FilterState.getInstance(
-            month , year ,
-            typeOfPE , newSwitchState ,
-            app.applicationContext
+            newSelectedMonth = month ,
+            newSelectedYear = year ,
+            newSelectedPositiveEmotion = typeOfPE ,
+            newSwitchState = newSwitchState ,
+            newOnlyFavorite = onlyFavorite,
+            context = app.applicationContext
         )
     }
 

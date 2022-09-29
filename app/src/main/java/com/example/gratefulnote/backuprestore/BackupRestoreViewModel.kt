@@ -47,7 +47,8 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
             val data = dao.getAllPositiveEmotion(
                 0,
                 null,
-                getString(R.string.semua)
+                getString(R.string.semua),
+                false
             )
 
             app.contentResolver.openOutputStream(uri)!!.use {

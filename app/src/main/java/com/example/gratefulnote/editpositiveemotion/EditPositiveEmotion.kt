@@ -52,7 +52,7 @@ class EditPositiveEmotion : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentEditPositiveEmotionBinding.inflate(inflater ,
             container , false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -92,8 +92,10 @@ class EditPositiveEmotion : Fragment() {
                 _ , bundle ->
             if (bundle.getBoolean(getString(R.string.confirm_edit_save_value_key))) {
                 viewModel.updatePositiveEmotion(
-                    binding.editPositiveEmotionTitleValue.text.toString(),
-                    binding.editPositiveEmotionDescriptionValue.text.toString(),
+                    curPositiveEmotion.copy(
+                       what = binding.editPositiveEmotionTitleValue.text.toString(),
+                        why = binding.editPositiveEmotionDescriptionValue.text.toString()
+                    )
                 )
             }
         }

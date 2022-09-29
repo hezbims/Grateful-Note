@@ -19,9 +19,15 @@ interface PositiveEmotionDatabaseDao {
         FROM positive_emotion_table
         WHERE (:month = 0 OR month = :month) AND
               (:year IS NULL OR year = :year) AND
-              (:type = 'Semua' OR type = :type)
+              (:type = 'Semua' OR type = :type) AND
+              (:onlyFavorite = 0 OR isFavorite = 1)
     """)
-    suspend fun getAllPositiveEmotion(month : Int , year : Int? , type : String) : List<PositiveEmotion>
+    suspend fun getAllPositiveEmotion(
+        month : Int ,
+        year : Int? ,
+        type : String ,
+        onlyFavorite : Boolean
+    ) : List<PositiveEmotion>
 
     @Query("SELECT DISTINCT year FROM positive_emotion_table")
     fun getAllYear() : LiveData<List<Int>>
@@ -34,9 +40,6 @@ interface PositiveEmotionDatabaseDao {
 
     @Query("DELETE FROM positive_emotion_table")
     suspend fun deleteAll()
-
-    @Query("UPDATE positive_emotion_table SET what = :what , why = :why WHERE id = :id")
-    suspend fun updateData(what : String , why : String , id : Long)
 
     @Update
     suspend fun normalUpdate(positiveEmotion: PositiveEmotion)

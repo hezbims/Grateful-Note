@@ -3,6 +3,7 @@ package com.example.gratefulnote.editpositiveemotion
 import android.app.Application
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -22,9 +23,9 @@ class EditPositiveEmotionViewModel(app : Application , private val id : Long) : 
     fun navigateBack(){_navigateBack.value = true}
     fun doneNavigateBack(){ _navigateBack.value = false }
 
-    fun updatePositiveEmotion(what : String , why : String){
+    fun updatePositiveEmotion(newPositiveEmotion : PositiveEmotion){
         viewModelScope.launch(Dispatchers.IO){
-            dao.updateData(what , why , id)
+            dao.normalUpdate(newPositiveEmotion)
             withContext(Dispatchers.Main) {
                 navigateBack()
             }

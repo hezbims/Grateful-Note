@@ -30,13 +30,16 @@ class PositiveAdapter(private val clickListener: PositiveAdapterClickListener) :
             binding.deletePositiveEmotion.setOnClickListener{ clickListener.onDelete(item.id) }
             binding.editPositiveEmotion.setOnClickListener{ clickListener.onEdit(item.id) }
             binding.favoriteSymbol.setOnClickListener {
-                clickListener.onFavoriteUpdate(item.copy(isFavorite = !item.isFavorite))
+
                 binding.favoriteSymbol.apply {
                     val nextDrawableId =
                         if (tag == R.drawable.ic_baseline_yellow_star)
                             R.drawable.ic_outline_star_border
                         else
                             R.drawable.ic_baseline_yellow_star
+                    clickListener.onFavoriteUpdate(item.copy(
+                        isFavorite = nextDrawableId == R.drawable.ic_baseline_yellow_star
+                    ))
                     setImageResource(nextDrawableId)
                     tag = nextDrawableId
                 }

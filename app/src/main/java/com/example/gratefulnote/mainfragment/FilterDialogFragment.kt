@@ -34,8 +34,8 @@ class FilterDialogFragment : DialogFragment() {
                 requireContext(),
                 android.R.layout.simple_spinner_item,
                 listOfYearToString
-            ).also {
-                binding.yearSpinner.setAdapter(it)
+            ).apply {
+                binding.yearSpinner.setAdapter(this)
             }
         }
 
@@ -45,6 +45,7 @@ class FilterDialogFragment : DialogFragment() {
                 binding.yearSpinner.setText(it.stringSelectedYear , false)
                 binding.typeOfPESpinner.setText(it.selectedPositiveEmotion , false)
                 binding.dateSwitchFilter.isChecked = it.switchState
+                binding.favoriteSwitchFilter.isChecked = it.onlyFavorite
             }
         }
 
@@ -81,12 +82,15 @@ class FilterDialogFragment : DialogFragment() {
             .setTitle(R.string.filter)
             .setPositiveButton(R.string.terapkan){
                 _ , _ ->
-                viewModel.setFilterData(
-                    binding.monthSpinner.text.toString(),
-                    binding.yearSpinner.text.toString(),
-                    binding.typeOfPESpinner.text.toString(),
-                    binding.dateSwitchFilter.isChecked
-                )
+                binding.apply {
+                    viewModel.setFilterData(
+                        binding.monthSpinner.text.toString(),
+                        binding.yearSpinner.text.toString(),
+                        binding.typeOfPESpinner.text.toString(),
+                        binding.dateSwitchFilter.isChecked,
+                        binding.favoriteSwitchFilter.isChecked
+                    )
+                }
             }
             .setNegativeButton(R.string.batal){
                 _ , _ ->
