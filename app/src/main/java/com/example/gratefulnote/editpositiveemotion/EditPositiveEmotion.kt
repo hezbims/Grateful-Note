@@ -7,15 +7,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.gratefulnote.R
 import com.example.gratefulnote.confirmdialog.ConfirmDialog
-import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.databinding.FragmentEditPositiveEmotionBinding
-import kotlinx.coroutines.runBlocking
 
 class EditPositiveEmotion : Fragment() {
     private lateinit var binding : FragmentEditPositiveEmotionBinding
 
     private lateinit var viewModel: EditPositiveEmotionViewModel
-    private lateinit var curPositiveEmotion : PositiveEmotion
 
     private val newWhat : String
         get() = binding.editPositiveEmotionTitleValue.text.toString()
@@ -23,7 +20,8 @@ class EditPositiveEmotion : Fragment() {
         get() = binding.editPositiveEmotionDescriptionValue.text.toString()
     private val isDataChanged : Boolean
         get() =
-            newWhat != curPositiveEmotion.what || newWhy != curPositiveEmotion.why
+            newWhat != viewModel.currentPositiveEmotion.what ||
+                    newWhy != viewModel.currentPositiveEmotion.why
 
     private lateinit var cancelDialog: ConfirmDialog
     private lateinit var saveDialog : ConfirmDialog
@@ -66,14 +64,10 @@ class EditPositiveEmotion : Fragment() {
     }
 
     private fun setFirstTimeCreated(isFirstTimeCreated : Boolean){
-        curPositiveEmotion = runBlocking {
-            viewModel.getCurrentPositiveEmotion().await()
-        }
-
         if (isFirstTimeCreated){
             binding.apply {
-                editPositiveEmotionTitleValue.setText(curPositiveEmotion.what)
-                editPositiveEmotionDescriptionValue.setText(curPositiveEmotion.why)
+                editPositiveEmotionTitleValue.setText(viewModel.currentPositiveEmotion.what)
+                editPositiveEmotionDescriptionValue.setText(viewModel.currentPositiveEmotion.why)
             }
         }
     }
@@ -92,7 +86,7 @@ class EditPositiveEmotion : Fragment() {
                 _ , bundle ->
             if (bundle.getBoolean(getString(R.string.confirm_edit_save_value_key))) {
                 viewModel.updatePositiveEmotion(
-                    curPositiveEmotion.copy(
+                    viewModel.currentPositiveEmotion.copy(
                        what = binding.editPositiveEmotionTitleValue.text.toString(),
                         why = binding.editPositiveEmotionDescriptionValue.text.toString()
                     )
@@ -126,7 +120,7 @@ class EditPositiveEmotion : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.edit_positive_emotion_menu , menu)
+        inflater.inflate(R.menu.menu_edit , menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

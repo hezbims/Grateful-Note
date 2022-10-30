@@ -6,16 +6,17 @@ import androidx.lifecycle.*
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EditPositiveEmotionViewModel(app : Application , private val id : Long) : AndroidViewModel(app) {
+class EditPositiveEmotionViewModel(
+    app : Application ,
+    val currentPositiveEmotion : PositiveEmotion
+    ) : AndroidViewModel(app) {
 
     private val dao = PositiveEmotionDatabase.getInstance(app).positiveEmotionDatabaseDao
 
-    fun getCurrentPositiveEmotion() =
-        viewModelScope.async(Dispatchers.IO) { dao.getAPositiveEmotion(id) }
+
 
     private val _navigateBack = MutableLiveData(false)
     val navigateBack : LiveData<Boolean>
@@ -36,7 +37,7 @@ class EditPositiveEmotionViewModel(app : Application , private val id : Long) : 
         fun getViewModel(fragment : Fragment) : EditPositiveEmotionViewModel{
             val viewModelFactory = EditPositiveEmotionViewModelFactory(
                 fragment.requireActivity().application,
-                EditPositiveEmotionArgs.fromBundle(fragment.requireArguments()).positiveEmotionId
+                EditPositiveEmotionArgs.fromBundle(fragment.requireArguments()).currentPositiveEmotion
             )
 
             return ViewModelProvider(
@@ -45,4 +46,17 @@ class EditPositiveEmotionViewModel(app : Application , private val id : Long) : 
         }
     }
 
+}
+
+class EditPositiveEmotionViewModelFactory(
+    private val app : Application,
+    private val currentPositiveEmotion : PositiveEmotion
+    )
+    : ViewModelProvider.Factory {
+    @Suppress("unchecked_cast")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(EditPositiveEmotionViewModel::class.java))
+            return EditPositiveEmotionViewModel(app, currentPositiveEmotion) as T
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

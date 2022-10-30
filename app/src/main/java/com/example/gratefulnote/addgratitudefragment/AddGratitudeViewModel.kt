@@ -1,18 +1,12 @@
 package com.example.gratefulnote.addgratitudefragment
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabaseDao
 import kotlinx.coroutines.*
+import java.lang.IllegalArgumentException
 
 class AddGratitudeViewModel(private val database : PositiveEmotionDatabaseDao) : ViewModel() {
-    val typeOfPositiveEmotion = arrayOf(
-        "Joy", "Gratitude", "Serenity", "Interest", "Hope",
-        "Pride", "Amusement", "Inspiration", "Awe", "Love", "Other"
-    )
     fun insert(newData : PositiveEmotion){
         viewModelScope.launch(Dispatchers.IO) {
             database.insert(newData)
@@ -34,5 +28,16 @@ class AddGratitudeViewModel(private val database : PositiveEmotionDatabaseDao) :
     }
     fun doneNavigatingToHelp(){
         _navigateToHelp.value = false
+    }
+}
+
+class AddGratitudeViewModelFactory(private val dataSource : PositiveEmotionDatabaseDao) :
+    ViewModelProvider.Factory {
+
+    @Suppress("unchecked_cast")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AddGratitudeViewModel::class.java))
+            return AddGratitudeViewModel(dataSource) as T
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

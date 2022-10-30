@@ -16,14 +16,14 @@ class BackupRestoreFragment : Fragment() {
 
 
     private val createJSONIntent = registerForActivityResult(
-        CreateJSON()
+        CreateJSONContract()
     ){
         if (it != null)
             viewModel.backup(it)
     }
 
     private val restoreJsonIntent = registerForActivityResult(
-        RestoreJSON()
+        RestoreJSONContract()
     ){
         if (it != null)
             viewModel.restore(it)

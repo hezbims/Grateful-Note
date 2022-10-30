@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.databinding.PositiveEmotionListBinding
+import com.example.gratefulnote.databinding.ViewHolderMainBinding
 
 class PositiveAdapter(private val clickListener: PositiveAdapterClickListener) :
     ListAdapter<PositiveEmotion , PositiveAdapter.ViewHolder>(DiffCallBack()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        PositiveEmotionListBinding
+        ViewHolderMainBinding
             .inflate(LayoutInflater
                 .from(parent.context) , parent , false),
         clickListener
@@ -22,13 +22,13 @@ class PositiveAdapter(private val clickListener: PositiveAdapterClickListener) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position))
 
     class ViewHolder(
-        private val binding : PositiveEmotionListBinding,
+        private val binding : ViewHolderMainBinding,
         private val clickListener: PositiveAdapterClickListener
         ) : RecyclerView.ViewHolder(binding.root){
         fun bind(item : PositiveEmotion){
             binding.positiveEmotion = item
             binding.deletePositiveEmotion.setOnClickListener{ clickListener.onDelete(item.id) }
-            binding.editPositiveEmotion.setOnClickListener{ clickListener.onEdit(item.id) }
+            binding.editPositiveEmotion.setOnClickListener{ clickListener.onEdit(item) }
             binding.favoriteSymbol.setOnClickListener {
 
                 binding.favoriteSymbol.apply {
@@ -60,11 +60,11 @@ class DiffCallBack : DiffUtil.ItemCallback<PositiveEmotion>(){
 
 class PositiveAdapterClickListener(
     private val delete : (itemId : Long) -> Unit,
-    private val edit : (itemId : Long) -> Unit,
+    private val edit : (currentPositiveEmotion : PositiveEmotion) -> Unit,
     private val favoriteUpdate : (positiveEmotion : PositiveEmotion) -> Unit
 ){
 
     fun onDelete(itemId : Long) = delete(itemId)
-    fun onEdit(itemId : Long) = edit(itemId)
+    fun onEdit(currentPositiveEmotion: PositiveEmotion) = edit(currentPositiveEmotion)
     fun onFavoriteUpdate(positiveEmotion: PositiveEmotion) = favoriteUpdate(positiveEmotion)
 }

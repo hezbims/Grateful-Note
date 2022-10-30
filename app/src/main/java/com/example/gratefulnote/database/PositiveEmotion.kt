@@ -1,9 +1,12 @@
 package com.example.gratefulnote.database
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
+@Parcelize
 @Entity(tableName = "positive_emotion_table")
 data class PositiveEmotion(
 
@@ -23,4 +26,4 @@ data class PositiveEmotion(
 
     @PrimaryKey(autoGenerate = true)
     val id : Long = 0L
-)
+) : Parcelable

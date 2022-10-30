@@ -99,10 +99,10 @@ class AddGratitudeFragment : Fragment() {
 
 
     private fun setSpinner(){
-        val arrayAdapter = ArrayAdapter(requireContext() ,
-            R.layout.positive_emotion_menu_item ,
-            viewModel.typeOfPositiveEmotion)
-        binding.addGratitudeSpinner.adapter = arrayAdapter
+        binding.addGratitudeSpinner.adapter = ArrayAdapter(requireContext() ,
+            R.layout.spinner_simple_item_list ,
+            resources.getStringArray(R.array.type_of_positive_emotion_array)
+        )
 
     }
 
@@ -135,7 +135,7 @@ class AddGratitudeFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.edit_positive_emotion_menu , menu)
+        inflater.inflate(R.menu.menu_edit , menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

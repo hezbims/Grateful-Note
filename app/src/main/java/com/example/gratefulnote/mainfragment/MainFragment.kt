@@ -53,9 +53,10 @@ class MainFragment : Fragment() {
                 if (!confirmDeleteDialog.isAdded)
                     confirmDeleteDialog.show(childFragmentManager , "TAG")
             },
-            {itemId ->
+            {currentPositiveEmotion ->
                 viewModel.clickEdit = true
-                val action = MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(itemId)
+                val action = MainFragmentDirections
+                    .actionMainFragmentToEditPositiveEmotion(currentPositiveEmotion)
                 findNavController().navigate(action)
             },
             {
@@ -122,7 +123,7 @@ class MainFragment : Fragment() {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu , menu)
+        inflater.inflate(R.menu.menu_main_options_menu , menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

@@ -30,13 +30,13 @@ class FilterDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         viewModel.listOfYearToString.observe(viewLifecycleOwner) {listOfYearToString ->
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                listOfYearToString
-            ).apply {
-                binding.yearSpinner.setAdapter(this)
-            }
+            binding.yearSpinner.setAdapter(
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.spinner_simple_item_list ,
+                    listOfYearToString
+                )
+            )
         }
 
         viewModel.filterState.observe(viewLifecycleOwner){
@@ -54,22 +54,21 @@ class FilterDialogFragment : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
+        binding.monthSpinner.setAdapter(
+            ArrayAdapter.createFromResource(
+                requireContext() ,
+                R.array.months_list,
+                R.layout.spinner_simple_item_list
+            )
+        )
 
-        ArrayAdapter.createFromResource(
-            requireContext() ,
-            R.array.months_list,
-            android.R.layout.simple_spinner_item
-        ).also{
-            binding.monthSpinner.setAdapter(it)
-        }
-        ArrayAdapter(
-            requireContext() ,
-            android.R.layout.simple_spinner_item ,
-            viewModel.typeOfPositiveEmotion
-        ).also{
-            binding.typeOfPESpinner.setAdapter(it)
-        }
-
+        binding.typeOfPESpinner.setAdapter(
+            ArrayAdapter(
+                requireContext() ,
+                R.layout.spinner_simple_item_list ,
+                viewModel.typeOfPositiveEmotion
+            )
+        )
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

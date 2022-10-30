@@ -37,8 +37,8 @@
         android:label="@string/edit"
         tools:layout="@layout/fragment_edit_positive_emotion">
         <argument
-            android:name="positive_emotion_id"
-            app:argType="long" />
+            android:name="currentPositiveEmotion"
+            app:argType="com.example.gratefulnote.database.PositiveEmotion" />
     </fragment>
     <fragment
         android:id="@+id/notificationSettingsFragment"

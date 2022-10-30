@@ -5,13 +5,13 @@
         android:title="@string/set_notification"
         android:icon="@drawable/ic_baseline_notifications" />
     <item
-        android:id="@+id/feedback"
-        android:icon="@drawable/ic_baseline_bug_report"
-        android:title="@string/feedback"
-        />
-    <item
         android:id="@+id/backupRestoreFragment"
         android:icon="@drawable/ic_baseline_restore"
         android:title="@string/backup_restore"
+        />
+    <item
+        android:id="@+id/feedback"
+        android:icon="@drawable/ic_baseline_bug_report"
+        android:title="@string/feedback"
         />
 </menu>
