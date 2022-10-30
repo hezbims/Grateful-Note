@@ -1,11 +1,9 @@
 package com.example.gratefulnote
 
-import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -71,7 +69,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp() =
-        NavigationUI.navigateUp(navController , drawerLayout)
+        NavigationUI.navigateUp(navController, drawerLayout)
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
