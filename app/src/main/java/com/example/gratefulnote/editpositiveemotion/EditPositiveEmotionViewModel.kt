@@ -11,12 +11,14 @@ import kotlinx.coroutines.withContext
 
 class EditPositiveEmotionViewModel(
     app : Application ,
-    val currentPositiveEmotion : PositiveEmotion
+    currentPositiveEmotion : PositiveEmotion
     ) : AndroidViewModel(app) {
 
     private val dao = PositiveEmotionDatabase.getInstance(app).positiveEmotionDatabaseDao
 
-
+    private var _currentPositiveEmotion = currentPositiveEmotion
+    val currentPositiveEmotion : PositiveEmotion
+        get() = _currentPositiveEmotion
 
     private val _navigateBack = MutableLiveData(false)
     val navigateBack : LiveData<Boolean>
@@ -25,6 +27,7 @@ class EditPositiveEmotionViewModel(
     fun doneNavigateBack(){ _navigateBack.value = false }
 
     fun updatePositiveEmotion(newPositiveEmotion : PositiveEmotion){
+        _currentPositiveEmotion = newPositiveEmotion
         viewModelScope.launch(Dispatchers.IO){
             dao.normalUpdate(newPositiveEmotion)
             withContext(Dispatchers.Main) {
