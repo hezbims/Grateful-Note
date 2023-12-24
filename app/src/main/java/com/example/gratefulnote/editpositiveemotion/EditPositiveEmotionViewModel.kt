@@ -7,7 +7,6 @@ import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class EditPositiveEmotionViewModel(
     app : Application ,
@@ -20,19 +19,10 @@ class EditPositiveEmotionViewModel(
     val currentPositiveEmotion : PositiveEmotion
         get() = _currentPositiveEmotion
 
-    private val _navigateBack = MutableLiveData(false)
-    val navigateBack : LiveData<Boolean>
-        get() = _navigateBack
-    fun navigateBack(){_navigateBack.value = true}
-    fun doneNavigateBack(){ _navigateBack.value = false }
-
     fun updatePositiveEmotion(newPositiveEmotion : PositiveEmotion){
         _currentPositiveEmotion = newPositiveEmotion
         viewModelScope.launch(Dispatchers.IO){
             dao.normalUpdate(newPositiveEmotion)
-            withContext(Dispatchers.Main) {
-                navigateBack()
-            }
         }
     }
 
