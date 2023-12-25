@@ -120,6 +120,7 @@ abstract class PositiveEmotionDatabase : RoomDatabase(){
     abstract val positiveEmotionDatabaseDao : PositiveEmotionDatabaseDao
 
     companion object {
+        const val dbName = "positive_emotion_database"
         @Volatile
         private var INSTANCE : PositiveEmotionDatabase? = null
 
@@ -131,7 +132,7 @@ abstract class PositiveEmotionDatabase : RoomDatabase(){
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         PositiveEmotionDatabase::class.java,
-                        "positive_emotion_database"
+                        dbName
                     )
                         .addMigrations(MIGRATION_1_2)
                         .addMigrations(MIGRATION_2_3)
