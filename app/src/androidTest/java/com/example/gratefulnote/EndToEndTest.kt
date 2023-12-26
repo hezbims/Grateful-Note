@@ -53,6 +53,6 @@ class EndToEndTest {
             whyValue = "Saya senang karena bermain sepak bola di hari ini"
         )
 
-
+        mainHomeController.toEditGratitude(whatValue = "saya bersyukur")
     }
 }
