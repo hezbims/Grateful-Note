@@ -6,6 +6,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.fragment_controller.AddGratitudeController
+import com.example.gratefulnote.fragment_controller.EditScreenController
 import com.example.gratefulnote.fragment_controller.MainHomeController
 import org.junit.Before
 import org.junit.Rule
@@ -31,6 +32,7 @@ class EndToEndTest {
     fun end_To_End_Test(){
         val mainHomeController = MainHomeController()
         val addGratitudeController = AddGratitudeController()
+        val editScreenController = EditScreenController()
 
         mainHomeController.toAddGratitude()
         addGratitudeController.fillFormAndSave(
@@ -53,6 +55,18 @@ class EndToEndTest {
             whyValue = "Saya senang karena bermain sepak bola di hari ini"
         )
 
-        mainHomeController.toEditGratitude(whatValue = "saya bersyukur")
+        /// nyoba ngedit salah satu gratitude
+        mainHomeController.toEditGratitudeWithTitle(title = "saya bersyukur")
+        editScreenController.replaceWhatValue(whatValue = "saya")
+        editScreenController.replaceWhyValue(whyValue = "bersyukur")
+        editScreenController.pressBack()
+
+        // mastiin proses editing berhasil
+        mainHomeController.toEditGratitudeWithNthItem(index = 1)
+        editScreenController.assertWhatValue(whatValue = "saya")
+        editScreenController.assertWhyValue(whyValue = "bersyukur")
+        editScreenController.pressBack()
+
+
     }
 }
