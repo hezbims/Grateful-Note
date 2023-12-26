@@ -1,8 +1,5 @@
 package com.example.gratefulnote
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -36,13 +33,26 @@ class EndToEndTest {
         val addGratitudeController = AddGratitudeController()
 
         mainHomeController.toAddGratitude()
-
-        addGratitudeController.chooseSpinnerItemWithText("Amusement")
-        addGratitudeController.enterWhatText("saya senang")
-        addGratitudeController.enterWhyText("karena diajak berwisata")
-        addGratitudeController.confirmSave()
+        addGratitudeController.fillFormAndSave(
+            spinnerValue = "Amusement",
+            whatValue = "Saya terhibur",
+            whyValue = "karena diajak berwisata"
+        )
 
         mainHomeController.toAddGratitude()
+        addGratitudeController.fillFormAndSave(
+            spinnerValue = "Gratitude",
+            whatValue = "saya bersyukur",
+            whyValue = "karena lulus ujian"
+        )
+
+        mainHomeController.toAddGratitude()
+        addGratitudeController.fillFormAndSave(
+            spinnerValue = "Joy",
+            whatValue = "saya senang",
+            whyValue = "Saya senang karena bermain sepak bola di hari ini"
+        )
+
 
     }
 }

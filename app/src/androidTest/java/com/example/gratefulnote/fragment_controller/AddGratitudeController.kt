@@ -33,4 +33,15 @@ class AddGratitudeController {
         onView(withText("YA"))
             .perform(ViewActions.click())
     }
+
+    fun fillFormAndSave(
+        spinnerValue : String,
+        whatValue : String,
+        whyValue : String
+    ){
+        chooseSpinnerItemWithText(spinnerValue)
+        enterWhatText(whatValue)
+        enterWhyText(whyValue)
+        confirmSave()
+    }
 }
