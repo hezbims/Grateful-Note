@@ -97,12 +97,11 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
 
 
     private val listOfYear = dataSource.getAllYear()
-    val listOfYearToString = Transformations.map(listOfYear){l ->
-        if (l == null)
-            emptyList()
-        else
-            listOf(getString(R.string.semua)) + l.map{it.toString()}
+    val listOfYearToString = listOfYear.map{intYear ->
+        listOf(getString(R.string.semua)) + intYear.map{it.toString()}
     }
+
+
 
     fun getString(id : Int) =
         app.applicationContext.getString(id)

@@ -2,7 +2,6 @@ package com.example.gratefulnote.backuprestore
 
 import android.app.Application
 import android.net.Uri
-import android.view.View
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
@@ -10,6 +9,9 @@ import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,26 +22,25 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
         .positiveEmotionDatabaseDao
 
     private val _isProcessing = MutableLiveData(ProcessingStatus.NONE)
-    val isProcessing : Boolean
-        get() =
-            _isProcessing.value!! != ProcessingStatus.NONE
 
-    val loadingDisplayed = Transformations.map(_isProcessing){
-        if (it == ProcessingStatus.NONE)View.GONE
-        else View.VISIBLE
+    private val _backupRestoreState = MutableStateFlow(BackupRestoreViewState())
+    val backupRestoreState : StateFlow<BackupRestoreViewState>
+        get() = _backupRestoreState
+    fun setPathLocation(newUri : Uri) {
+
     }
 
-    val processingStatusLabel = Transformations.map(_isProcessing){
-        getString(
-            R.string.backup_restore_process_status ,
-            if (it == ProcessingStatus.RESTORE) getString(R.string.restore_text)
-            else getString(R.string.backup_text)
-        )
+    fun onEvent(event: BackupRestoreStateEvent){
+        when(event){
+            is BackupRestoreStateEvent.EventUpdatePathLocation -> {
+                _backupRestoreState.update {
+                    it.copy(pathLocation = event.newUri)
+                }
+            }
+        }
     }
 
-    val buttonEnabled = Transformations.map(_isProcessing){
-        it == ProcessingStatus.NONE
-    }
+
 
     fun backup(uri : Uri){
         _isProcessing.value = ProcessingStatus.BACKUP
@@ -47,7 +48,7 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
             val data = dao.getAllPositiveEmotion(
                 0,
                 null,
-                getString(R.string.semua),
+                app.getString(R.string.semua),
                 false
             )
 
@@ -65,8 +66,10 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
     fun restore(uri : Uri){
         if (_isProcessing.value!! == ProcessingStatus.NONE) {
             _isProcessing.value = ProcessingStatus.RESTORE
-            val jsonString = app.contentResolver.openInputStream(uri)!!.bufferedReader().use {
-                it.readText()
+            val jsonString = app.contentResolver.openInputStream(uri)!!.use {inputStream ->
+                inputStream.bufferedReader().use {
+                    it.readText()
+                }
             }
 
             val type = object : TypeToken<List<PositiveEmotion>>() {}.type
@@ -82,14 +85,19 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
         }
     }
 
-    private fun getString(id : Int , vararg arg : String) =
-        app.getString(id , *arg)
-
     private companion object{
         enum class ProcessingStatus{
             BACKUP , RESTORE , NONE
         }
     }
+}
+
+data class BackupRestoreViewState(
+    val pathLocation : Uri? = null
+)
+
+sealed class BackupRestoreStateEvent {
+    class EventUpdatePathLocation(val newUri: Uri) : BackupRestoreStateEvent()
 }
 
 class BackupRestoreViewModelFactory(private val app : Application): ViewModelProvider.Factory {
