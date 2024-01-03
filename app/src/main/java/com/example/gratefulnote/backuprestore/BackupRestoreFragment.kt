@@ -62,12 +62,12 @@ class BackupRestoreFragment : Fragment() {
 
     fun onActivityResultEvent(event : BackupRestoreActivityEvent){
         when (event){
-            BackupRestoreActivityEvent.OnOpenDocumentTree ->
+            BackupRestoreActivityEvent.OpenDocumentTree ->
                 getDocumentTreeAction.launch(null)
         }
     }
 }
 
 sealed class BackupRestoreActivityEvent {
-    object OnOpenDocumentTree : BackupRestoreActivityEvent()
+    object OpenDocumentTree : BackupRestoreActivityEvent()
 }

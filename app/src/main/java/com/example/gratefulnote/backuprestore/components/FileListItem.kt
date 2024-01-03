@@ -58,7 +58,9 @@ fun FileListItem(
                 Icon(
                     Icons.Outlined.Delete,
                     contentDescription = "Hapus file backup",
-                    modifier = Modifier.clickable { }
+                    modifier = Modifier.clickable {
+                        onDeleteFile(file)
+                    }
                 )
             }
 
@@ -79,7 +81,9 @@ fun FileListItem(
                     text = "Size : ${String.format("%.1f Mb", file.length() / 1000000f)}"
                 )
 
-                ElevatedButton(onClick = { /*TODO*/ }) {
+                ElevatedButton(onClick = {
+                    onRestoreFile(file)
+                }) {
                     Text("Restore")
                 }
             }
