@@ -2,8 +2,10 @@ package com.example.gratefulnote.backuprestore
 
 import android.app.Application
 import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
+import com.example.gratefulnote.common.data.ResponseWrapper
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.google.gson.Gson
@@ -26,15 +28,37 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
     private val _backupRestoreState = MutableStateFlow(BackupRestoreViewState())
     val backupRestoreState : StateFlow<BackupRestoreViewState>
         get() = _backupRestoreState
-    fun setPathLocation(newUri : Uri) {
-
-    }
 
     fun onEvent(event: BackupRestoreStateEvent){
         when(event){
             is BackupRestoreStateEvent.EventUpdatePathLocation -> {
                 _backupRestoreState.update {
-                    it.copy(pathLocation = event.newUri)
+                    it.copy(
+                        pathLocation = event.newUri,
+                        backupFiles = ResponseWrapper.ResponseLoading()
+                    )
+                }
+                loadFiles()
+            }
+        }
+    }
+
+    fun loadFiles(){
+        _backupRestoreState.update {
+            it.copy(backupFiles = ResponseWrapper.ResponseLoading())
+        }
+        val uri = _backupRestoreState.value.pathLocation
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val documentTree = DocumentFile.fromTreeUri(app , uri!!)!!
+                val files = documentTree.listFiles()
+                _backupRestoreState.update {
+                    it.copy(backupFiles = ResponseWrapper.ResponseLoaded(files))
+                }
+            } catch (e : Exception){
+                _backupRestoreState.update {
+                    it.copy(backupFiles = ResponseWrapper.ResponseError(e))
                 }
             }
         }
@@ -93,7 +117,8 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
 }
 
 data class BackupRestoreViewState(
-    val pathLocation : Uri? = null
+    val pathLocation : Uri? = null,
+    val backupFiles : ResponseWrapper? = null,
 )
 
 sealed class BackupRestoreStateEvent {
