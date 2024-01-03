@@ -1,6 +1,9 @@
 package com.example.gratefulnote.backuprestore
 
 import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +25,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,26 +39,40 @@ import com.example.gratefulnote.common.data.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
 @Composable
+fun BackupRestoreFragmentBodySetup(
+    viewModel : BackupRestoreViewModel
+){
+    val getDocumentTreeAction = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ){
+        if (it != null){
+            viewModel.onEvent(BackupRestoreStateEvent.EventUpdatePathLocation(it))
+        }
+    }
+
+    BackupRestoreFragmentBody(
+        state = viewModel.backupRestoreState.collectAsState().value,
+        openDocumentTree = { getDocumentTreeAction.launch(null) }
+    )
+}
+@Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun BackupRestoreFragmentBody(
     state : BackupRestoreViewState,
-    onEvent : (BackupRestoreStateEvent) -> Unit,
-    launchActivityResultEvent : (BackupRestoreActivityEvent) -> Unit
+    openDocumentTree : () -> Unit
 ){
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         if (state.pathLocation == null)
             ElevatedButton(onClick = {
-                launchActivityResultEvent(
-                    BackupRestoreActivityEvent.OpenDocumentTree
-                )
+                openDocumentTree()
             }) {
                 Text(text = "Pilih Lokasi Backup")
             }
+
 
         else {
             ResponseWrapperLoader<List<DocumentFile>>(
@@ -108,9 +126,7 @@ private fun BackupRestoreFragmentBody(
                     ) {
                         Button(
                             onClick = {
-                                launchActivityResultEvent(
-                                    BackupRestoreActivityEvent.OpenDocumentTree
-                                )
+                                openDocumentTree()
                             },
                             modifier = Modifier.weight(1f)
                         ) {
@@ -128,7 +144,7 @@ private fun BackupRestoreFragmentBody(
 
                     Text(
                         fontWeight = FontWeight.Bold,
-                        text = "Lokasi sekarang : ${state.pathLocation}",
+                        text = "Lokasi sekarang : ${state.pathLocation.path}",
                         modifier = Modifier.basicMarquee(),
                         fontSize = 15.sp
                     )
@@ -146,8 +162,7 @@ private fun PreviewLoading(){
             state = BackupRestoreViewState(
                 pathLocation = Uri.parse("http://www.google.com.v.abc.pens.ac.id.google.com")
             ),
-            onEvent = {_ -> },
-            launchActivityResultEvent = { _ -> }
+            openDocumentTree = {}
         )
     }
 }
@@ -159,8 +174,8 @@ private fun PreviewWithListFile(){
         BackupRestoreFragmentBody(
             state = BackupRestoreViewState(
                 pathLocation = Uri.parse("Download/Backups"),
-                backupFiles = ResponseWrapper.ResponseLoaded<List<DocumentFile>>(
-                    data = List(100){index ->
+                backupFiles = ResponseWrapper.ResponseLoaded(
+                    data = List(100){ _ ->
                         DocumentFile.fromSingleUri(
                             LocalContext.current,
                             Uri.parse("content://mock/mockfile.gn_backup.json")
@@ -168,8 +183,18 @@ private fun PreviewWithListFile(){
                     }
                 )
             ),
-            onEvent = { _ -> },
-            launchActivityResultEvent = { _ -> }
+            openDocumentTree = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewPathLocationNull(){
+    Surface {
+        BackupRestoreFragmentBody(
+            state = BackupRestoreViewState(),
+            openDocumentTree = {}
         )
     }
 }

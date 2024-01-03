@@ -52,7 +52,7 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val documentTree = DocumentFile.fromTreeUri(app , uri!!)!!
-                val files = documentTree.listFiles()
+                val files = documentTree.listFiles().toList()
                 _backupRestoreState.update {
                     it.copy(backupFiles = ResponseWrapper.ResponseLoaded(files))
                 }
