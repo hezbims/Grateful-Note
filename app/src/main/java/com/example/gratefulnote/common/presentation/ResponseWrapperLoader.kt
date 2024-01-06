@@ -39,7 +39,7 @@ inline fun <reified T>ResponseWrapperLoader(
                     onRefresh = onRetry
                 )
 
-            is ResponseWrapper.ResponseLoaded<*> -> {
+            is ResponseWrapper.ResponseSucceed<*> -> {
                 if (response.data is T?){
                     content(response.data)
                 }

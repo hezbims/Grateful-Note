@@ -55,7 +55,7 @@ class CreateNewBackupDialogViewModel(private val app : Application) : AndroidVie
 
 
                 _state.update {
-                    it.copy(createNewBackupStatus = ResponseWrapper.ResponseLoaded<Nothing>())
+                    it.copy(createNewBackupStatus = ResponseWrapper.ResponseSucceed<Nothing>())
                 }
 
             } catch (e : Exception){

@@ -1,8 +1,8 @@
 package com.example.gratefulnote.backuprestore.components
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,9 +57,17 @@ fun CreateNewBackupDialogSetup(
     }
 
     val state = viewModel.state.collectAsState().value
+    val currentContext = LocalContext.current
+
     LaunchedEffect(state.createNewBackupStatus){
-        if (state.createNewBackupStatus is ResponseWrapper.ResponseLoaded<*>)
+        if (state.createNewBackupStatus is ResponseWrapper.ResponseSucceed<*>) {
+            Toast.makeText(
+                currentContext,
+                "Berhasil membuat backup baru!" ,
+                Toast.LENGTH_SHORT
+            ).show()
             onDismissRequest(state.createNewBackupStatus)
+        }
     }
 
     CreateNewBackupDialog(

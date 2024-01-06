@@ -40,14 +40,21 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
                 }
                 loadFiles()
             }
-            BackupRestoreStateEvent.OpenCreateNewBackupDialog ->
+            BackupRestoreStateEvent.OpenDialog ->
                 _backupRestoreState.update {
                     it.copy(openCreateNewBackupDialog = true)
                 }
-            BackupRestoreStateEvent.DismissCreateNewBackupDialog ->
-                _backupRestoreState.update {
-                    it.copy(openCreateNewBackupDialog = false)
+            is BackupRestoreStateEvent.RequestDismissDialog -> {
+                // enggak bisa ngedismiss dialog pas lagi proses loading
+                if (event.dialogStatus !is ResponseWrapper.ResponseLoading) {
+                    _backupRestoreState.update {
+                        it.copy(openCreateNewBackupDialog = false)
+                    }
+                    // Kalo berhasil, load files ulang agar menampilkan hasil bakup terbaru juga
+                    if (event.dialogStatus is ResponseWrapper.ResponseSucceed<*>)
+                        loadFiles()
                 }
+            }
             BackupRestoreStateEvent.ReloadBackupFileList ->
                 loadFiles()
 
@@ -65,7 +72,7 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
                 val documentTree = DocumentFile.fromTreeUri(app , uri!!)!!
                 val files = documentTree.listFiles().toList()
                 _backupRestoreState.update {
-                    it.copy(backupFiles = ResponseWrapper.ResponseLoaded(files))
+                    it.copy(backupFiles = ResponseWrapper.ResponseSucceed(files))
                 }
             } catch (e : Exception){
                 _backupRestoreState.update {
@@ -135,8 +142,8 @@ data class BackupRestoreViewState(
 
 sealed class BackupRestoreStateEvent {
     class UpdatePathLocation(val newUri: Uri) : BackupRestoreStateEvent()
-    data object OpenCreateNewBackupDialog : BackupRestoreStateEvent()
-    data object DismissCreateNewBackupDialog : BackupRestoreStateEvent()
+    data object OpenDialog : BackupRestoreStateEvent()
+    class RequestDismissDialog(val dialogStatus : ResponseWrapper?) : BackupRestoreStateEvent()
     data object ReloadBackupFileList : BackupRestoreStateEvent()
 }
 

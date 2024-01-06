@@ -141,7 +141,7 @@ private fun BackupRestoreFragmentBody(
                         }
                         Button(
                             onClick = {
-                                onEvent(BackupRestoreStateEvent.OpenCreateNewBackupDialog)
+                                onEvent(BackupRestoreStateEvent.OpenDialog)
                             },
                             modifier = Modifier.weight(1f)
                         ) {
@@ -164,8 +164,7 @@ private fun BackupRestoreFragmentBody(
     if (state.openCreateNewBackupDialog)
         CreateNewBackupDialogSetup(
             onDismissRequest = { backupStatus ->
-                if (backupStatus !is ResponseWrapper.ResponseLoading)
-                    onEvent(BackupRestoreStateEvent.DismissCreateNewBackupDialog)
+                onEvent(BackupRestoreStateEvent.RequestDismissDialog(backupStatus))
             },
             documentTreeUri = state.pathLocation!!
         )
@@ -192,7 +191,7 @@ private fun PreviewWithListFile(){
         BackupRestoreFragmentBody(
             state = BackupRestoreViewState(
                 pathLocation = Uri.parse("Download/Backups"),
-                backupFiles = ResponseWrapper.ResponseLoaded(
+                backupFiles = ResponseWrapper.ResponseSucceed(
                     data = List(100){ _ ->
                         DocumentFile.fromSingleUri(
                             LocalContext.current,
