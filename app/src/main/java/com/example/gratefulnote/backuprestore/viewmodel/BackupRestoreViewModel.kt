@@ -70,7 +70,17 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val documentTree = DocumentFile.fromTreeUri(app , uri!!)!!
-                val files = documentTree.listFiles().toList()
+                val files = documentTree
+                    .listFiles()
+                    .toList()
+                    .filter {file ->
+                        val nameSegments = file.name!!.split('.')
+
+                        nameSegments.size >= 3 &&
+                            nameSegments.last() == "json" &&
+                            nameSegments[nameSegments.lastIndex - 1].contains("gn_backup")
+                    }
+                    .sortedBy { file -> -file.lastModified() }
                 _backupRestoreState.update {
                     it.copy(backupFiles = ResponseWrapper.ResponseSucceed(files))
                 }

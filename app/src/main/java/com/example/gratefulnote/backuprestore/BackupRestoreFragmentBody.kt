@@ -88,23 +88,26 @@ private fun BackupRestoreFragmentBody(
                 modifier = Modifier
                     .weight(1f),
                 content = { documentFiles ->
-                    LazyColumn(
-                        contentPadding = PaddingValues(vertical = 24.dp),
-                        verticalArrangement = Arrangement.spacedBy(24.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(documentFiles!!){
-                            FileListItem(
-                                file = it,
-                                onDeleteFile = { file ->
+                    if (documentFiles.isNullOrEmpty())
+                        Text(text = "Tidak ada data")
+                    else
+                        LazyColumn(
+                            contentPadding = PaddingValues(vertical = 24.dp),
+                            verticalArrangement = Arrangement.spacedBy(24.dp),
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(documentFiles){
+                                FileListItem(
+                                    file = it,
+                                    onDeleteFile = { file ->
 
-                                },
-                                onRestoreFile = { file ->
+                                    },
+                                    onRestoreFile = { file ->
 
-                                }
-                            )
+                                    }
+                                )
+                            }
                         }
-                    }
                 }
             )
 
