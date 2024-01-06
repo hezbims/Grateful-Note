@@ -1,7 +1,6 @@
 package com.example.gratefulnote.backuprestore
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -34,7 +33,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.documentfile.provider.DocumentFile
+import com.example.gratefulnote.backuprestore.components.CreateNewBackupDialogSetup
 import com.example.gratefulnote.backuprestore.components.FileListItem
+import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreStateEvent
+import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewModel
+import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewState
 import com.example.gratefulnote.common.data.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
@@ -46,12 +49,13 @@ fun BackupRestoreFragmentBodySetup(
         ActivityResultContracts.OpenDocumentTree()
     ){
         if (it != null){
-            viewModel.onEvent(BackupRestoreStateEvent.EventUpdatePathLocation(it))
+            viewModel.onEvent(BackupRestoreStateEvent.UpdatePathLocation(it))
         }
     }
 
     BackupRestoreFragmentBody(
         state = viewModel.backupRestoreState.collectAsState().value,
+        onEvent = viewModel::onEvent,
         openDocumentTree = { getDocumentTreeAction.launch(null) }
     )
 }
@@ -59,6 +63,7 @@ fun BackupRestoreFragmentBodySetup(
 @OptIn(ExperimentalFoundationApi::class)
 private fun BackupRestoreFragmentBody(
     state : BackupRestoreViewState,
+    onEvent : (BackupRestoreStateEvent) -> Unit,
     openDocumentTree : () -> Unit
 ){
     Column(
@@ -77,7 +82,9 @@ private fun BackupRestoreFragmentBody(
         else {
             ResponseWrapperLoader<List<DocumentFile>>(
                 response = state.backupFiles ?: ResponseWrapper.ResponseLoading(),
-                onRetry = { /*TODO*/ },
+                onRetry = {
+                    onEvent(BackupRestoreStateEvent.ReloadBackupFileList)
+                },
                 modifier = Modifier
                     .weight(1f),
                 content = { documentFiles ->
@@ -133,7 +140,9 @@ private fun BackupRestoreFragmentBody(
                             Text(text = "Ubah Lokasi")
                         }
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                onEvent(BackupRestoreStateEvent.OpenCreateNewBackupDialog)
+                            },
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(text = "Buat Backup Baru")
@@ -152,6 +161,14 @@ private fun BackupRestoreFragmentBody(
             }
         }
     }
+    if (state.openCreateNewBackupDialog)
+        CreateNewBackupDialogSetup(
+            onDismissRequest = { backupStatus ->
+                if (backupStatus !is ResponseWrapper.ResponseLoading)
+                    onEvent(BackupRestoreStateEvent.DismissCreateNewBackupDialog)
+            },
+            documentTreeUri = state.pathLocation!!
+        )
 }
 
 @Preview(name = "Main body URL Choosen")
@@ -162,6 +179,7 @@ private fun PreviewLoading(){
             state = BackupRestoreViewState(
                 pathLocation = Uri.parse("http://www.google.com.v.abc.pens.ac.id.google.com")
             ),
+            onEvent = {},
             openDocumentTree = {}
         )
     }
@@ -183,6 +201,7 @@ private fun PreviewWithListFile(){
                     }
                 )
             ),
+            onEvent = {},
             openDocumentTree = {}
         )
     }
@@ -194,6 +213,7 @@ private fun PreviewPathLocationNull(){
     Surface {
         BackupRestoreFragmentBody(
             state = BackupRestoreViewState(),
+            onEvent = {},
             openDocumentTree = {}
         )
     }

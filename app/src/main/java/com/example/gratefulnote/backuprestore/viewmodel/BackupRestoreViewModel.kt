@@ -1,4 +1,4 @@
-package com.example.gratefulnote.backuprestore
+package com.example.gratefulnote.backuprestore.viewmodel
 
 import android.app.Application
 import android.net.Uri
@@ -31,7 +31,7 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
 
     fun onEvent(event: BackupRestoreStateEvent){
         when(event){
-            is BackupRestoreStateEvent.EventUpdatePathLocation -> {
+            is BackupRestoreStateEvent.UpdatePathLocation -> {
                 _backupRestoreState.update {
                     it.copy(
                         pathLocation = event.newUri,
@@ -40,10 +40,21 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
                 }
                 loadFiles()
             }
+            BackupRestoreStateEvent.OpenCreateNewBackupDialog ->
+                _backupRestoreState.update {
+                    it.copy(openCreateNewBackupDialog = true)
+                }
+            BackupRestoreStateEvent.DismissCreateNewBackupDialog ->
+                _backupRestoreState.update {
+                    it.copy(openCreateNewBackupDialog = false)
+                }
+            BackupRestoreStateEvent.ReloadBackupFileList ->
+                loadFiles()
+
         }
     }
 
-    fun loadFiles(){
+    private fun loadFiles(){
         _backupRestoreState.update {
             it.copy(backupFiles = ResponseWrapper.ResponseLoading())
         }
@@ -119,10 +130,14 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
 data class BackupRestoreViewState(
     val pathLocation : Uri? = null,
     val backupFiles : ResponseWrapper? = null,
+    val openCreateNewBackupDialog : Boolean = false,
 )
 
 sealed class BackupRestoreStateEvent {
-    class EventUpdatePathLocation(val newUri: Uri) : BackupRestoreStateEvent()
+    class UpdatePathLocation(val newUri: Uri) : BackupRestoreStateEvent()
+    data object OpenCreateNewBackupDialog : BackupRestoreStateEvent()
+    data object DismissCreateNewBackupDialog : BackupRestoreStateEvent()
+    data object ReloadBackupFileList : BackupRestoreStateEvent()
 }
 
 class BackupRestoreViewModelFactory(private val app : Application): ViewModelProvider.Factory {
