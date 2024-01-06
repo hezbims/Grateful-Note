@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CreateNewBackupDialogViewModel(private val app : Application) : AndroidViewModel(app) {
+class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel(app) {
     private val dao = PositiveEmotionDatabase.getInstance(app).positiveEmotionDatabaseDao
 
     private val _state = MutableStateFlow(CreateNewBackupDialogState())

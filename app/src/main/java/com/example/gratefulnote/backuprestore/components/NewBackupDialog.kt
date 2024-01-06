@@ -33,14 +33,14 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gratefulnote.backuprestore.viewmodel.CreateNewBackupDialogEvent
 import com.example.gratefulnote.backuprestore.viewmodel.CreateNewBackupDialogState
-import com.example.gratefulnote.backuprestore.viewmodel.CreateNewBackupDialogViewModel
+import com.example.gratefulnote.backuprestore.viewmodel.NewBackupDialogViewModel
 import com.example.gratefulnote.common.data.ResponseWrapper
 
 @Composable
-fun CreateNewBackupDialogSetup(
+fun NewBackupDialogSetup(
     onDismissRequest: (ResponseWrapper?) -> Unit,
     documentTreeUri: Uri,
-    viewModel: CreateNewBackupDialogViewModel = viewModel(),
+    viewModel: NewBackupDialogViewModel = viewModel(),
 ){
     DisposableEffect(Unit){
         viewModel.onEvent(
@@ -70,14 +70,14 @@ fun CreateNewBackupDialogSetup(
         }
     }
 
-    CreateNewBackupDialog(
+    NewBackupDialog(
         onDismissRequest = onDismissRequest,
         state = state,
         onEvent = viewModel::onEvent
     )
 }
 @Composable
-private fun CreateNewBackupDialog(
+private fun NewBackupDialog(
     onDismissRequest : (ResponseWrapper?) -> Unit,
     state : CreateNewBackupDialogState,
     onEvent : (CreateNewBackupDialogEvent) -> Unit,
@@ -151,7 +151,7 @@ private fun CreateNewBackupDialog(
 @Composable
 private fun PreviewDialog(){
     Surface {
-        CreateNewBackupDialog(
+        NewBackupDialog(
             onDismissRequest = { /*TODO*/ },
             state = CreateNewBackupDialogState(),
             onEvent = {_ -> }

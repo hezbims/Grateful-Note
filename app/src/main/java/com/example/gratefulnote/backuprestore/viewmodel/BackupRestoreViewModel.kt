@@ -38,7 +38,7 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
                         backupFiles = ResponseWrapper.ResponseLoading()
                     )
                 }
-                loadFiles()
+                reloadFiles()
             }
             BackupRestoreStateEvent.OpenDialog ->
                 _backupRestoreState.update {
@@ -52,16 +52,18 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
                     }
                     // Kalo berhasil, load files ulang agar menampilkan hasil bakup terbaru juga
                     if (event.dialogStatus is ResponseWrapper.ResponseSucceed<*>)
-                        loadFiles()
+                        reloadFiles()
                 }
             }
             BackupRestoreStateEvent.ReloadBackupFileList ->
-                loadFiles()
+                reloadFiles()
+            is BackupRestoreStateEvent.DeleteFile ->
+                deleteFile(event.file)
 
         }
     }
 
-    private fun loadFiles(){
+    private fun reloadFiles(){
         _backupRestoreState.update {
             it.copy(backupFiles = ResponseWrapper.ResponseLoading())
         }
@@ -92,6 +94,11 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
         }
     }
 
+    private fun deleteFile(deletedFile: DocumentFile){
+        val deleteSucceed = deletedFile.delete()
+        if (deleteSucceed)
+            reloadFiles()
+    }
 
 
     fun backup(uri : Uri){
@@ -155,6 +162,7 @@ sealed class BackupRestoreStateEvent {
     data object OpenDialog : BackupRestoreStateEvent()
     class RequestDismissDialog(val dialogStatus : ResponseWrapper?) : BackupRestoreStateEvent()
     data object ReloadBackupFileList : BackupRestoreStateEvent()
+    class DeleteFile(val file : DocumentFile) : BackupRestoreStateEvent()
 }
 
 class BackupRestoreViewModelFactory(private val app : Application): ViewModelProvider.Factory {

@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.documentfile.provider.DocumentFile
-import com.example.gratefulnote.backuprestore.components.CreateNewBackupDialogSetup
+import com.example.gratefulnote.backuprestore.components.NewBackupDialogSetup
 import com.example.gratefulnote.backuprestore.components.FileListItem
 import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreStateEvent
 import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewModel
@@ -88,26 +88,28 @@ private fun BackupRestoreFragmentBody(
                 modifier = Modifier
                     .weight(1f),
                 content = { documentFiles ->
-                    if (documentFiles.isNullOrEmpty())
+                    if (documentFiles.isNullOrEmpty()) {
                         Text(text = "Tidak ada data")
-                    else
-                        LazyColumn(
-                            contentPadding = PaddingValues(vertical = 24.dp),
-                            verticalArrangement = Arrangement.spacedBy(24.dp),
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            items(documentFiles){
-                                FileListItem(
-                                    file = it,
-                                    onDeleteFile = { file ->
+                        return
+                    }
 
-                                    },
-                                    onRestoreFile = { file ->
+                    LazyColumn(
+                        contentPadding = PaddingValues(vertical = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(documentFiles){
+                            FileListItem(
+                                file = it,
+                                onDeleteFile = { file ->
+                                    onEvent(BackupRestoreStateEvent.DeleteFile(file))
+                                },
+                                onRestoreFile = { file ->
 
-                                    }
-                                )
-                            }
+                                }
+                            )
                         }
+                    }
                 }
             )
 
@@ -165,7 +167,7 @@ private fun BackupRestoreFragmentBody(
         }
     }
     if (state.openCreateNewBackupDialog)
-        CreateNewBackupDialogSetup(
+        NewBackupDialogSetup(
             onDismissRequest = { backupStatus ->
                 onEvent(BackupRestoreStateEvent.RequestDismissDialog(backupStatus))
             },
