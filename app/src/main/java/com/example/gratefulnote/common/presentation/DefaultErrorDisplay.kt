@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun DefaultErrorDisplay(
-    exception : Exception,
+    exception : Exception?,
     onRefresh : () -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -35,7 +35,7 @@ fun DefaultErrorDisplay(
 
         Text(
             textAlign = TextAlign.Center,
-            text = exception.message ?: "Unknown Error",
+            text = exception?.message ?: "Unknown Error",
         )
 
         ElevatedButton(onClick = onRefresh) {

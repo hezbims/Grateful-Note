@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -106,6 +108,19 @@ private fun NewBackupDialog(
                     value = state.backupTitle,
                     onValueChange = { newValue ->
                         onEvent(CreateNewBackupDialogEvent.onChangeBackupTitle(newValue))
+                    },
+                    isError = state.createNewBackupStatus is ResponseWrapper.ResponseError,
+                    supportingText = {
+                        if (state.createNewBackupStatus is ResponseWrapper.ResponseError)
+                            Text(
+                                text = state.createNewBackupStatus.exception?.message ?:
+                                    "Unknown Error occured",
+                                color = MaterialTheme.colorScheme.error,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+
                     }
                 )
 

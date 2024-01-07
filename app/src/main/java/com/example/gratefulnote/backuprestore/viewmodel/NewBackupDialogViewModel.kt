@@ -52,6 +52,12 @@ class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel
                     "application/json",
                     "${_state.value.backupTitle}.gn_backup.json"
                 )
+                val fileNameSegments = file!!.name!!.split('.')
+                if (fileNameSegments.first().isEmpty())
+                    throw Exception("Judul backup tidak boleh kosong")
+                if (fileNameSegments[1] != "gn_backup")
+                    throw Exception("Judul backup ini sudah dipakai")
+
 
 
                 _state.update {
