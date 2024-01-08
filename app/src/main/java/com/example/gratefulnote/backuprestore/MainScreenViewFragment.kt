@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewModel
 import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewModelFactory
 
-class BackupRestoreFragment : Fragment() {
+class MainScreenViewFragment : Fragment() {
     private lateinit var viewModel: BackupRestoreViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

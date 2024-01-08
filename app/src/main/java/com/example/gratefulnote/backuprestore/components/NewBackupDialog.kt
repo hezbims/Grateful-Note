@@ -47,13 +47,13 @@ fun NewBackupDialogSetup(
     DisposableEffect(Unit){
         viewModel.onEvent(
             CreateNewBackupDialogEvent
-                .onInitDocumentTreeUri(documentTreeUri)
+                .OnInitDocumentTreeUri(documentTreeUri)
         )
 
         onDispose {
             viewModel.
                 onEvent(
-                    CreateNewBackupDialogEvent.onResetViewModelState
+                    CreateNewBackupDialogEvent.OnResetViewModelState
                 )
         }
     }
@@ -107,7 +107,7 @@ private fun NewBackupDialog(
                     },
                     value = state.backupTitle,
                     onValueChange = { newValue ->
-                        onEvent(CreateNewBackupDialogEvent.onChangeBackupTitle(newValue))
+                        onEvent(CreateNewBackupDialogEvent.OnChangeBackupTitle(newValue))
                     },
                     isError = state.createNewBackupStatus is ResponseWrapper.ResponseError,
                     supportingText = {
@@ -149,7 +149,7 @@ private fun NewBackupDialog(
                                 contentColor = Color.Blue
                             ),
                             onClick = {
-                                onEvent(CreateNewBackupDialogEvent.onCreateNewBackup)
+                                onEvent(CreateNewBackupDialogEvent.OnCreateNewBackup)
                             }
                         ) {
                             Text("Buat")

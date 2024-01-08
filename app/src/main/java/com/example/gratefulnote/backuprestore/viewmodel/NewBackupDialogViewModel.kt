@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gratefulnote.common.data.ResponseWrapper
 import com.example.gratefulnote.database.PositiveEmotionDatabase
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,17 +25,17 @@ class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel
 
     fun onEvent(event: CreateNewBackupDialogEvent){
         when (event){
-            is CreateNewBackupDialogEvent.onChangeBackupTitle ->
+            is CreateNewBackupDialogEvent.OnChangeBackupTitle ->
                 _state.update {
                     it.copy(backupTitle = event.newTitle)
                 }
-            CreateNewBackupDialogEvent.onResetViewModelState ->
+            CreateNewBackupDialogEvent.OnResetViewModelState ->
                 _state.update {
                     CreateNewBackupDialogState()
                 }
-            is CreateNewBackupDialogEvent.onInitDocumentTreeUri ->
+            is CreateNewBackupDialogEvent.OnInitDocumentTreeUri ->
                 _targetDocumentTree = event.uri
-            CreateNewBackupDialogEvent.onCreateNewBackup ->
+            CreateNewBackupDialogEvent.OnCreateNewBackup ->
                 createNewBackup()
         }
     }
@@ -58,6 +59,13 @@ class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel
                 if (fileNameSegments[1] != "gn_backup")
                     throw Exception("Judul backup ini sudah dipakai")
 
+                app.contentResolver.openOutputStream(file!!.uri)!!.use{
+                    it.write(
+                        Gson().toJson(
+                            dao.getAllPositiveEmotion()
+                        ).toByteArray()
+                    )
+                }
 
 
                 _state.update {
@@ -80,8 +88,8 @@ data class CreateNewBackupDialogState(
 )
 
 sealed class CreateNewBackupDialogEvent {
-    class onChangeBackupTitle(val newTitle : String) : CreateNewBackupDialogEvent()
-    data object onResetViewModelState : CreateNewBackupDialogEvent()
-    class onInitDocumentTreeUri(val uri : Uri) : CreateNewBackupDialogEvent()
-    data object onCreateNewBackup : CreateNewBackupDialogEvent()
+    class OnChangeBackupTitle(val newTitle : String) : CreateNewBackupDialogEvent()
+    data object OnResetViewModelState : CreateNewBackupDialogEvent()
+    class OnInitDocumentTreeUri(val uri : Uri) : CreateNewBackupDialogEvent()
+    data object OnCreateNewBackup : CreateNewBackupDialogEvent()
 }

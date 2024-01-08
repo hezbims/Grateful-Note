@@ -23,10 +23,10 @@ interface PositiveEmotionDatabaseDao {
               (:onlyFavorite = 0 OR isFavorite = 1)
     """)
     suspend fun getAllPositiveEmotion(
-        month : Int ,
-        year : Int? ,
-        type : String ,
-        onlyFavorite : Boolean
+        month : Int  = 0,
+        year : Int? = null,
+        type : String =  "Semua",
+        onlyFavorite : Boolean = false
     ) : List<PositiveEmotion>
 
     @Query("SELECT DISTINCT year FROM positive_emotion_table")
