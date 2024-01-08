@@ -1,4 +1,4 @@
-package com.example.gratefulnote.backuprestore
+package com.example.gratefulnote.backuprestore.presentation.main_screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewModel
-import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewModelFactory
 
 class MainScreenViewFragment : Fragment() {
     private lateinit var viewModel: BackupRestoreViewModel

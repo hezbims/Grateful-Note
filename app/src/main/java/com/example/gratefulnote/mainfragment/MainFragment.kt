@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gratefulnote.R
-import com.example.gratefulnote.confirmdialog.ConfirmDialog
+import com.example.gratefulnote.common.presentation.ConfirmDialog
 import com.example.gratefulnote.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {

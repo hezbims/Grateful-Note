@@ -10,12 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.gratefulnote.common.data.ResponseWrapper
+import com.example.gratefulnote.common.data.dto.ResponseWrapper
 
 @Composable
-inline fun <reified T>ResponseWrapperLoader(
-    response : ResponseWrapper,
-    noinline onRetry : () -> Unit,
+fun <T>ResponseWrapperLoader(
+    response : ResponseWrapper<T>,
+    onRetry : () -> Unit,
     content : @Composable (T?) -> Unit,
     modifier: Modifier = Modifier,
 ){
@@ -39,12 +39,8 @@ inline fun <reified T>ResponseWrapperLoader(
                     onRefresh = onRetry
                 )
 
-            is ResponseWrapper.ResponseSucceed<*> -> {
-                if (response.data is T?){
-                    content(response.data)
-                }
-                else
-                    throw IllegalArgumentException("Tipe data tidak diketahui pada response wrapper")
+            is ResponseWrapper.ResponseSucceed -> {
+                content(response.data)
             }
         }
     }

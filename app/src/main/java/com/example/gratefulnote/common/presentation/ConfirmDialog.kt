@@ -1,4 +1,4 @@
-package com.example.gratefulnote.confirmdialog
+package com.example.gratefulnote.common.presentation
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -47,7 +47,7 @@ class ConfirmDialog : DialogFragment() {
                         requestKey : String,
                         valueKey : String,
                         context : Context
-                        ) : ConfirmDialog{
+                        ) : ConfirmDialog {
             val dialogFragment = ConfirmDialog()
 
             dialogFragment.arguments = Bundle().apply {

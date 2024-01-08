@@ -1,11 +1,11 @@
-package com.example.gratefulnote.backuprestore.viewmodel
+package com.example.gratefulnote.backuprestore.presentation.new_backup_dialog
 
 import android.app.Application
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gratefulnote.common.data.ResponseWrapper
+import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +58,7 @@ class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel
                     throw Exception("Judul backup tidak boleh kosong")
                 if (fileNameSegments[1] != "gn_backup")
                     throw Exception("Judul backup ini sudah dipakai")
-
+                
                 app.contentResolver.openOutputStream(file!!.uri)!!.use{
                     it.write(
                         Gson().toJson(
@@ -69,7 +69,7 @@ class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel
 
 
                 _state.update {
-                    it.copy(createNewBackupStatus = ResponseWrapper.ResponseSucceed<Nothing>())
+                    it.copy(createNewBackupStatus = ResponseWrapper.ResponseSucceed())
                 }
 
             } catch (e : Exception){
@@ -83,7 +83,7 @@ class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel
 }
 
 data class CreateNewBackupDialogState(
-    val createNewBackupStatus : ResponseWrapper? = null,
+    val createNewBackupStatus : ResponseWrapper<Nothing>? = null,
     val backupTitle : String = "",
 )
 

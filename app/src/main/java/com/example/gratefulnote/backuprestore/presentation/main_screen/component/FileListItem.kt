@@ -1,4 +1,4 @@
-package com.example.gratefulnote.backuprestore.components
+package com.example.gratefulnote.backuprestore.presentation.main_screen.component
 
 import android.net.Uri
 import androidx.compose.foundation.clickable
@@ -16,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,19 +23,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.documentfile.provider.DocumentFile
-import java.text.SimpleDateFormat
+import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
 
 @Composable
 fun FileListItem(
-    file : DocumentFile,
-    onDeleteFile : (DocumentFile) -> Unit,
-    onRestoreFile : (DocumentFile) -> Unit,
+    file : DocumentFileDto,
+    onDeleteFile : (DocumentFileDto) -> Unit,
+    onRestoreFile : (DocumentFileDto) -> Unit,
     modifier: Modifier = Modifier
 ){
-    val dateFormatter = remember {
-        SimpleDateFormat("dd-LLL-yyyy, HH:mm")
-    }
-
     Column(
         modifier = modifier
     ) {
@@ -52,7 +47,7 @@ fun FileListItem(
             ) {
                 Text(
                     fontSize = 15.sp,
-                    text = file.name ?: "*This file has no name*"
+                    text = file.fileName
                 )
 
                 Icon(
@@ -66,9 +61,7 @@ fun FileListItem(
 
             Text(
                 fontSize = 12.sp,
-                text = "Terkahir diubah : ${
-                    dateFormatter.format(file.lastModified())
-                }"
+                text = "Terkahir diubah : ${file.lastModified}"
             )
 
             Row(
@@ -78,7 +71,7 @@ fun FileListItem(
             ) {
                 Text(
                     fontSize = 12.sp,
-                    text = "Size : ${String.format("%.1f Mb", file.length() / 1000000f)}"
+                    text = "Size : ${String.format("%.1f Mb", file.file.length() / 1000000f)}"
                 )
 
                 ElevatedButton(onClick = {
@@ -101,8 +94,10 @@ fun FileListItem(
 @Preview
 @Composable
 private fun PreviewFileListItem(){
-    val mockFile = DocumentFile.fromSingleUri(
-        LocalContext.current, Uri.parse("content://mock/mockfile.gn_backup.json")
+    val mockFile = DocumentFileDto.from(
+        DocumentFile.fromSingleUri(
+            LocalContext.current, Uri.parse("content://mock/mockfile.gn_backup.json")
+        )!!
     )
 
     Surface {
@@ -112,7 +107,7 @@ private fun PreviewFileListItem(){
                 .fillMaxWidth()
         ) {
             FileListItem(
-                file = mockFile!!,
+                file = mockFile,
                 onDeleteFile = {_ ->},
                 onRestoreFile = {_ ->},
                 modifier = Modifier.fillMaxWidth()

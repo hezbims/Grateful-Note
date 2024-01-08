@@ -1,4 +1,4 @@
-package com.example.gratefulnote.backuprestore
+package com.example.gratefulnote.backuprestore.presentation.main_screen
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -33,12 +33,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.documentfile.provider.DocumentFile
-import com.example.gratefulnote.backuprestore.components.NewBackupDialogSetup
-import com.example.gratefulnote.backuprestore.components.FileListItem
-import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreStateEvent
-import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewModel
-import com.example.gratefulnote.backuprestore.viewmodel.BackupRestoreViewState
-import com.example.gratefulnote.common.data.ResponseWrapper
+import com.example.gratefulnote.backuprestore.presentation.new_backup_dialog.NewBackupDialogSetup
+import com.example.gratefulnote.backuprestore.presentation.main_screen.component.FileListItem
+import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
+import com.example.gratefulnote.backuprestore.presentation.confirm_restore_dialog.ConfirmRestoreDialogSetup
+import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
 @Composable
@@ -80,7 +79,7 @@ private fun BackupRestoreFragmentBody(
 
 
         else {
-            ResponseWrapperLoader<List<DocumentFile>>(
+            ResponseWrapperLoader(
                 response = state.backupFiles ?: ResponseWrapper.ResponseLoading(),
                 onRetry = {
                     onEvent(BackupRestoreStateEvent.ReloadBackupFileList)
@@ -90,7 +89,7 @@ private fun BackupRestoreFragmentBody(
                 content = { documentFiles ->
                     if (documentFiles.isNullOrEmpty()) {
                         Text(text = "Tidak ada data")
-                        return
+                        return@ResponseWrapperLoader
                     }
 
                     LazyColumn(
@@ -105,7 +104,9 @@ private fun BackupRestoreFragmentBody(
                                     onEvent(BackupRestoreStateEvent.DeleteFile(file))
                                 },
                                 onRestoreFile = { file ->
-
+                                    onEvent(
+                                        BackupRestoreStateEvent.OpenRestoreConfirmationDialog(file)
+                                    )
                                 }
                             )
                         }
@@ -146,7 +147,7 @@ private fun BackupRestoreFragmentBody(
                         }
                         Button(
                             onClick = {
-                                onEvent(BackupRestoreStateEvent.OpenDialog)
+                                onEvent(BackupRestoreStateEvent.OpenNewBackupDialog)
                             },
                             modifier = Modifier.weight(1f)
                         ) {
@@ -169,9 +170,20 @@ private fun BackupRestoreFragmentBody(
     if (state.openCreateNewBackupDialog)
         NewBackupDialogSetup(
             onDismissRequest = { backupStatus ->
-                onEvent(BackupRestoreStateEvent.RequestDismissDialog(backupStatus))
+                onEvent(BackupRestoreStateEvent.RequestDismissNewBackupDialog(backupStatus))
             },
             documentTreeUri = state.pathLocation!!
+        )
+    if (state.restoreFile != null)
+        ConfirmRestoreDialogSetup(
+            onDismissRequest = {backupStatus ->
+                onEvent(
+                    BackupRestoreStateEvent.RequestDismissRestoreConfirmationDialog(
+                        backupStatus
+                    )
+                )
+            },
+            restoreFile = state.restoreFile
         )
 }
 
@@ -198,10 +210,12 @@ private fun PreviewWithListFile(){
                 pathLocation = Uri.parse("Download/Backups"),
                 backupFiles = ResponseWrapper.ResponseSucceed(
                     data = List(100){ _ ->
-                        DocumentFile.fromSingleUri(
-                            LocalContext.current,
-                            Uri.parse("content://mock/mockfile.gn_backup.json")
-                        )!!
+                        DocumentFileDto.from(
+                            DocumentFile.fromSingleUri(
+                                LocalContext.current,
+                                Uri.parse("content://mock/mockfile.gn_backup.json")
+                            )!!
+                        )
                     }
                 )
             ),

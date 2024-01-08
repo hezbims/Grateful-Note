@@ -47,6 +47,6 @@
         tools:layout="@layout/fragment_notification_settings"/>
     <fragment
         android:id="@+id/backupRestoreFragment"
-        android:name="com.example.gratefulnote.backuprestore.MainScreenViewFragment"
+        android:name="com.example.gratefulnote.backuprestore.presentation.main_screen.MainScreenViewFragment"
         android:label="Backup and Restore" />
 </navigation>

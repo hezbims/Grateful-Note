@@ -1,4 +1,4 @@
-package com.example.gratefulnote.backuprestore.components
+package com.example.gratefulnote.backuprestore.presentation.new_backup_dialog
 
 import android.net.Uri
 import android.widget.Toast
@@ -33,21 +33,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.gratefulnote.backuprestore.viewmodel.CreateNewBackupDialogEvent
-import com.example.gratefulnote.backuprestore.viewmodel.CreateNewBackupDialogState
-import com.example.gratefulnote.backuprestore.viewmodel.NewBackupDialogViewModel
-import com.example.gratefulnote.common.data.ResponseWrapper
+import com.example.gratefulnote.common.data.dto.ResponseWrapper
 
 @Composable
 fun NewBackupDialogSetup(
-    onDismissRequest: (ResponseWrapper?) -> Unit,
+    onDismissRequest: (ResponseWrapper<Nothing>?) -> Unit,
     documentTreeUri: Uri,
     viewModel: NewBackupDialogViewModel = viewModel(),
 ){
     DisposableEffect(Unit){
         viewModel.onEvent(
-            CreateNewBackupDialogEvent
-                .OnInitDocumentTreeUri(documentTreeUri)
+            CreateNewBackupDialogEvent.OnInitDocumentTreeUri(documentTreeUri)
         )
 
         onDispose {
@@ -80,7 +76,7 @@ fun NewBackupDialogSetup(
 }
 @Composable
 private fun NewBackupDialog(
-    onDismissRequest : (ResponseWrapper?) -> Unit,
+    onDismissRequest : (ResponseWrapper<Nothing>?) -> Unit,
     state : CreateNewBackupDialogState,
     onEvent : (CreateNewBackupDialogEvent) -> Unit,
 ){
