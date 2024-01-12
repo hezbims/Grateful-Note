@@ -1,6 +1,9 @@
 package com.example.gratefulnote.backuprestore.presentation.main_screen
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.*
@@ -16,18 +19,27 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
     private val _backupRestoreState = MutableStateFlow(BackupRestoreViewState())
     val backupRestoreState : StateFlow<BackupRestoreViewState>
         get() = _backupRestoreState
+    private lateinit var sharedPref : SharedPreferences
+    private val contentResolver = app.contentResolver
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedPref = app.getSharedPreferences(
+                "Backup_Restore_Shared_Preference",
+                Context.MODE_PRIVATE
+            )
+
+            loadPathLocationFromSharedPref()
+        }
+
+    }
 
     fun onEvent(event: BackupRestoreStateEvent){
         when(event){
-            is BackupRestoreStateEvent.UpdatePathLocation -> {
-                _backupRestoreState.update {
-                    it.copy(
-                        pathLocation = event.newUri,
-                        backupFiles = ResponseWrapper.ResponseLoading()
-                    )
-                }
-                reloadFiles()
-            }
+            BackupRestoreStateEvent.LoadPathFromSharedPref ->
+                loadPathLocationFromSharedPref()
+            is BackupRestoreStateEvent.UpdatePathLocation ->
+                updatePathLocation(event.newUri)
             BackupRestoreStateEvent.OpenNewBackupDialog ->
                 _backupRestoreState.update {
                     it.copy(openCreateNewBackupDialog = true)
@@ -56,14 +68,46 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
         }
     }
 
+    private fun loadPathLocationFromSharedPref(){
+        val uriString = sharedPref.getString("backup_restore_uri", null)
+        _backupRestoreState.update {
+            it.copy(pathLocation =
+                if (uriString != null) ResponseWrapper.ResponseSucceed(Uri.parse(uriString))
+                else ResponseWrapper.ResponseSucceed(null)
+            )
+        }
+        reloadFiles()
+    }
+
+    private fun updatePathLocation(newUri: Uri){
+        val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        contentResolver.takePersistableUriPermission(newUri, takeFlags)
+
+        _backupRestoreState.update {
+            it.copy(
+                pathLocation = ResponseWrapper.ResponseSucceed(newUri),
+                backupFiles = ResponseWrapper.ResponseLoading()
+            )
+        }
+
+        sharedPref.edit()
+            .putString("backup_restore_uri" , newUri.toString())
+            .apply()
+        reloadFiles()
+    }
+
     private fun reloadFiles(){
         _backupRestoreState.update {
             it.copy(backupFiles = ResponseWrapper.ResponseLoading())
         }
-        val uri = _backupRestoreState.value.pathLocation
+
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val uri = (_backupRestoreState.value.pathLocation
+                        as ResponseWrapper.ResponseSucceed).data
+
                 val documentTree = DocumentFile.fromTreeUri(app , uri!!)!!
                 val files = documentTree
                     .listFiles()
@@ -96,13 +140,14 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
 }
 
 data class BackupRestoreViewState(
-    val pathLocation : Uri? = null,
+    val pathLocation : ResponseWrapper<Uri> = ResponseWrapper.ResponseLoading(),
     val backupFiles : ResponseWrapper<List<DocumentFileDto>>? = null,
     val openCreateNewBackupDialog : Boolean = false,
     val restoreFile : DocumentFileDto? = null,
 )
 
 sealed class BackupRestoreStateEvent {
+    data object LoadPathFromSharedPref : BackupRestoreStateEvent()
     class UpdatePathLocation(val newUri: Uri) : BackupRestoreStateEvent()
     data object OpenNewBackupDialog : BackupRestoreStateEvent()
     class RequestDismissNewBackupDialog(val dialogStatus : ResponseWrapper<Nothing>?) : BackupRestoreStateEvent()
