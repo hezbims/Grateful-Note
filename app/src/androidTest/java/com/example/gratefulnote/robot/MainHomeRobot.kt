@@ -1,4 +1,4 @@
-package com.example.gratefulnote.fragment_controller
+package com.example.gratefulnote.robot
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
@@ -12,13 +12,14 @@ import com.example.gratefulnote.R
 import com.example.gratefulnote.helper.ClickRecyclerViewItemAction
 import org.hamcrest.CoreMatchers.allOf
 
-class MainHomeController {
-    fun toAddGratitude(){
+class MainHomeRobot {
+    fun toAddGratitude() : MainHomeRobot{
         onView(withId(R.id.add_new_gratitude))
             .perform(click())
+        return this
     }
 
-    fun toEditGratitudeWithTitle(title : String){
+    fun toEditGratitudeWithTitle(title : String) : MainHomeRobot{
         val editButton = onView(allOf(
             withId(R.id.edit_positive_emotion),
 
@@ -29,12 +30,13 @@ class MainHomeController {
             )
         ))
         editButton.perform(click())
+        return this
     }
 
     /**
      * Mencet tombol edit di item index ke-n
      */
-    fun toEditGratitudeWithNthItem(index : Int){
+    fun toEditGratitudeWithNthItem(index : Int) : MainHomeRobot{
         val editButton = onView(
             withId(R.id.recyclerView)
         ).perform(
@@ -45,6 +47,7 @@ class MainHomeController {
                 )
             )
         )
+        return this
     }
 
 

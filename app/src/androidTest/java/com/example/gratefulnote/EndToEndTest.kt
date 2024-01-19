@@ -5,9 +5,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.database.PositiveEmotionDatabase
-import com.example.gratefulnote.fragment_controller.AddGratitudeController
-import com.example.gratefulnote.fragment_controller.EditScreenController
-import com.example.gratefulnote.fragment_controller.MainHomeController
+import com.example.gratefulnote.robot.AddGratitudeRobot
+import com.example.gratefulnote.robot.EditScreenRobot
+import com.example.gratefulnote.robot.MainHomeRobot
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,9 +30,9 @@ class EndToEndTest {
 
     @Test
     fun end_To_End_Test(){
-        val mainHomeController = MainHomeController()
-        val addGratitudeController = AddGratitudeController()
-        val editScreenController = EditScreenController()
+        val mainHomeController = MainHomeRobot()
+        val addGratitudeController = AddGratitudeRobot()
+        val editScreenController = EditScreenRobot()
 
         mainHomeController.toAddGratitude()
         addGratitudeController.fillFormAndSave(
@@ -57,16 +57,17 @@ class EndToEndTest {
 
         /// nyoba ngedit salah satu gratitude
         mainHomeController.toEditGratitudeWithTitle(title = "saya bersyukur")
-        editScreenController.replaceWhatValue(whatValue = "saya")
-        editScreenController.replaceWhyValue(whyValue = "bersyukur")
-        editScreenController.pressBack()
+        editScreenController
+            .replaceWhatValue(whatValue = "saya")
+            .replaceWhyValue(whyValue = "bersyukur")
+            .pressBack()
 
         // mastiin proses editing berhasil
         mainHomeController.toEditGratitudeWithNthItem(index = 1)
-        editScreenController.assertWhatValue(whatValue = "saya")
-        editScreenController.assertWhyValue(whyValue = "bersyukur")
-        editScreenController.pressBack()
-
+        editScreenController
+            .assertWhatValue(whatValue = "saya")
+            .assertWhyValue(whyValue = "bersyukur")
+            .pressBack()
 
     }
 }

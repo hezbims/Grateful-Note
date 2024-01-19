@@ -1,47 +1,51 @@
-package com.example.gratefulnote.fragment_controller
+package com.example.gratefulnote.robot
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
 
-class AddGratitudeController {
-    fun enterWhyText(value : String){
+class AddGratitudeRobot {
+    fun enterWhyText(value : String): AddGratitudeRobot {
         onView(withId(R.id.why_value))
             .perform(typeText(value))
+        return this
     }
 
-    fun enterWhatText(value: String){
+    fun enterWhatText(value: String): AddGratitudeRobot {
         onView(withId(R.id.what_value))
             .perform(typeText(value))
+        return this
     }
 
-    fun chooseSpinnerItemWithText(value : String){
+    fun chooseSpinnerItemWithText(value : String): AddGratitudeRobot {
         onView(withId(R.id.add_gratitude_spinner))
             .perform(ViewActions.click())
-        onView(ViewMatchers.withText(value))
+        onView(withText(value))
             .perform(ViewActions.click())
+        return this
     }
 
-    fun confirmSave(){
+    fun confirmSave(): AddGratitudeRobot {
         onView(withId(R.id.save))
             .perform(ViewActions.click())
 
         onView(withText("YA"))
             .perform(ViewActions.click())
+        return this
     }
 
     fun fillFormAndSave(
         spinnerValue : String,
         whatValue : String,
         whyValue : String
-    ){
+    ): AddGratitudeRobot {
         chooseSpinnerItemWithText(spinnerValue)
         enterWhatText(whatValue)
         enterWhyText(whyValue)
         confirmSave()
+        return this
     }
 }

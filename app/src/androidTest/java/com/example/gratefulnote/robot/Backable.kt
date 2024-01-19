@@ -1,4 +1,4 @@
-package com.example.gratefulnote.fragment_controller
+package com.example.gratefulnote.robot
 
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
