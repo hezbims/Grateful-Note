@@ -23,7 +23,9 @@ android {
         versionCode 2
         versionName "2.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.example.gratefulnote.debug.test.CucumberRunner"
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation" : "$projectDir/schemas".toString()]
@@ -119,5 +121,11 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
 
+    var cucumberVersion = '7.14.0'
+    androidTestImplementation "io.cucumber:cucumber-android:$cucumberVersion"
+    androidTestImplementation "io.cucumber:cucumber-junit:$cucumberVersion"
+    androidTestImplementation "io.cucumber:cucumber-picocontainer:$cucumberVersion"
+
+    androidTestImplementation "androidx.activity:activity-compose"
 
 }
