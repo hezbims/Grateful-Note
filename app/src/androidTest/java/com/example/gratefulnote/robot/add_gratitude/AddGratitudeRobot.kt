@@ -1,4 +1,4 @@
-package com.example.gratefulnote.robot
+package com.example.gratefulnote.robot.add_gratitude
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions

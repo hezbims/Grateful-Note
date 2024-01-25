@@ -9,8 +9,8 @@ import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.databinding.ViewHolderMainBinding
 
-class PositiveAdapter(private val clickListener: PositiveAdapterClickListener) :
-    ListAdapter<PositiveEmotion , PositiveAdapter.ViewHolder>(DiffCallBack()){
+class MainRecyclerViewAdapter(private val clickListener: PositiveAdapterClickListener) :
+    ListAdapter<PositiveEmotion , MainRecyclerViewAdapter.ViewHolder>(DiffCallBack()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ViewHolderMainBinding

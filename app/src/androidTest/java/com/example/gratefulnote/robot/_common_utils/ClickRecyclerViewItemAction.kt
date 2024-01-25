@@ -1,4 +1,4 @@
-package com.example.gratefulnote.helper
+package com.example.gratefulnote.robot._common_utils
 
 import android.view.View
 import androidx.test.espresso.UiController

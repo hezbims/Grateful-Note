@@ -26,7 +26,7 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
         viewModelScope.launch(Dispatchers.IO) {
             dataSource.delete(deletedItemId)
             clickEdit = true
-            updateRecyclerViewData()
+            updateRecyclerViewData(_filterState.value!!)
         }
     }
 
@@ -51,30 +51,28 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
 
 
     /* Semua recyclerView Data */
-    private var _recyclerViewData = listOf<PositiveEmotion>()
-    val recyclerViewData : List<PositiveEmotion>
+    private var _recyclerViewData = MutableLiveData<List<PositiveEmotion>?>()
+    val recyclerViewData : LiveData<List<PositiveEmotion>?>
         get() = _recyclerViewData
-    private val _isDataUpdated = MutableLiveData(false)
-    val isDataUpdated : LiveData<Boolean>
-        get() = _isDataUpdated
-    fun doneCreatingRecyclerView(){_isDataUpdated.value = false}
 
-    fun updateRecyclerViewData(){
+    fun updateRecyclerViewData(currentFilterState : FilterState){
         viewModelScope.launch(Dispatchers.Main) {
-            _recyclerViewData =
+            _recyclerViewData.value =
                 withContext(Dispatchers.IO) {
-                    with(
+                    val nextData = currentFilterState.let {
                         dataSource.getAllPositiveEmotion(
-                            month = _filterState.value!!.selectedMonth,
-                            year = _filterState.value!!.selectedYear,
-                            type = _filterState.value!!.selectedPositiveEmotion,
-                            onlyFavorite = _filterState.value!!.onlyFavorite
+                            month = it.selectedMonth,
+                            year = it.selectedYear,
+                            type = it.selectedPositiveEmotion,
+                            onlyFavorite = it.onlyFavorite
                         )
-                    ) {
-                        if (_filterState.value!!.switchState) reversed() else this
                     }
+
+
+                    if (_filterState.value!!.switchState)
+                        nextData.reversed()
+                    else nextData
                 }
-            _isDataUpdated.value = true
         }
     }
 

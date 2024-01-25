@@ -2,18 +2,16 @@ package com.example.gratefulnote.steps_definition
 
 import android.content.Intent
 import android.util.Log
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.helper.ActivityScenarioHolder
-import com.example.gratefulnote.robot.AddGratitudeRobot
-import com.example.gratefulnote.robot.EditScreenRobot
-import com.example.gratefulnote.robot.MainHomeRobot
+import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
+import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
+import com.example.gratefulnote.robot.main_home.MainHomeRobot
 import io.cucumber.java.Before
-import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -71,7 +69,9 @@ class E2ETestSteps(
 
     @Then("^there is three list of card in home page$")
     fun thereIsThreeListOfCardInHomePage() {
-        // Write code here that turns the phrase above into concrete actions
-        throw PendingException()
+        mainHomeRobot.assertNthRecyclerViewTitle(0 , "saya senang")
+        mainHomeRobot.assertNthRecyclerViewTitle(1 , "saya bersyukur")
+        mainHomeRobot.assertNthRecyclerViewTitle(2 , "Saya terhibur")
+
     }
 }

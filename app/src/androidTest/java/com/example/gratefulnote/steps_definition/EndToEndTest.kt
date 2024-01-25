@@ -6,9 +6,9 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.database.PositiveEmotionDatabase
-import com.example.gratefulnote.robot.AddGratitudeRobot
-import com.example.gratefulnote.robot.EditScreenRobot
-import com.example.gratefulnote.robot.MainHomeRobot
+import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
+import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
+import com.example.gratefulnote.robot.main_home.MainHomeRobot
 import org.junit.Before
 
 import org.junit.Rule

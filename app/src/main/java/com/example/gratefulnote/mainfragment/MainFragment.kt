@@ -14,7 +14,7 @@ import com.example.gratefulnote.databinding.FragmentMainBinding
 class MainFragment : Fragment() {
     private lateinit var binding : FragmentMainBinding
     private lateinit var viewModel : MainViewModel
-    private lateinit var adapter : PositiveAdapter
+    private lateinit var adapter : MainRecyclerViewAdapter
 
     private lateinit var confirmDeleteDialog : ConfirmDialog
     private val filterDialog = FilterDialogFragment()
@@ -47,19 +47,19 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // RecyclerView Adapter
-        adapter = PositiveAdapter(PositiveAdapterClickListener(
-            {itemId ->
+        adapter = MainRecyclerViewAdapter(PositiveAdapterClickListener(
+            delete = {itemId ->
                 viewModel.setDeletedItemId(itemId)
                 if (!confirmDeleteDialog.isAdded)
                     confirmDeleteDialog.show(childFragmentManager , "TAG")
             },
-            {currentPositiveEmotion ->
+            edit = {currentPositiveEmotion ->
                 viewModel.clickEdit = true
                 val action = MainFragmentDirections
                     .actionMainFragmentToEditPositiveEmotion(currentPositiveEmotion)
                 findNavController().navigate(action)
             },
-            {
+            favoriteUpdate = {
                 viewModel.normalUpdate(it)
             }
         ))
@@ -96,28 +96,31 @@ class MainFragment : Fragment() {
     }
 
     private fun onChangeRecyclerViewData(){
-        viewModel.isDataUpdated.observe(viewLifecycleOwner){
-            if (it) {
-                adapter.submitList(viewModel.recyclerViewData) {
-                    if (!viewModel.clickEdit) {
-                        binding.recyclerView.scrollToPosition(0)
-                    }
-                    viewModel.clickEdit = false
+        viewModel.recyclerViewData.observe(viewLifecycleOwner){ positiveEmotionList ->
+            adapter.submitList(positiveEmotionList) {
+                if (!viewModel.clickEdit) {
+                    binding.recyclerView.scrollToPosition(0)
                 }
-
-                binding.emptyDataIndicator.visibility =
-                    if (viewModel.recyclerViewData.isEmpty())
-                        View.VISIBLE
-                    else
-                        View.GONE
-                viewModel.doneCreatingRecyclerView()
+                viewModel.clickEdit = false
             }
+
+            binding.emptyTextIndicator.visibility =
+                if (positiveEmotionList?.isEmpty() == true)
+                    View.VISIBLE
+                else
+                    View.GONE
+
+            binding.loadingIndicator.visibility =
+                if (positiveEmotionList != null)
+                    View.VISIBLE
+                else
+                    View.GONE
         }
     }
 
     private fun onChangeFilterData(){
         viewModel.filterState.observe(viewLifecycleOwner){
-            viewModel.updateRecyclerViewData()
+            viewModel.updateRecyclerViewData(it!!)
         }
     }
 
