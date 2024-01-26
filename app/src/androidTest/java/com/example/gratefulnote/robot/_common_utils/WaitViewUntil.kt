@@ -22,7 +22,9 @@ class WaitViewUntil(
     override fun perform(uiController: UiController, view: View) {
         val endtime = System.currentTimeMillis() + timeoutInMillis
         do {
-            if (condition(view)) return
+            try {
+                if (condition(view)) return
+            } catch (_: Throwable){}
             uiController.loopMainThreadForAtLeast(100L)
         } while (System.currentTimeMillis() < endtime)
 

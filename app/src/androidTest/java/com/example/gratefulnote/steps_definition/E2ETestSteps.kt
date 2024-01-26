@@ -68,9 +68,34 @@ class E2ETestSteps(
 
     @Then("^there is three list of card in home page$")
     fun thereIsThreeListOfCardInHomePage() {
-        mainHomeRobot.assertNthRecyclerViewTitle(0 , "saya senang")
-        mainHomeRobot.assertNthRecyclerViewTitle(1 , "saya bersyukur")
-        mainHomeRobot.assertNthRecyclerViewTitle(2 , "Saya terhibur")
+        mainHomeRobot
+            .waitForItemCount(itemCount = 3)
+            .assertNthRecyclerViewTitle(0 , "saya senang")
+            .assertNthRecyclerViewTitle(1 , "saya bersyukur")
+            .assertNthRecyclerViewTitle(2 , "Saya terhibur")
 
+    }
+
+    @When("the user edit the second positive emotion")
+    fun theUserEditTheSecondPositiveEmotion() {
+        mainHomeRobot
+            .toEditGratitudeWithNthItem(index = 1)
+        editScreenRobot
+            .replaceWhatValue("title berubah")
+            .replaceWhyValue("\"\"\"\"")
+            .pressBack()
+    }
+
+    @Then("the second positive emotion edited")
+    fun theSecondPositiveEmotionEdited() {
+        mainHomeRobot
+            .assertNthRecyclerViewTitle(itemIndex = 1, title= "title berubah")
+            .toEditGratitudeWithNthItem(index = 1)
+        editScreenRobot
+            .assertFieldValue(
+                what = "title berubah",
+                why = "\"\"\"\"",
+            )
+            .pressBack()
     }
 }

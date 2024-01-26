@@ -1,11 +1,11 @@
 package com.example.gratefulnote.robot.edit_screen
 
-import com.example.gratefulnote.R
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.example.gratefulnote.R
 import com.example.gratefulnote.robot.Backable
 
 class EditScreenRobot : Backable() {
@@ -18,6 +18,15 @@ class EditScreenRobot : Backable() {
     fun replaceWhyValue(whyValue : String): EditScreenRobot {
         onView(withId(R.id.edit_positive_emotion_description_value))
             .perform(replaceText(whyValue))
+        return this
+    }
+
+    fun assertFieldValue(
+        what : String,
+        why : String,
+    ) : EditScreenRobot{
+        assertWhatValue(what)
+        assertWhyValue(why)
         return this
     }
 
