@@ -1,7 +1,12 @@
 package com.example.gratefulnote.mainfragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -111,7 +116,7 @@ class MainFragment : Fragment() {
                     View.GONE
 
             binding.loadingIndicator.visibility =
-                if (positiveEmotionList != null)
+                if (positiveEmotionList == null)
                     View.VISIBLE
                 else
                     View.GONE

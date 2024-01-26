@@ -73,8 +73,9 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
-                  <entry key="Duration" value="208" />
-                  <entry key="Tests" value="478" />
+                  <entry key="Duration" value="245" />
+                  <entry key="Pixel_3a_API_34_extension_level_7_x86_64" value="157" />
+                  <entry key="Tests" value="515" />
                   <entry key="Xiaomi M2004J19C" value="238" />
                 </map>
               </option>

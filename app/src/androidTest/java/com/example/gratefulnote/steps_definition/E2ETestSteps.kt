@@ -1,7 +1,6 @@
 package com.example.gratefulnote.steps_definition
 
 import android.content.Intent
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
@@ -21,10 +20,10 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class E2ETestSteps(
-    val mainHomeRobot: MainHomeRobot,
-    val addGratitudeRobot: AddGratitudeRobot,
-    val editScreenRobot: EditScreenRobot,
-    val activityScenarioHolder: ActivityScenarioHolder,
+    private val mainHomeRobot: MainHomeRobot,
+    private val addGratitudeRobot: AddGratitudeRobot,
+    private val editScreenRobot: EditScreenRobot,
+    private val activityScenarioHolder: ActivityScenarioHolder,
 ) {
 
     @Before("@e2e-test")
