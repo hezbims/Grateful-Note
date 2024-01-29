@@ -7,3 +7,6 @@ Feature: All Feature
     Then there is three list of card in home page
     When the user edit the second positive emotion
     Then the second positive emotion edited
+    When the user navigate to backup screen
+    And the user try to create a new backup
+    Then a new backup item is displayed

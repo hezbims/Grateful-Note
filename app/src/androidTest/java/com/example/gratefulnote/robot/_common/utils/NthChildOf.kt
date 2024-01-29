@@ -1,4 +1,4 @@
-package com.example.gratefulnote.robot._common_utils
+package com.example.gratefulnote.robot._common.utils
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +9,7 @@ import org.hamcrest.Matcher
 fun nthChildOf(matcher : Matcher<View>, index : Int) : BoundedMatcher<View , RecyclerView>{
     return object : BoundedMatcher<View , RecyclerView>(RecyclerView::class.java){
         override fun describeTo(description: Description?) {
-            description?.appendText("deskripsi nth child")
+            description?.appendText("finding nth child of recyclerview")
         }
 
 

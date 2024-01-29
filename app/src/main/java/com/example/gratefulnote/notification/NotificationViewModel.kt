@@ -4,13 +4,14 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
+import com.example.gratefulnote.common.constants.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class NotificationViewModel(private val app : Application) : AndroidViewModel(app){
     private val sharedPreferences = app.getSharedPreferences(
-        app.getString(R.string.shared_preferences_name) ,
+        Constants.SharedPrefs.Notification.name ,
         Context.MODE_PRIVATE)
 
     fun setSavedClock(inputClock : Clock){

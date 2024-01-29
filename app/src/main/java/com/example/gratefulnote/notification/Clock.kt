@@ -3,8 +3,9 @@ package com.example.gratefulnote.notification
 import android.content.Context
 import android.os.Parcelable
 import com.example.gratefulnote.R
+import com.example.gratefulnote.common.constants.Constants
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Calendar
 
 @Parcelize
 data class Clock(val hours : Int, val minutes : Int) : Parcelable{
@@ -25,7 +26,7 @@ data class Clock(val hours : Int, val minutes : Int) : Parcelable{
     companion object{
         fun getSavedClock(context : Context) : Clock{
             val sharedPreferences = context.getSharedPreferences(
-                context.getString(R.string.shared_preferences_name),
+                Constants.SharedPrefs.Notification.name,
                 Context.MODE_PRIVATE
             )
 

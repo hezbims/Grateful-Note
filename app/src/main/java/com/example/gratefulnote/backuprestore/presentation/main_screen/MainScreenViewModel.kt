@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.*
 import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
+import com.example.gratefulnote.common.constants.Constants
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +26,7 @@ class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(a
     init {
         viewModelScope.launch(Dispatchers.IO) {
             sharedPref = app.getSharedPreferences(
-                "Backup_Restore_Shared_Preference",
+                Constants.SharedPrefs.BackupRestore.name,
                 Context.MODE_PRIVATE
             )
 

@@ -121,6 +121,8 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
 
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+
     var cucumberVersion = '7.14.0'
     androidTestImplementation "io.cucumber:cucumber-android:$cucumberVersion"
     androidTestImplementation "io.cucumber:cucumber-junit:$cucumberVersion"

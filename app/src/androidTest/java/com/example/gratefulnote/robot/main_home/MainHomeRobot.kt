@@ -1,9 +1,13 @@
 package com.example.gratefulnote.robot.main_home
 
+import android.view.Gravity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.DrawerActions
+import androidx.test.espresso.contrib.DrawerMatchers.isClosed
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
@@ -11,8 +15,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
-import com.example.gratefulnote.robot._common_utils.ClickRecyclerViewItemAction
-import com.example.gratefulnote.robot._common_utils.WaitViewUntil
+import com.example.gratefulnote.robot._common.utils.ClickRecyclerViewItemAction
+import com.example.gratefulnote.robot._common.utils.WaitViewUntil
 import org.hamcrest.CoreMatchers.allOf
 
 class MainHomeRobot {
@@ -76,6 +80,14 @@ class MainHomeRobot {
             }
         ))
         return this
+    }
+
+    fun navigateToBackupRestore(){
+        onView(withId(R.id.drawer_layout))
+            .check(matches(isClosed(Gravity.LEFT)))
+            .perform(DrawerActions.open())
+        onView(withId(R.id.backupRestoreFragment))
+            .perform(click())
     }
 
 }
