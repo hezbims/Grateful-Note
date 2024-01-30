@@ -2,14 +2,14 @@ package com.example.gratefulnote.steps_definition
 
 import android.content.Context
 import android.content.Intent
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.common.constants.Constants
 import com.example.gratefulnote.database.PositiveEmotionDatabase
 import com.example.gratefulnote.helper.ActivityScenarioHolder
+import com.example.gratefulnote.robot._common.ComposeRuleHolder
 import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
+import com.example.gratefulnote.robot.backup_and_restore.BackupRestoreRobot
 import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
 import io.cucumber.java.Before
@@ -17,17 +17,15 @@ import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import org.junit.runner.RunWith
 
-
-@RunWith(AndroidJUnit4::class)
-@LargeTest
 class E2ETestSteps(
-    private val mainHomeRobot: MainHomeRobot,
-    private val addGratitudeRobot: AddGratitudeRobot,
-    private val editScreenRobot: EditScreenRobot,
-    private val activityScenarioHolder: ActivityScenarioHolder,
+    val mainHomeRobot: MainHomeRobot,
+    val addGratitudeRobot: AddGratitudeRobot,
+    val editScreenRobot: EditScreenRobot,
+    val activityScenarioHolder: ActivityScenarioHolder,
+    composeRuleHolder: ComposeRuleHolder
 ) {
+    private val backupRestoreRobot = BackupRestoreRobot(composeRuleHolder.composeRule)
 
     @Before("@e2e-test")
     fun clearDatabase(){
@@ -137,11 +135,11 @@ class E2ETestSteps(
 
     @And("the user try to create a new backup")
     fun theUserTryToCreateANewBackup() {
-
+        backupRestoreRobot.clickPilihLokasiBackup()
+        // onNodeWithText("Pilih Lokasi Backup").performClick()
     }
 
     @Then("a new backup item is displayed")
     fun aNewBackupItemIsDisplayed() {
-
     }
 }
