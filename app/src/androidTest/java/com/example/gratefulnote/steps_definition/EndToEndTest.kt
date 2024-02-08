@@ -1,6 +1,7 @@
 package com.example.gratefulnote.steps_definition
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.gratefulnote.MainActivity
@@ -9,6 +10,7 @@ import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
 import com.example.gratefulnote.robot.backup_and_restore.BackupRestoreRobot
 import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +30,13 @@ class EndToEndTest {
         Then_a_new_backup_item_is_displayed()
     }
     @Before
-    fun clearAppData() = appDataManager.clearAppData()
+    fun clearAppData() {
+        appDataManager.clearAppData()
+        Intents.init()
+    }
+
+    @After
+    fun after() = Intents.release()
 
     private fun When_the_user_input_three_new_positive_emotion() {
         mainHomeRobot.toAddGratitude()

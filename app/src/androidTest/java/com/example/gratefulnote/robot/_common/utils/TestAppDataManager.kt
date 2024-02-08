@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.common.constants.Constants
 import com.example.gratefulnote.database.PositiveEmotionDatabase
+import java.io.File
 
 class TestAppDataManager {
     fun clearAppData(){
@@ -16,6 +17,7 @@ class TestAppDataManager {
         clearUrisPermissions(appContext)
         clearSharedPreference(Constants.SharedPrefs.Notification.name , appContext)
         clearSharedPreference(Constants.SharedPrefs.BackupRestore.name , appContext)
+        clearCacheDirectory(appContext)
     }
 
     private fun clearUrisPermissions(context: Context){
@@ -39,5 +41,18 @@ class TestAppDataManager {
             .edit()
             .clear()
             .apply()
+    }
+
+    private fun clearCacheDirectory(context: Context){
+        deleteFile(context.cacheDir)
+    }
+
+    private fun deleteFile(file : File){
+        if (file.isDirectory){
+            for (childFile in file.listFiles()){
+                deleteFile(childFile)
+            }
+        }
+        file.delete()
     }
 }

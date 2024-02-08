@@ -8,9 +8,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainScreenViewFragment : Fragment() {
-    private lateinit var viewModel: BackupRestoreViewModel
+    private lateinit var viewModel: MainScreenViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +20,7 @@ class MainScreenViewFragment : Fragment() {
         viewModel = ViewModelProvider(
             this,
             BackupRestoreViewModelFactory(requireActivity().application)
-        )[BackupRestoreViewModel::class.java]
+        )[MainScreenViewModel::class.java]
     }
 
     override fun onCreateView(

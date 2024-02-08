@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class BackupRestoreViewModel(private val app : Application) : AndroidViewModel(app) {
+class MainScreenViewModel(private val app : Application) : AndroidViewModel(app) {
     private val _backupRestoreState = MutableStateFlow(BackupRestoreViewState())
     val backupRestoreState : StateFlow<BackupRestoreViewState>
         get() = _backupRestoreState
@@ -161,8 +161,8 @@ sealed class BackupRestoreStateEvent {
 class BackupRestoreViewModelFactory(private val app : Application): ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(BackupRestoreViewModel::class.java))
-            return BackupRestoreViewModel(app) as T
+        if (modelClass.isAssignableFrom(MainScreenViewModel::class.java))
+            return MainScreenViewModel(app) as T
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

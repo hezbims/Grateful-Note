@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id "androidx.navigation.safeargs.kotlin"
     id "org.jetbrains.kotlin.plugin.parcelize"
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -23,8 +24,7 @@ android {
         versionCode 2
         versionName "2.0"
 
-        // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner "com.example.gratefulnote.debug.test.CucumberRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -124,11 +124,14 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
 
-    var cucumberVersion = '7.14.0'
-    androidTestImplementation "io.cucumber:cucumber-android:$cucumberVersion"
-    androidTestImplementation "io.cucumber:cucumber-junit:$cucumberVersion"
-    androidTestImplementation "io.cucumber:cucumber-picocontainer:$cucumberVersion"
-
     androidTestImplementation "androidx.activity:activity-compose"
 
+    // dagger-hilt
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
+
+}
+
+kapt {
+    correctErrorTypes true
 }

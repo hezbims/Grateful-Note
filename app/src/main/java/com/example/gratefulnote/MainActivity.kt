@@ -12,9 +12,11 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
 const val STORAGE_PERMISSION_REQUEST_CODE = 0
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController : NavController
     private lateinit var drawerLayout : DrawerLayout
