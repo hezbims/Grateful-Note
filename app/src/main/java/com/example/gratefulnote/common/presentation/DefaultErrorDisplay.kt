@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun DefaultErrorDisplay(
-    exception : Exception?,
+    exception : Throwable?,
     onRefresh : () -> Unit,
     modifier: Modifier = Modifier
 ){

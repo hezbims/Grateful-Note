@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.documentfile.provider.DocumentFile
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
 import com.example.gratefulnote.backuprestore.presentation.confirm_restore_dialog.ConfirmRestoreDialogSetup
 import com.example.gratefulnote.backuprestore.presentation.main_screen.component.BottomActionCard
@@ -28,7 +29,7 @@ import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
 @Composable
 fun BackupRestoreFragmentBodySetup(
-    viewModel : MainScreenViewModel
+    viewModel : MainScreenViewModel = viewModel()
 ){
     val getDocumentTreeAction = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocumentTree()

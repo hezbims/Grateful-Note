@@ -7,20 +7,13 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainScreenViewFragment : Fragment() {
-    private lateinit var viewModel: MainScreenViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel = ViewModelProvider(
-            this,
-            BackupRestoreViewModelFactory(requireActivity().application)
-        )[MainScreenViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -31,7 +24,7 @@ class MainScreenViewFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                BackupRestoreFragmentBodySetup(viewModel = viewModel)
+                BackupRestoreFragmentBodySetup()
             }
         }
     }

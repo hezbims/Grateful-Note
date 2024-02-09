@@ -1,39 +1,28 @@
 package com.example.gratefulnote.backuprestore.presentation.main_screen
 
-import android.app.Application
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
-import androidx.documentfile.provider.DocumentFile
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
-import com.example.gratefulnote.common.constants.Constants
+import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManager
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainScreenViewModel(private val app : Application) : AndroidViewModel(app) {
+@HiltViewModel
+class MainScreenViewModel @Inject constructor(
+    private val backupRestoreManager: IBackupRestoreManager
+) : ViewModel() {
     private val _backupRestoreState = MutableStateFlow(BackupRestoreViewState())
     val backupRestoreState : StateFlow<BackupRestoreViewState>
         get() = _backupRestoreState
-    private lateinit var sharedPref : SharedPreferences
-    private val contentResolver = app.contentResolver
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            sharedPref = app.getSharedPreferences(
-                Constants.SharedPrefs.BackupRestore.name,
-                Context.MODE_PRIVATE
-            )
-
-            loadPathLocationFromSharedPref()
-        }
-
-    }
+    init { loadPathLocationFromSharedPref() }
 
     fun onEvent(event: BackupRestoreStateEvent){
         when(event){
@@ -70,64 +59,34 @@ class MainScreenViewModel(private val app : Application) : AndroidViewModel(app)
     }
 
     private fun loadPathLocationFromSharedPref(){
-        val uriString = sharedPref.getString("backup_restore_uri", null)
-        _backupRestoreState.update {
-            it.copy(pathLocation =
-                if (uriString != null) ResponseWrapper.ResponseSucceed(Uri.parse(uriString))
-                else ResponseWrapper.ResponseSucceed(null)
-            )
+        viewModelScope.launch(Dispatchers.IO) {
+            backupRestoreManager.getPersistedBackupUri().collect { response ->
+                _backupRestoreState.update { it.copy(pathLocation = response) }
+            }
+            reloadFiles()
         }
-        reloadFiles()
     }
 
     private fun updatePathLocation(newUri: Uri){
-        val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        contentResolver.takePersistableUriPermission(newUri, takeFlags)
-
         _backupRestoreState.update {
             it.copy(
                 pathLocation = ResponseWrapper.ResponseSucceed(newUri),
                 backupFiles = ResponseWrapper.ResponseLoading()
             )
         }
-
-        sharedPref.edit()
-            .putString("backup_restore_uri" , newUri.toString())
-            .apply()
-        reloadFiles()
+        viewModelScope.launch(Dispatchers.IO) {
+            backupRestoreManager.persistPath(newUri)
+            reloadFiles()
+        }
     }
 
     private fun reloadFiles(){
-        _backupRestoreState.update {
-            it.copy(backupFiles = ResponseWrapper.ResponseLoading())
-        }
-
-
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val uri = (_backupRestoreState.value.pathLocation
-                        as ResponseWrapper.ResponseSucceed).data
-
-                val documentTree = DocumentFile.fromTreeUri(app , uri!!)!!
-                val files = documentTree
-                    .listFiles()
-                    .toList()
-                    .filter {file ->
-                        val nameSegments = file.name!!.split('.')
-
-                        nameSegments.size >= 3 &&
-                            nameSegments.last() == "json" &&
-                            nameSegments[nameSegments.lastIndex - 1].contains("gn_backup")
-                    }
-                    .sortedBy { file -> -file.lastModified() }
-                    .map { file -> DocumentFileDto.from(file) }
+            val uri =
+                (_backupRestoreState.value.pathLocation as ResponseWrapper.ResponseSucceed).data!!
+            backupRestoreManager.loadListOfFilesFrom(uri).collect { result ->
                 _backupRestoreState.update {
-                    it.copy(backupFiles = ResponseWrapper.ResponseSucceed(files))
-                }
-            } catch (e : Exception){
-                _backupRestoreState.update {
-                    it.copy(backupFiles = ResponseWrapper.ResponseError(e))
+                    it.copy(backupFiles = result)
                 }
             }
         }
@@ -156,13 +115,4 @@ sealed class BackupRestoreStateEvent {
     class DeleteFile(val file : DocumentFileDto) : BackupRestoreStateEvent()
     class OpenRestoreConfirmationDialog(val file : DocumentFileDto) : BackupRestoreStateEvent()
     class RequestDismissRestoreConfirmationDialog(val dialogStatus : ResponseWrapper<Nothing>?) : BackupRestoreStateEvent()
-}
-
-class BackupRestoreViewModelFactory(private val app : Application): ViewModelProvider.Factory {
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainScreenViewModel::class.java))
-            return MainScreenViewModel(app) as T
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }
