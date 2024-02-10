@@ -13,5 +13,5 @@ import dagger.hilt.components.SingletonComponent
 object GratefulNoteAppModule {
     @Provides
     fun provideDao(@ApplicationContext app : Context) =
-        PositiveEmotionDatabase.getInstance(app).positiveEmotionDatabaseDao
+        PositiveEmotionDatabase.getInstance(app).dao
 }

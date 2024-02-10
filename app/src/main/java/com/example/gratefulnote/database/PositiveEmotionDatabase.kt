@@ -117,7 +117,7 @@ val MIGRATION_2_3 = object : Migration(2 , 3){
 @Database(entities = [PositiveEmotion::class] , version = 3)
 abstract class PositiveEmotionDatabase : RoomDatabase(){
 
-    abstract val positiveEmotionDatabaseDao : PositiveEmotionDatabaseDao
+    abstract val dao : PositiveEmotionDatabaseDao
 
     companion object {
         const val dbName = "positive_emotion_database"

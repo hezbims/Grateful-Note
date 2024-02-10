@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(private val app : Application) : AndroidViewModel(app){
     private val dataSource = PositiveEmotionDatabase.getInstance(app.applicationContext)
-        .positiveEmotionDatabaseDao
+        .dao
 
     val typeOfPositiveEmotion : Array<String> =
                 arrayOf(getString(R.string.semua)) +

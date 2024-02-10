@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 
 @Dao
@@ -43,4 +44,10 @@ interface PositiveEmotionDatabaseDao {
 
     @Update
     suspend fun normalUpdate(positiveEmotion: PositiveEmotion)
+
+    @Transaction
+    suspend fun restorePositiveEmotions(listPositiveEmotions : List<PositiveEmotion>){
+        deleteAll()
+        insertAll(listPositiveEmotions)
+    }
 }

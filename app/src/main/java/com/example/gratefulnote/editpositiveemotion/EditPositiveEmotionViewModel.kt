@@ -13,7 +13,7 @@ class EditPositiveEmotionViewModel(
     currentPositiveEmotion : PositiveEmotion
     ) : AndroidViewModel(app) {
 
-    private val dao = PositiveEmotionDatabase.getInstance(app).positiveEmotionDatabaseDao
+    private val dao = PositiveEmotionDatabase.getInstance(app).dao
 
     private var _currentPositiveEmotion = currentPositiveEmotion
     val currentPositiveEmotion : PositiveEmotion

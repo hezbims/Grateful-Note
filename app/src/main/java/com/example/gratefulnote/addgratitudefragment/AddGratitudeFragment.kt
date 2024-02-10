@@ -93,7 +93,7 @@ class AddGratitudeFragment : Fragment() {
 
     private fun getViewModelFactory() : AddGratitudeViewModelFactory {
         val application = requireNotNull(this.activity).application
-        val dataSource = PositiveEmotionDatabase.getInstance(application).positiveEmotionDatabaseDao
+        val dataSource = PositiveEmotionDatabase.getInstance(application).dao
         return AddGratitudeViewModelFactory(dataSource)
     }
 

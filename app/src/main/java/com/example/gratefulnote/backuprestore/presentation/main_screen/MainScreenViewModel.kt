@@ -75,7 +75,7 @@ class MainScreenViewModel @Inject constructor(
             )
         }
         viewModelScope.launch(Dispatchers.IO) {
-            backupRestoreManager.persistPath(newUri)
+            backupRestoreManager.persistBackupPath(newUri)
             reloadFiles()
         }
     }
@@ -93,9 +93,12 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private fun deleteFile(deletedFile: DocumentFileDto){
-        val deleteSucceed = deletedFile.file.delete()
-        if (deleteSucceed)
-            reloadFiles()
+        viewModelScope.launch(Dispatchers.IO) {
+            backupRestoreManager.deleteDocumentFile(deletedFile.file).collect {result ->
+                if (result is ResponseWrapper.ResponseSucceed)
+                    reloadFiles()
+            }
+        }
     }
 }
 
