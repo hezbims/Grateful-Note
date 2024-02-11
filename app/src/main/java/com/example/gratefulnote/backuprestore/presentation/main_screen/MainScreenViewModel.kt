@@ -62,8 +62,10 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             backupRestoreManager.getPersistedBackupUri().collect { response ->
                 _backupRestoreState.update { it.copy(pathLocation = response) }
+                if (response is ResponseWrapper.ResponseSucceed && response.data != null)
+                    reloadFiles()
             }
-            reloadFiles()
+
         }
     }
 

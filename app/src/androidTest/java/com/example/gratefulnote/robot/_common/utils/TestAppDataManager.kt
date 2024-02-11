@@ -49,7 +49,7 @@ class TestAppDataManager {
 
     private fun deleteFile(file : File){
         if (file.isDirectory){
-            for (childFile in file.listFiles()){
+            for (childFile in file.listFiles()!!){
                 deleteFile(childFile)
             }
         }

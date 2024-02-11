@@ -2,22 +2,20 @@ package com.example.gratefulnote.steps_definition
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.LargeTest
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.robot._common.utils.TestAppDataManager
 import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
 import com.example.gratefulnote.robot.backup_and_restore.BackupRestoreRobot
 import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-@LargeTest
+@HiltAndroidTest
 class EndToEndTest {
     @Test
     fun givenAnUserStartTheApp() {
@@ -97,7 +95,10 @@ class EndToEndTest {
     private fun Then_a_new_backup_item_is_displayed() {
     }
 
-    @get:Rule
+    @get:Rule(order = 1)
+    var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 2)
     val composeRule = createAndroidComposeRule<MainActivity>()
 
     private val appDataManager = TestAppDataManager()
