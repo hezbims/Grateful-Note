@@ -90,7 +90,9 @@ class EndToEndTest {
             .navigateToBackupRestore()
     }
     private fun And_the_user_create_a_new_backup() {
-        backupRestoreRobot.clickPilihLokasiBackup()
+        backupRestoreRobot
+            .clickPilihLokasiBackup()
+            .clickDanBuatBackupBaru("backup-khusus-test")
     }
     private fun Then_a_new_backup_item_is_displayed() {
     }

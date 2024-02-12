@@ -1,22 +1,22 @@
 package com.example.gratefulnote.backuprestore.presentation.new_backup_dialog
 
-import android.app.Application
 import android.net.Uri
-import androidx.documentfile.provider.DocumentFile
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManager
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
-import com.example.gratefulnote.database.PositiveEmotionDatabase
-import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel(app) {
-    private val dao = PositiveEmotionDatabase.getInstance(app).dao
-
+@HiltViewModel
+class NewBackupDialogViewModel @Inject constructor(
+    private val backupRestoreManager: IBackupRestoreManager
+) : ViewModel() {
     private val _state = MutableStateFlow(CreateNewBackupDialogState())
     private var _targetDocumentTree : Uri? = null
 
@@ -41,41 +41,13 @@ class NewBackupDialogViewModel(private val app : Application) : AndroidViewModel
     }
 
     private fun createNewBackup(){
-        _state.update {
-            it.copy(createNewBackupStatus = ResponseWrapper.ResponseLoading())
-        }
-
-        var file: DocumentFile? = null
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val folder = DocumentFile.fromTreeUri(app, _targetDocumentTree!!)!!
-                file = folder.createFile(
-                    "application/json",
-                    "${_state.value.backupTitle}.gn_backup.json"
-                )
-                val fileNameSegments = file!!.name!!.split('.')
-                if (fileNameSegments.first().isEmpty())
-                    throw Exception("Judul backup tidak boleh kosong")
-                if (fileNameSegments[1] != "gn_backup")
-                    throw Exception("Judul backup ini sudah dipakai")
-                
-                app.contentResolver.openOutputStream(file!!.uri)!!.use{
-                    it.write(
-                        Gson().toJson(
-                            dao.getAllPositiveEmotion()
-                        ).toByteArray()
-                    )
-                }
-
-
+            backupRestoreManager.createNewBackup(
+                backupDirectoryUri = _targetDocumentTree!!,
+                backupTitle = _state.value.backupTitle,
+            ).collect{response ->
                 _state.update {
-                    it.copy(createNewBackupStatus = ResponseWrapper.ResponseSucceed())
-                }
-
-            } catch (e : Exception){
-                file?.delete()
-                _state.update {
-                    it.copy(createNewBackupStatus = ResponseWrapper.ResponseError(e))
+                    it.copy(createNewBackupStatus = response)
                 }
             }
         }

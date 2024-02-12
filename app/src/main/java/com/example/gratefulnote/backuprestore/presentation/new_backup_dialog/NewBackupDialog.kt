@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 
 @Composable
@@ -83,7 +85,7 @@ private fun NewBackupDialog(
     Dialog(onDismissRequest = {
         onDismissRequest(state.createNewBackupStatus)
     }) {
-        Card {
+        Card(modifier = Modifier.testTag(BackupRestoreNodeTag.buatBackupBaruDialog)) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -117,7 +119,8 @@ private fun NewBackupDialog(
                                     .fillMaxWidth()
                             )
 
-                    }
+                    },
+                    modifier = Modifier.testTag(BackupRestoreNodeTag.buatBackupBaruTextField)
                 )
 
                 Row(

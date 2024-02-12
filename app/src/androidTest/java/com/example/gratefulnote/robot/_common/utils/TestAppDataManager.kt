@@ -17,7 +17,7 @@ class TestAppDataManager {
         clearUrisPermissions(appContext)
         clearSharedPreference(Constants.SharedPrefs.Notification.name , appContext)
         clearSharedPreference(Constants.SharedPrefs.BackupRestore.name , appContext)
-        clearCacheDirectory(appContext)
+        clearFilesDirectory(appContext)
     }
 
     private fun clearUrisPermissions(context: Context){
@@ -43,8 +43,8 @@ class TestAppDataManager {
             .apply()
     }
 
-    private fun clearCacheDirectory(context: Context){
-        deleteFile(context.cacheDir)
+    private fun clearFilesDirectory(context: Context){
+        deleteFile(context.filesDir)
     }
 
     private fun deleteFile(file : File){

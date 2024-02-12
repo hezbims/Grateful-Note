@@ -12,5 +12,9 @@ interface IBackupRestoreManager {
     fun restoreFile(file : DocumentFile) : Flow<ResponseWrapper<Nothing>>
     fun getPersistedBackupUri() : Flow<ResponseWrapper<Uri>>
     suspend fun persistBackupPath(uri : Uri) : ResponseWrapper<Nothing>
+    fun createNewBackup(
+        backupDirectoryUri : Uri,
+        backupTitle : String
+    ) : Flow<ResponseWrapper<Nothing>>
 
 }

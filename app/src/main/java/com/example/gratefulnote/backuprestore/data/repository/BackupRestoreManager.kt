@@ -14,7 +14,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.flow
 
-class BackupRestoreManager (
+open class BackupRestoreManager (
     private val app : Context
 ) : IBackupRestoreManager {
     private val dao = PositiveEmotionDatabase.getInstance(app).dao
@@ -46,7 +46,7 @@ class BackupRestoreManager (
         return files
     }
 
-    private fun getBackupDirectoryFrom(uri : Uri) =
+    protected  open fun getBackupDirectoryFrom(uri : Uri) =
         DocumentFile.fromTreeUri(app , uri)!!
 
     override fun deleteDocumentFile(file: DocumentFile) = flow<ResponseWrapper<Nothing>>{
@@ -102,9 +102,48 @@ class BackupRestoreManager (
         }
     }
 
-    private fun persistUriReadAndWritePermission(uri : Uri){
+    protected open fun persistUriReadAndWritePermission(uri : Uri){
         val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         contentResolver.takePersistableUriPermission(uri, takeFlags)
+    }
+
+    override fun createNewBackup(
+        backupDirectoryUri: Uri,
+        backupTitle: String
+    ) = flow<ResponseWrapper<Nothing>> {
+        emit(ResponseWrapper.ResponseLoading())
+
+        var file: DocumentFile? = null
+        try {
+            if (backupTitle.isEmpty())
+                throw Exception("Judul backup tidak boleh kosong")
+
+            val backupFolder = getBackupDirectoryFrom(backupDirectoryUri)
+
+            val backupFileName = "$backupTitle.gn_backup"
+
+            file = backupFolder.createFile(
+                "application/json",
+                backupFileName
+            )
+
+            if ("$backupFileName.json" != file!!.name!!)
+                throw Exception("Judul backup ini sudah dipakai")
+
+            contentResolver.openOutputStream(file.uri)!!.use{
+                it.write(
+                    Gson().toJson(
+                        dao.getAllPositiveEmotion()
+                    ).toByteArray()
+                )
+            }
+
+            emit(ResponseWrapper.ResponseSucceed())
+
+        } catch (e : Exception){
+            file?.delete()
+            emit(ResponseWrapper.ResponseError(e))
+        }
     }
 }
