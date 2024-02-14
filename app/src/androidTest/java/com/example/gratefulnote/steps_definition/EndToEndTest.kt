@@ -26,6 +26,10 @@ class EndToEndTest {
         When_the_user_navigate_to_backup_screen()
         And_the_user_create_a_new_backup()
         Then_a_new_backup_item_is_displayed()
+        When_the_user_navigate_to_home_screen()
+        And_the_user_delete_the_second_positive_emotion()
+        And_the_user_restore_the_latest_backup()
+        Then_there_will_be_three_positive_emotion()
     }
     @Before
     fun clearAppData() {
@@ -95,6 +99,23 @@ class EndToEndTest {
             .clickDanBuatBackupBaru("backup-khusus-test")
     }
     private fun Then_a_new_backup_item_is_displayed() {
+        backupRestoreRobot
+            .assertFileBackupExist("backup-khusus-test")
+    }
+    private fun When_the_user_navigate_to_home_screen(){
+        backupRestoreRobot.pressBack()
+    }
+    private fun And_the_user_delete_the_second_positive_emotion(){
+        mainHomeRobot
+            .deleteNthPositiveEmotion(1)
+            .assertNthRecyclerViewTitle(0 , "saya senang")
+            .assertNthRecyclerViewTitle(1 , "Saya terhibur")
+    }
+    private fun And_the_user_restore_the_latest_backup(){
+
+    }
+    private fun Then_there_will_be_three_positive_emotion(){
+
     }
 
     @get:Rule(order = 1)

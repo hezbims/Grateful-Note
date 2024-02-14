@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,7 +22,6 @@ import com.example.gratefulnote.backuprestore.presentation.confirm_restore_dialo
 import com.example.gratefulnote.backuprestore.presentation.main_screen.component.BottomActionCard
 import com.example.gratefulnote.backuprestore.presentation.main_screen.component.FileList
 import com.example.gratefulnote.backuprestore.presentation.new_backup_dialog.NewBackupDialogSetup
-import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
@@ -81,7 +79,6 @@ private fun BackupRestoreFragmentBody(
                         currentLocation = pathLocation.path!!,
                         onEvent = onEvent,
                         openDocumentTree = openDocumentTree,
-                        modifier = Modifier.testTag(BackupRestoreNodeTag.bottomActionCard)
                     )
                 }
             }

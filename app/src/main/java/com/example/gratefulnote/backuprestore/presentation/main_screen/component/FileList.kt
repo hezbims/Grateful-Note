@@ -8,9 +8,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.example.gratefulnote.backuprestore.presentation.main_screen.BackupRestoreStateEvent
 import com.example.gratefulnote.backuprestore.presentation.main_screen.BackupRestoreViewState
+import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
@@ -35,7 +37,9 @@ fun FileList(
             LazyColumn(
                 contentPadding = PaddingValues(vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag(BackupRestoreNodeTag.backupFilesLazyColumn)
             ) {
                 items(documentFiles){
                     FileListItem(

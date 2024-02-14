@@ -82,12 +82,28 @@ class MainHomeRobot {
         return this
     }
 
-    fun navigateToBackupRestore(){
+    fun navigateToBackupRestore() : MainHomeRobot{
         onView(withId(R.id.drawer_layout))
             .check(matches(isClosed(Gravity.LEFT)))
             .perform(DrawerActions.open())
         onView(withId(R.id.backupRestoreFragment))
             .perform(click())
+
+        return this
+    }
+
+    fun deleteNthPositiveEmotion(index : Int) : MainHomeRobot{
+        onView(withId(R.id.recyclerView))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(
+                    index,
+                    ClickRecyclerViewItemAction.clickChildWithId(R.id.delete_positive_emotion)
+                )
+            )
+        onView(withText("YA"))
+            .perform(click())
+
+        return this
     }
 
 }

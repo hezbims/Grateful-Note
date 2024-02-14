@@ -15,10 +15,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gratefulnote.backuprestore.presentation.main_screen.BackupRestoreStateEvent
+import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -33,7 +35,7 @@ fun BottomActionCard(
             topStart = 12.dp,
             topEnd = 12.dp,
         ),
-        modifier = modifier
+        modifier = modifier.testTag(BackupRestoreNodeTag.bottomActionCard)
     ) {
         Column(
             modifier = Modifier

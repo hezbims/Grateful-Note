@@ -10,6 +10,7 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import androidx.test.espresso.intent.Intents.intended
@@ -19,12 +20,12 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
-import com.example.gratefulnote.robot._common.BaseRobot
+import com.example.gratefulnote.robot._common.Backable
 
 @OptIn(ExperimentalTestApi::class)
 class BackupRestoreRobot(
     private val composeRule : AndroidComposeTestRule<ActivityScenarioRule<MainActivity> , MainActivity>
-) : BaseRobot() {
+) : Backable() {
     fun clickPilihLokasiBackup() : BackupRestoreRobot{
         val directoryUri = InstrumentationRegistry
             .getInstrumentation()
@@ -59,8 +60,15 @@ class BackupRestoreRobot(
         composeRule
             .onNodeWithText("Buat")
             .performClick()
-        composeRule.waitUntilDoesNotExist(hasTestTag(BackupRestoreNodeTag.buatBackupBaruDialog) , timeoutMillis = 5000)
-        composeRule.waitUntilExactlyOneExists(hasText(namaBackup))
+        composeRule.waitUntilDoesNotExist(hasTestTag(BackupRestoreNodeTag.buatBackupBaruDialog))
+
+        return this
+    }
+
+    fun assertFileBackupExist(backupTitle : String) : BackupRestoreRobot {
+        composeRule
+            .onNodeWithTag(BackupRestoreNodeTag.backupFilesLazyColumn)
+            .performScrollToNode(hasText(backupTitle))
 
         return this
     }
