@@ -82,7 +82,7 @@ class MainHomeRobot {
         return this
     }
 
-    fun navigateToBackupRestore() : MainHomeRobot{
+    fun toBackupRestore() : MainHomeRobot{
         onView(withId(R.id.drawer_layout))
             .check(matches(isClosed(Gravity.LEFT)))
             .perform(DrawerActions.open())

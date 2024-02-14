@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -69,6 +71,31 @@ class BackupRestoreRobot(
         composeRule
             .onNodeWithTag(BackupRestoreNodeTag.backupFilesLazyColumn)
             .performScrollToNode(hasText(backupTitle))
+
+        return this
+    }
+
+    fun restoreBackupFile(backupTitle: String) : BackupRestoreRobot {
+        composeRule
+            .waitUntilExactlyOneExists(hasTestTag(BackupRestoreNodeTag.backupFilesLazyColumn))
+
+        val listItemMatcher = hasTestTag(BackupRestoreNodeTag.fileListItem) and hasAnyDescendant(
+            hasText(backupTitle)
+        )
+
+        composeRule
+            .onNodeWithTag(BackupRestoreNodeTag.backupFilesLazyColumn)
+            .performScrollToNode(listItemMatcher)
+
+        composeRule.onNode(
+            hasText("Restore") and
+            hasAnyAncestor(listItemMatcher)
+        ).performClick()
+
+        composeRule.onNodeWithText("YA").performClick()
+        composeRule.waitUntilDoesNotExist(
+            hasTestTag(BackupRestoreNodeTag.confirmRestoreDialog)
+        )
 
         return this
     }

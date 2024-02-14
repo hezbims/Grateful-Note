@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
+import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 
 
@@ -125,7 +128,8 @@ private fun ConfirmRestoreDialog(
                 }) {
                     Text(text = "YA")
                 }
-        }
+        },
+        modifier = Modifier.testTag(BackupRestoreNodeTag.confirmRestoreDialog)
     )
 
 }

@@ -91,7 +91,7 @@ class EndToEndTest {
     }
     private fun When_the_user_navigate_to_backup_screen() {
         mainHomeRobot
-            .navigateToBackupRestore()
+            .toBackupRestore()
     }
     private fun And_the_user_create_a_new_backup() {
         backupRestoreRobot
@@ -112,6 +112,11 @@ class EndToEndTest {
             .assertNthRecyclerViewTitle(1 , "Saya terhibur")
     }
     private fun And_the_user_restore_the_latest_backup(){
+        mainHomeRobot
+            .toBackupRestore()
+        backupRestoreRobot
+            .restoreBackupFile("backup-khusus-test")
+            .pressBack()
 
     }
     private fun Then_there_will_be_three_positive_emotion(){

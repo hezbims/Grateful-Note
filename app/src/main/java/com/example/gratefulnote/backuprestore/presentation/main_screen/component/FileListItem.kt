@@ -19,11 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.documentfile.provider.DocumentFile
 import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
+import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 
 @Composable
 fun FileListItem(
@@ -33,7 +35,7 @@ fun FileListItem(
     modifier: Modifier = Modifier
 ){
     Column(
-        modifier = modifier
+        modifier = modifier.testTag(BackupRestoreNodeTag.fileListItem)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
