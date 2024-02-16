@@ -8,7 +8,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 
 @Dao
-interface PositiveEmotionDatabaseDao {
+interface PositiveEmotionDao {
     @Insert
     suspend fun insert(positiveEmotion : PositiveEmotion)
 
