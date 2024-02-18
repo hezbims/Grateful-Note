@@ -1,4 +1,4 @@
-package com.example.gratefulnote.notification
+package com.example.gratefulnote.daily_notification.data.service
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 
-class AlarmReceiver : BroadcastReceiver() {
+class DailyNotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context : Context, intent : Intent) {
         val notificationManager = ContextCompat.getSystemService(context ,
                 NotificationManager::class.java

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.database.PositiveEmotionDatabase
+import com.example.gratefulnote.database.GratefulNoteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -13,7 +13,7 @@ class EditPositiveEmotionViewModel(
     currentPositiveEmotion : PositiveEmotion
     ) : AndroidViewModel(app) {
 
-    private val dao = PositiveEmotionDatabase.getInstance(app).dao
+    private val dao = GratefulNoteDatabase.getInstance(app).positiveEmotionDao
 
     private var _currentPositiveEmotion = currentPositiveEmotion
     val currentPositiveEmotion : PositiveEmotion

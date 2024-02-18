@@ -1,10 +1,11 @@
-package com.example.gratefulnote.notification
+package com.example.gratefulnote.daily_notification
 
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
 import com.example.gratefulnote.common.constants.Constants
+import com.example.gratefulnote.daily_notification.data.service.NotificationAlarmSetter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

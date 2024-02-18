@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.gratefulnote.notification.NotificationViewModel" />
+            type="com.example.gratefulnote.daily_notification.NotificationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".notification.NotificationSettingsFragment">
+        tools:context=".daily_notification.NotificationSettingsFragment">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch_notification"

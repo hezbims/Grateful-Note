@@ -4,14 +4,14 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.gratefulnote.R
 import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.database.PositiveEmotionDatabase
+import com.example.gratefulnote.database.GratefulNoteDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel(private val app : Application) : AndroidViewModel(app){
-    private val dataSource = PositiveEmotionDatabase.getInstance(app.applicationContext)
-        .dao
+    private val dataSource = GratefulNoteDatabase.getInstance(app.applicationContext)
+        .positiveEmotionDao
 
     val typeOfPositiveEmotion : Array<String> =
                 arrayOf(getString(R.string.semua)) +

@@ -9,7 +9,7 @@ import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManag
 import com.example.gratefulnote.common.constants.Constants
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.database.PositiveEmotionDatabase
+import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.flow
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flow
 open class BackupRestoreManager (
     private val app : Context
 ) : IBackupRestoreManager {
-    private val dao = PositiveEmotionDatabase.getInstance(app).dao
+    private val dao = GratefulNoteDatabase.getInstance(app).positiveEmotionDao
     private val contentResolver = app.contentResolver
     override fun loadListOfFilesFrom(uri: Uri) = flow {
         emit(ResponseWrapper.ResponseLoading())

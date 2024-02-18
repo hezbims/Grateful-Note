@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".notification.AlarmReceiver"
+        <receiver android:name=".daily_notification.data.service.DailyNotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false"/>
     </application>

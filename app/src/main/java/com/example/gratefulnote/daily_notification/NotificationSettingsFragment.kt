@@ -1,4 +1,4 @@
-package com.example.gratefulnote.notification
+package com.example.gratefulnote.daily_notification
 
 import android.os.Bundle
 import android.view.LayoutInflater

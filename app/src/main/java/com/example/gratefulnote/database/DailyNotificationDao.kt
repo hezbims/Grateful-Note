@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DailyNotificationDao {
     @Insert
-    suspend fun insert(vararg dailyNotification: DailyNotification)
+    suspend fun insert(vararg dailyNotification: DailyNotification) : Array<Long>
 
     @Delete
     suspend fun delete(vararg  dailyNotification: DailyNotification)

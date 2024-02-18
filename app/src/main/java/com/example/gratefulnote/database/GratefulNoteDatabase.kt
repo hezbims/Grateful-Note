@@ -118,23 +118,24 @@ val MIGRATION_2_3 = object : Migration(2 , 3){
     entities = [PositiveEmotion::class , DailyNotification::class] ,
     version = 4
 )
-abstract class PositiveEmotionDatabase : RoomDatabase(){
+abstract class GratefulNoteDatabase : RoomDatabase(){
 
-    abstract val dao : PositiveEmotionDao
+    abstract val positiveEmotionDao : PositiveEmotionDao
+    abstract val dailyNotificationDao : DailyNotificationDao
 
     companion object {
         const val dbName = "positive_emotion_database"
         @Volatile
-        private var INSTANCE : PositiveEmotionDatabase? = null
+        private var INSTANCE : GratefulNoteDatabase? = null
 
-        fun getInstance(context : Context) : PositiveEmotionDatabase{
+        fun getInstance(context : Context) : GratefulNoteDatabase{
             synchronized(this) {
                 var instance = INSTANCE
 
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        PositiveEmotionDatabase::class.java,
+                        GratefulNoteDatabase::class.java,
                         dbName
                     )
                         .addMigrations(MIGRATION_1_2)

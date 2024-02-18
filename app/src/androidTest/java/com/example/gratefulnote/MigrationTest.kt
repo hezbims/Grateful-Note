@@ -5,7 +5,7 @@
 //import androidx.test.ext.junit.runners.AndroidJUnit4
 //import androidx.test.platform.app.InstrumentationRegistry
 //import com.example.gratefulnote.database.MIGRATION_1_2
-//import com.example.gratefulnote.database.PositiveEmotionDatabase
+//import com.example.gratefulnote.database.GratefulNoteDatabase
 //import org.junit.Rule
 //import org.junit.Test
 //import org.junit.runner.RunWith
@@ -18,7 +18,7 @@
 //    @get:Rule
 //    val helper: MigrationTestHelper = MigrationTestHelper(
 //        InstrumentationRegistry.getInstrumentation(),
-//        PositiveEmotionDatabase::class.java.canonicalName,
+//        GratefulNoteDatabase::class.java.canonicalName,
 //        FrameworkSQLiteOpenHelperFactory()
 //    )
 //

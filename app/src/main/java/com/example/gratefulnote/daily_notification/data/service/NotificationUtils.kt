@@ -1,4 +1,4 @@
-package com.example.gratefulnote.notification
+package com.example.gratefulnote.daily_notification.data.service
 
 import android.app.NotificationManager
 import android.app.PendingIntent

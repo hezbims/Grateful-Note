@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.gratefulnote.R
 import com.example.gratefulnote.common.presentation.ConfirmDialog
 import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.database.PositiveEmotionDatabase
+import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.example.gratefulnote.databinding.FragmentAddGratitudeBinding
 
 class AddGratitudeFragment : Fragment() {
@@ -93,7 +93,7 @@ class AddGratitudeFragment : Fragment() {
 
     private fun getViewModelFactory() : AddGratitudeViewModelFactory {
         val application = requireNotNull(this.activity).application
-        val dataSource = PositiveEmotionDatabase.getInstance(application).dao
+        val dataSource = GratefulNoteDatabase.getInstance(application).positiveEmotionDao
         return AddGratitudeViewModelFactory(dataSource)
     }
 

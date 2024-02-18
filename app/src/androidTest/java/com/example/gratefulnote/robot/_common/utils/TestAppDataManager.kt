@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.common.constants.Constants
-import com.example.gratefulnote.database.PositiveEmotionDatabase
+import com.example.gratefulnote.database.GratefulNoteDatabase
 import java.io.File
 
 class TestAppDataManager {
@@ -13,7 +13,7 @@ class TestAppDataManager {
             .getInstrumentation()
             .targetContext
 
-        appContext.deleteDatabase(PositiveEmotionDatabase.dbName)
+        appContext.deleteDatabase(GratefulNoteDatabase.dbName)
         clearUrisPermissions(appContext)
         clearSharedPreference(Constants.SharedPrefs.Notification.name , appContext)
         clearSharedPreference(Constants.SharedPrefs.BackupRestore.name , appContext)

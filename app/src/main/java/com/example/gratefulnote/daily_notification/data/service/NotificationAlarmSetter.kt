@@ -1,9 +1,10 @@
-package com.example.gratefulnote.notification
+package com.example.gratefulnote.daily_notification.data.service
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.example.gratefulnote.daily_notification.Clock
 
 const val BROADCAST_INTENT_ID = 0
 
@@ -14,7 +15,7 @@ class NotificationAlarmSetter(private val context: Context) {
     private val broadcastPendingIntent = PendingIntent.getBroadcast(
         context,
         BROADCAST_INTENT_ID,
-        Intent(context, AlarmReceiver::class.java),
+        Intent(context, DailyNotificationBroadcastReceiver::class.java),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 

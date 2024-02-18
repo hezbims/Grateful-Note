@@ -1,7 +1,7 @@
 package com.example.gratefulnote._hilt_module
 
 import android.content.Context
-import com.example.gratefulnote.database.PositiveEmotionDatabase
+import com.example.gratefulnote.database.GratefulNoteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ import dagger.hilt.components.SingletonComponent
 object GratefulNoteAppModule {
     @Provides
     fun provideDao(@ApplicationContext app : Context) =
-        PositiveEmotionDatabase.getInstance(app).dao
+        GratefulNoteDatabase.getInstance(app).positiveEmotionDao
 }
