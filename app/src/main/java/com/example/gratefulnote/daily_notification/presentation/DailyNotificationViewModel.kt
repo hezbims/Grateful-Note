@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DailyNotificationViewModel @Inject constructor(
-    dailyNotificationManager: IDailyNotificationManager
+    private val dailyNotificationManager: IDailyNotificationManager
 ) : ViewModel(){
     private val _state = MutableStateFlow(DailyNotificationState())
     val state = _state.asStateFlow()
