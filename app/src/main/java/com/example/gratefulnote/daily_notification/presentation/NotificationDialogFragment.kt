@@ -1,4 +1,4 @@
-package com.example.gratefulnote.daily_notification
+package com.example.gratefulnote.daily_notification.presentation
 
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -10,7 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.example.gratefulnote.R
-import java.util.*
+import com.example.gratefulnote.daily_notification.Clock
+import java.util.Calendar
 
 class NotificationDialogFragment : DialogFragment() , TimePickerDialog.OnTimeSetListener{
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
