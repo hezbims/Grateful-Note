@@ -64,4 +64,7 @@ class DailyNotificationManager (private val app : Context) : IDailyNotificationM
     override suspend fun deleteDailyNotification(dailyNotification: DailyNotification): Flow<ResponseWrapper<Nothing>> {
         TODO("Not yet implemented")
     }
+
+    override fun getAllDailyNotification(): Flow<ResponseWrapper<List<DailyNotification>>> =
+        repository.getAllDailyNotification()
 }

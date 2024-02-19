@@ -19,5 +19,5 @@ interface DailyNotificationDao {
     suspend fun update(vararg dailyNotification: DailyNotification)
 
     @Query("SELECT * FROM daily_notification_table")
-    fun getAllDailyNotification() : Flow<Array<DailyNotification>>
+    fun getAllDailyNotification() : Flow<List<DailyNotification>>
 }

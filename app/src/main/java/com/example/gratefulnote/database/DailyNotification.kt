@@ -7,14 +7,14 @@ import androidx.room.PrimaryKey
 @Entity(tableName = DailyNotification.tableName)
 data class DailyNotification(
     @PrimaryKey
-    val id : Long,
+    val id : Long = 0,
 
     val minute : Int,
 
     val hour : Int,
 
     @ColumnInfo(name = "is_enabled")
-    val isEnabled : Int,
+    val isEnabled : Boolean,
 ){
     companion object {
         const val tableName = "daily_notification_table"

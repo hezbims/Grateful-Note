@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint // Agar bisa ngeinject viewmodel
@@ -57,9 +59,19 @@ fun DailyNotificationScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        LazyColumn {
+        ResponseWrapperLoader(
+            response = state.listDailyNotification,
+            onRetry = {
+                onEvent(DailyNotificationEvent.OnLoadListNotification)
+            },
+            content = {
+                LazyColumn {
+                    items(it!!){
 
-        }
+                    }
+                }
+            }
+        )
 
         FloatingActionButton(
             onClick = {

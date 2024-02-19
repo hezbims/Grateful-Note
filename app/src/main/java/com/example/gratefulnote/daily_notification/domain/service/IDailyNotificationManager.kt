@@ -8,4 +8,5 @@ interface IDailyNotificationManager {
     suspend fun addNewDailyNotification(hour : Int, minute : Int) : Flow<ResponseWrapper<Long>>
     suspend fun toogleDailyNotification(dailyNotification: DailyNotification) : Flow<ResponseWrapper<Nothing>>
     suspend fun deleteDailyNotification(dailyNotification: DailyNotification) : Flow<ResponseWrapper<Nothing>>
+    fun getAllDailyNotification() : Flow<ResponseWrapper<List<DailyNotification>>>
 }
