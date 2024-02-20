@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "8cc9bfac0889e118583a5f5121bea6c1",
+    "identityHash": "597cca9bdca6821048569b6d3ee53946",
     "entities": [
       {
         "tableName": "positive_emotion_table",
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "daily_notification_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `minute` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `is_enabled` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -96,7 +96,7 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
             "id"
           ]
@@ -108,7 +108,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8cc9bfac0889e118583a5f5121bea6c1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '597cca9bdca6821048569b6d3ee53946')"
     ]
   }
 }

@@ -15,8 +15,21 @@ class DailyNotificationRepository(
     override fun createNewDailyNotification(
         hour: Int,
         minute: Int
-    ): Flow<ResponseWrapper<Long>> {
-        throw Exception()
+    ) = flow {
+        emit(ResponseWrapper.ResponseLoading())
+
+        try {
+            val id = dao.insert(
+                DailyNotification(
+                    isEnabled = true,
+                    hour = hour,
+                    minute = minute,
+                )
+            ).single()
+            emit(ResponseWrapper.ResponseSucceed(id))
+        } catch (t : Throwable){
+            emit(ResponseWrapper.ResponseError(t))
+        }
     }
 
     override fun updateDailyNotification(

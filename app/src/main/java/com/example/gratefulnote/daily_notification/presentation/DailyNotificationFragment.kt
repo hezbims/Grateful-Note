@@ -86,5 +86,8 @@ fun DailyNotificationScreen(
     }
 
     if (state.openTimePickerDialog)
-        ComposeTimePickerDialog(onEvent)
+        ComposeTimePickerDialog(
+            state = state,
+            onEvent = onEvent
+        )
 }

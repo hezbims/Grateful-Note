@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -15,13 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.gratefulnote.common.data.dto.ResponseWrapper
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun ComposeTimePickerDialog(
+    state : DailyNotificationState,
     onEvent: (DailyNotificationEvent) -> Unit,
 ){
-    val state = rememberTimePickerState()
+    val timePickerState = rememberTimePickerState()
     Dialog(onDismissRequest = {
         onEvent(DailyNotificationEvent.OnDismissTimePickerDialog)
     }) {
@@ -29,7 +32,7 @@ fun ComposeTimePickerDialog(
             Column(
                 modifier = Modifier.padding(24.dp)
             ) {
-                TimePicker(state = state)
+                TimePicker(state = timePickerState)
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -41,9 +44,16 @@ fun ComposeTimePickerDialog(
                         Text(text = "Batal")
                     }
 
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Konfirmasi")
-                    }
+                    if (state.createNewDailyNotificationStatus is ResponseWrapper.ResponseLoading)
+                        CircularProgressIndicator()
+                    else
+                        TextButton(onClick = {
+                            onEvent(DailyNotificationEvent.OnCreateNewDailyNotification(
+                                hour = timePickerState.hour , minute = timePickerState.minute
+                            ))
+                        }) {
+                            Text(text = "Konfirmasi")
+                        }
                 }
             }
         }

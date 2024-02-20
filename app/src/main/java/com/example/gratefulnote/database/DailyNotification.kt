@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = DailyNotification.tableName)
 data class DailyNotification(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id : Long = 0,
 
     val minute : Int,

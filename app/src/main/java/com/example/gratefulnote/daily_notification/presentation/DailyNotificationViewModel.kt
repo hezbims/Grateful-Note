@@ -28,6 +28,8 @@ class DailyNotificationViewModel @Inject constructor(
                 onDismissTimePickerDialog()
             DailyNotificationEvent.OnLoadListNotification ->
                 loadListNotification()
+            is DailyNotificationEvent.OnCreateNewDailyNotification ->
+                createNewDailyNotification(hour = event.hour, minute = event.minute)
         }
     }
     init {
@@ -49,10 +51,30 @@ class DailyNotificationViewModel @Inject constructor(
             }
         }
     }
+    private fun createNewDailyNotification(hour : Int , minute: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            dailyNotificationManager.addNewDailyNotification(
+                hour = hour, minute = minute,
+            ).collect { response ->
+                // TODO : Tambahin method untuk ngedisplay toast kalo ada response error
+                _state.update {
+                    val openTimePickerDialog =
+                        if (response is ResponseWrapper.ResponseSucceed) false
+                        else _state.value.openTimePickerDialog
+
+                    it.copy(
+                        createNewDailyNotificationStatus = response,
+                        openTimePickerDialog = openTimePickerDialog,
+                    )
+                }
+            }
+        }
+    }
 }
 
 data class DailyNotificationState(
     val listDailyNotification : ResponseWrapper<List<DailyNotification>> = ResponseWrapper.ResponseLoading(),
+    val createNewDailyNotificationStatus : ResponseWrapper<Long> = ResponseWrapper.ResponseSucceed(),
     val openTimePickerDialog : Boolean = false,
 )
 
@@ -60,4 +82,5 @@ sealed class DailyNotificationEvent {
     data object OnOpenTimePickerDialog : DailyNotificationEvent()
     data object OnDismissTimePickerDialog : DailyNotificationEvent()
     data object OnLoadListNotification : DailyNotificationEvent()
+    class OnCreateNewDailyNotification(val minute : Int, val hour : Int) : DailyNotificationEvent()
 }
