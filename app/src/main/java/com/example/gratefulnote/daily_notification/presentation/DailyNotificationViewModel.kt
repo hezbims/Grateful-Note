@@ -67,6 +67,8 @@ class DailyNotificationViewModel @Inject constructor(
                         openTimePickerDialog = openTimePickerDialog,
                     )
                 }
+                if (response is ResponseWrapper.ResponseSucceed)
+                    loadListNotification()
             }
         }
     }
