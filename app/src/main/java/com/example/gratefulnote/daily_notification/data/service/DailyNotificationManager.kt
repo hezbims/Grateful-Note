@@ -10,7 +10,7 @@ import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.daily_notification.data.repository.DailyNotificationRepository
 import com.example.gratefulnote.daily_notification.domain.repository.IDailyNotificationRepository
 import com.example.gratefulnote.daily_notification.domain.service.IDailyNotificationManager
-import com.example.gratefulnote.database.DailyNotification
+import com.example.gratefulnote.database.DailyNotificationEntity
 import com.example.gratefulnote.database.GratefulNoteDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -57,14 +57,14 @@ class DailyNotificationManager (private val app : Context) : IDailyNotificationM
         }
     }
 
-    override suspend fun toogleDailyNotification(dailyNotification: DailyNotification): Flow<ResponseWrapper<Nothing>> {
+    override suspend fun toogleDailyNotification(dailyNotification: DailyNotificationEntity): Flow<ResponseWrapper<Nothing>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteDailyNotification(dailyNotification: DailyNotification): Flow<ResponseWrapper<Nothing>> {
+    override suspend fun deleteDailyNotification(dailyNotification: DailyNotificationEntity): Flow<ResponseWrapper<Nothing>> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllDailyNotification(): Flow<ResponseWrapper<List<DailyNotification>>> =
+    override fun getAllDailyNotification(): Flow<ResponseWrapper<List<DailyNotificationEntity>>> =
         repository.getAllDailyNotification()
 }

@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.daily_notification.domain.service.IDailyNotificationManager
-import com.example.gratefulnote.database.DailyNotification
+import com.example.gratefulnote.database.DailyNotificationEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,8 +30,14 @@ class DailyNotificationViewModel @Inject constructor(
                 onDismissTimePickerDialog()
             DailyNotificationEvent.OnLoadListNotification ->
                 loadListNotification()
+            DailyNotificationEvent.OnBackPressWhenMultiSelectModeActivated ->
+                disableMultiSelectMode()
             is DailyNotificationEvent.OnCreateNewDailyNotification ->
                 createNewDailyNotification(hour = event.hour, minute = event.minute)
+            is DailyNotificationEvent.OnLongClickDailyNotificationCard ->
+                activateMultipleSelectMode(event.dailyNotification)
+            is DailyNotificationEvent.OnClickItemWhenMultiSelectModeActivated ->
+                onClickItemWhenSelectModeActivated(event.dailyNotification)
         }
     }
     init {
@@ -42,11 +50,86 @@ class DailyNotificationViewModel @Inject constructor(
         _state.update { it.copy(openTimePickerDialog = false) }
     }
 
+    private fun disableMultiSelectMode(){
+        val uncheckedList = _state.value.listDailyNotification.map {
+            it.copy(isSelectedForDeleteCandidate = false)
+        }
+        _state.update { it.copy(
+            listDailyNotification = uncheckedList,
+            isMultiSelectModeActivated = false,
+        ) }
+    }
+
+    private fun onClickItemWhenSelectModeActivated(
+        dailyNotification : DailyNotificationUiModel
+    ){
+        val newList =
+        if (dailyNotification.isSelectedForDeleteCandidate){
+            removeItemToDeleteCandidate(item = dailyNotification.data)
+        } else {
+            addItemToDeleteCandidate(item = dailyNotification.data)
+        }
+
+        _state.update { it.copy(listDailyNotification = newList) }
+    }
+
+    private fun addItemToDeleteCandidate(
+        item: DailyNotificationEntity,
+    ) : List<DailyNotificationUiModel> {
+        return onEditItemFromDeleteCandidate(item = item, willRemovedFromDeleteCandidate = false)
+    }
+
+    private fun removeItemToDeleteCandidate(
+        item: DailyNotificationEntity,
+    ) : List<DailyNotificationUiModel> {
+        return onEditItemFromDeleteCandidate(item = item, willRemovedFromDeleteCandidate = true)
+    }
+
+    private fun onEditItemFromDeleteCandidate(
+        item : DailyNotificationEntity,
+        willRemovedFromDeleteCandidate : Boolean,
+    ) : List<DailyNotificationUiModel> {
+        val listData = _state.value.listDailyNotification.map {
+            if (it.data.id == item.id) {
+                it.copy(isSelectedForDeleteCandidate = !willRemovedFromDeleteCandidate)
+            }
+            else it
+        }
+        return listData
+    }
+
+    private fun activateMultipleSelectMode(dailyNotification: DailyNotificationEntity){
+        if (_state.value.isMultiSelectModeActivated)
+            return
+
+        val newListData = addItemToDeleteCandidate(dailyNotification)
+
+        _state.update {
+            it.copy(
+                isMultiSelectModeActivated = true,
+                listDailyNotification = newListData,
+            )
+        }
+    }
+
     private fun loadListNotification(){
         viewModelScope.launch(Dispatchers.IO) {
-            dailyNotificationManager.getAllDailyNotification().collect { response ->
+            dailyNotificationManager.getAllDailyNotification()
+            .filter {
+                it is ResponseWrapper.ResponseSucceed
+            }
+            .map { response ->
+                (response as ResponseWrapper.ResponseSucceed).data!!
+                    .map {
+                        DailyNotificationUiModel(
+                            data = it,
+                            isSelectedForDeleteCandidate = false,
+                        )
+                    }
+            }
+            .collect { listData ->
                 _state.update {
-                    it.copy(listDailyNotification = response)
+                    it.copy(listDailyNotification = listData)
                 }
             }
         }
@@ -75,14 +158,18 @@ class DailyNotificationViewModel @Inject constructor(
 }
 
 data class DailyNotificationState(
-    val listDailyNotification : ResponseWrapper<List<DailyNotification>> = ResponseWrapper.ResponseLoading(),
+    val listDailyNotification : List<DailyNotificationUiModel> = emptyList(),
     val createNewDailyNotificationStatus : ResponseWrapper<Long> = ResponseWrapper.ResponseSucceed(),
     val openTimePickerDialog : Boolean = false,
+    val isMultiSelectModeActivated : Boolean = false,
 )
 
 sealed class DailyNotificationEvent {
     data object OnOpenTimePickerDialog : DailyNotificationEvent()
     data object OnDismissTimePickerDialog : DailyNotificationEvent()
     data object OnLoadListNotification : DailyNotificationEvent()
+    data object OnBackPressWhenMultiSelectModeActivated : DailyNotificationEvent()
     class OnCreateNewDailyNotification(val minute : Int, val hour : Int) : DailyNotificationEvent()
+    class OnLongClickDailyNotificationCard(val dailyNotification: DailyNotificationEntity) : DailyNotificationEvent()
+    class OnClickItemWhenMultiSelectModeActivated(val dailyNotification : DailyNotificationUiModel) : DailyNotificationEvent()
 }

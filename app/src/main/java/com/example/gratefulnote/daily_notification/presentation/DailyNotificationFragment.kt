@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,18 +20,27 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint // Agar bisa ngeinject viewmodel
 class DailyNotificationFragment : Fragment() {
+    private val viewModel : DailyNotificationViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,7 +49,9 @@ class DailyNotificationFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                DailyNotificationScreen()
+                DailyNotificationScreen(
+                    viewModel = viewModel,
+                )
             }
         }
     }
@@ -59,25 +72,36 @@ fun DailyNotificationScreen(
     state : DailyNotificationState,
     onEvent : (DailyNotificationEvent) -> Unit,
 ){
+    HandleCustomBackPress(
+        state = state,
+        onEvent = onEvent,
+    )
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        ResponseWrapperLoader(
-            response = state.listDailyNotification,
-            onRetry = {
-                onEvent(DailyNotificationEvent.OnLoadListNotification)
-            },
-            content = {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                    contentPadding = PaddingValues(all = 24.dp)
-                ) {
-                    items(it!!, key = {item ->  item.id}){
-                        DailyNotificationCard(data = it , modifier = Modifier.fillMaxWidth())
-                    }
-                }
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            contentPadding = PaddingValues(all = 24.dp)
+        ) {
+            items(state.listDailyNotification, key = {item ->  item.data.id}){
+                DailyNotificationCard(
+                    dailyNotificationUiModel = it,
+                    onLongClick = {
+                      onEvent(DailyNotificationEvent
+                        .OnLongClickDailyNotificationCard(it.data))
+                    },
+                    onClickWhenSelectModeActivated =
+                        if (state.isMultiSelectModeActivated)({
+                            onEvent(DailyNotificationEvent.OnClickItemWhenMultiSelectModeActivated(
+                                dailyNotification = it,
+                            ))
+                        })
+                        else null,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
-        )
+        }
 
         FloatingActionButton(
             onClick = {
@@ -96,4 +120,29 @@ fun DailyNotificationScreen(
             state = state,
             onEvent = onEvent
         )
+}
+
+@Composable
+fun HandleCustomBackPress(
+    state: DailyNotificationState,
+    onEvent: (DailyNotificationEvent) -> Unit,
+){
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    var backPressHandled by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    BackHandler(
+        enabled = !backPressHandled
+    ) {
+        backPressHandled = true
+        coroutineScope.launch {
+            awaitFrame()
+            if (state.isMultiSelectModeActivated)
+                onEvent(DailyNotificationEvent.OnBackPressWhenMultiSelectModeActivated)
+            else
+                onBackPressedDispatcher?.onBackPressed()
+
+            backPressHandled = false
+        }
+    }
 }

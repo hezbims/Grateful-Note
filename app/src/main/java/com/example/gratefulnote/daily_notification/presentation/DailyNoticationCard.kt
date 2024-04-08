@@ -1,10 +1,13 @@
 package com.example.gratefulnote.daily_notification.presentation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -16,14 +19,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.gratefulnote.database.DailyNotification
+import com.example.gratefulnote.database.DailyNotificationEntity
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DailyNotificationCard(
-    data : DailyNotification,
+    dailyNotificationUiModel : DailyNotificationUiModel,
+    onLongClick : () -> Unit,
     modifier : Modifier = Modifier,
+    onClickWhenSelectModeActivated : (() -> Unit)? = null,
 ){
-    Card {
+    val data = dailyNotificationUiModel.data
+    Card(
+        modifier = Modifier.combinedClickable(
+            onClick = onClickWhenSelectModeActivated ?: {},
+            onLongClick = onLongClick
+        )
+    ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -37,14 +49,21 @@ fun DailyNotificationCard(
                 fontSize = 32.sp,
                 color = if (data.isEnabled) Color.Black else Color(0xFFA6A6A6)
             )
+            
+            if (onClickWhenSelectModeActivated != null)
+                Checkbox(
+                    checked = dailyNotificationUiModel.isSelectedForDeleteCandidate,
+                    onCheckedChange = null,
+                )
 
-            Switch(
-                checked = data.isEnabled,
-                onCheckedChange = {
+            else
+                Switch(
+                    checked = data.isEnabled,
+                    onCheckedChange = {
 
-                },
-                modifier = Modifier.scale(0.8f)
-            )
+                    },
+                    modifier = Modifier.scale(0.8f)
+                )
         }
     }
 }
@@ -56,11 +75,18 @@ fun PreviewEnabledDailyNotificationCard(){
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        DailyNotificationCard(data = DailyNotification(
-            hour = 8,
-            minute = 1,
-            isEnabled = true,
-        ) , modifier = Modifier.padding(24.dp))
+        DailyNotificationCard(
+            dailyNotificationUiModel = DailyNotificationUiModel(
+                data = DailyNotificationEntity(
+                hour = 8,
+                minute = 1,
+                isEnabled = true,
+                ),
+                isSelectedForDeleteCandidate = false,
+            ),
+            onLongClick = {},
+            modifier = Modifier.padding(24.dp)
+        )
     }
 }
 
@@ -71,10 +97,16 @@ fun PreviewDisabledDailyNotificationCard(){
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        DailyNotificationCard(data = DailyNotification(
-            hour = 23,
-            minute = 59,
-            isEnabled = false,
-        ) , modifier = Modifier.padding(24.dp))
+        DailyNotificationCard(
+            dailyNotificationUiModel = DailyNotificationUiModel(
+                data = DailyNotificationEntity(
+                    hour = 23,
+                    minute = 59,
+                    isEnabled = false,
+                ),
+                isSelectedForDeleteCandidate = false,
+            ),
+            onLongClick = {},
+            modifier = Modifier.padding(24.dp))
     }
 }

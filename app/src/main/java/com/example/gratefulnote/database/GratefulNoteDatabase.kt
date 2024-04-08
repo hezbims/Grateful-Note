@@ -115,7 +115,7 @@ val MIGRATION_2_3 = object : Migration(2 , 3){
 }
 
 @Database(
-    entities = [PositiveEmotion::class , DailyNotification::class] ,
+    entities = [PositiveEmotion::class , DailyNotificationEntity::class] ,
     version = 4
 )
 abstract class GratefulNoteDatabase : RoomDatabase(){

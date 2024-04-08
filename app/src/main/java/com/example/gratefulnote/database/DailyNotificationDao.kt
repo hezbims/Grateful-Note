@@ -10,23 +10,23 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DailyNotificationDao {
     @Insert
-    suspend fun insert(vararg dailyNotification: DailyNotification) : Array<Long>
+    suspend fun insert(vararg dailyNotification: DailyNotificationEntity) : Array<Long>
 
     @Delete
-    suspend fun delete(vararg  dailyNotification: DailyNotification)
+    suspend fun delete(vararg  dailyNotification: DailyNotificationEntity)
 
     @Update
-    suspend fun update(vararg dailyNotification: DailyNotification)
+    suspend fun update(vararg dailyNotification: DailyNotificationEntity)
 
     @Query("SELECT * FROM daily_notification_table")
-    fun getAllDailyNotification() : Flow<List<DailyNotification>>
+    fun getAllDailyNotification() : Flow<List<DailyNotificationEntity>>
 
     @Query("SELECT * FROM daily_notification_table WHERE id = :id")
-    suspend fun getDailyNotification(id: Long) : DailyNotification?
+    suspend fun getDailyNotification(id: Long) : DailyNotificationEntity?
 
     suspend fun updateAndGetADailyNotification(
-        dailyNotification: DailyNotification
-    ) : DailyNotification {
+        dailyNotification: DailyNotificationEntity
+    ) : DailyNotificationEntity {
         update(dailyNotification)
         return getDailyNotification(dailyNotification.id)!!
     }

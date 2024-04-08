@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = DailyNotification.tableName)
-data class DailyNotification(
+@Entity(tableName = DailyNotificationEntity.tableName)
+data class DailyNotificationEntity(
     @PrimaryKey(autoGenerate = true)
     val id : Long = 0,
 
