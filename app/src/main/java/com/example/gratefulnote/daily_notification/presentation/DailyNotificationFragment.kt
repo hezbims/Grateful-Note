@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -33,6 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gratefulnote.daily_notification.presentation.components.ComposeTimePickerDialog
+import com.example.gratefulnote.daily_notification.presentation.components.ConfirmDeleteDailyNotificationsDialog
+import com.example.gratefulnote.daily_notification.presentation.components.DailyNotificationCard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -103,22 +107,40 @@ fun DailyNotificationScreen(
             }
         }
 
-        FloatingActionButton(
-            onClick = {
-                onEvent(DailyNotificationEvent.OnOpenTimePickerDialog)
-            },
-            modifier = Modifier
-                .padding(all = 48.dp)
-                .align(Alignment.BottomEnd)
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Buat daily notification baru")
-        }
+        if (state.isMultiSelectModeActivated)
+            FloatingActionButton(
+                onClick = {
+                    onEvent(DailyNotificationEvent.OnClickTrashButton)
+                },
+                modifier = Modifier
+                    .padding(all = 48.dp)
+                    .align(Alignment.BottomEnd)
+            ) {
+                Icon(Icons.Filled.DeleteOutline, contentDescription = "Hapus item dipilih")
+            }
+
+        else
+            FloatingActionButton(
+                onClick = {
+                    onEvent(DailyNotificationEvent.OnOpenTimePickerDialog)
+                },
+                modifier = Modifier
+                    .padding(all = 48.dp)
+                    .align(Alignment.BottomEnd)
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Buat daily notification baru")
+            }
     }
 
     if (state.openTimePickerDialog)
         ComposeTimePickerDialog(
             state = state,
-            onEvent = onEvent
+            onEvent = onEvent,
+        )
+    if (state.openConfirmDeleteDialog)
+        ConfirmDeleteDailyNotificationsDialog(
+            state = state,
+            onEvent = onEvent,
         )
 }
 

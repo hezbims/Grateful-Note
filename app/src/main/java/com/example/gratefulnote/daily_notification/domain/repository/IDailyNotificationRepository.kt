@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface IDailyNotificationRepository {
     fun createNewDailyNotification(hour : Int, minute : Int) : Flow<ResponseWrapper<Long>>
     fun updateDailyNotification(dailyNotification: DailyNotificationEntity) : Flow<ResponseWrapper<Nothing>>
-    fun deleteDailyNotification(dailyNotifications : Collection<DailyNotificationEntity>) : Flow<ResponseWrapper<Nothing>>
+    fun deleteDailyNotification(vararg dailyNotifications : DailyNotificationEntity) : Flow<ResponseWrapper<Nothing>>
     fun getAllDailyNotification() : Flow<ResponseWrapper<List<DailyNotificationEntity>>>
 }

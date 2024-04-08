@@ -1,4 +1,4 @@
-package com.example.gratefulnote.daily_notification.presentation
+package com.example.gratefulnote.daily_notification.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.daily_notification.presentation.DailyNotificationEvent
+import com.example.gratefulnote.daily_notification.presentation.DailyNotificationState
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,9 +50,11 @@ fun ComposeTimePickerDialog(
                         CircularProgressIndicator()
                     else
                         TextButton(onClick = {
-                            onEvent(DailyNotificationEvent.OnCreateNewDailyNotification(
-                                hour = timePickerState.hour , minute = timePickerState.minute
-                            ))
+                            onEvent(
+                                DailyNotificationEvent.OnCreateNewDailyNotification(
+                                    hour = timePickerState.hour, minute = timePickerState.minute
+                                )
+                            )
                         }) {
                             Text(text = "Konfirmasi")
                         }

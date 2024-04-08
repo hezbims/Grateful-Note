@@ -32,6 +32,12 @@ class DailyNotificationViewModel @Inject constructor(
                 loadListNotification()
             DailyNotificationEvent.OnBackPressWhenMultiSelectModeActivated ->
                 disableMultiSelectMode()
+            DailyNotificationEvent.OnConfirmDeleteDialog ->
+                deleteSelectedItems()
+            DailyNotificationEvent.OnDismissDeleteDialog ->
+                dismissDeleteDialog()
+            DailyNotificationEvent.OnClickTrashButton ->
+                showDeleteDialog()
             is DailyNotificationEvent.OnCreateNewDailyNotification ->
                 createNewDailyNotification(hour = event.hour, minute = event.minute)
             is DailyNotificationEvent.OnLongClickDailyNotificationCard ->
@@ -50,6 +56,14 @@ class DailyNotificationViewModel @Inject constructor(
         _state.update { it.copy(openTimePickerDialog = false) }
     }
 
+    private fun showDeleteDialog(){
+        _state.update { it.copy(openConfirmDeleteDialog = true) }
+    }
+
+    private fun dismissDeleteDialog(){
+        _state.update { it.copy(openConfirmDeleteDialog = false) }
+    }
+
     private fun disableMultiSelectMode(){
         val uncheckedList = _state.value.listDailyNotification.map {
             it.copy(isSelectedForDeleteCandidate = false)
@@ -58,6 +72,24 @@ class DailyNotificationViewModel @Inject constructor(
             listDailyNotification = uncheckedList,
             isMultiSelectModeActivated = false,
         ) }
+    }
+
+    private fun deleteSelectedItems(){
+        _state.update { it.copy(openConfirmDeleteDialog = false) }
+        viewModelScope.launch (Dispatchers.IO) {
+            dailyNotificationManager.deleteDailyNotification(
+                _state.value.listDailyNotification
+                    .filter {
+                        it.isSelectedForDeleteCandidate
+                    }
+                    .map {
+                        it.data
+                    }
+            ).collect {
+                if (it !is ResponseWrapper.ResponseLoading)
+                    loadListNotification()
+            }
+        }
     }
 
     private fun onClickItemWhenSelectModeActivated(
@@ -161,6 +193,7 @@ data class DailyNotificationState(
     val listDailyNotification : List<DailyNotificationUiModel> = emptyList(),
     val createNewDailyNotificationStatus : ResponseWrapper<Long> = ResponseWrapper.ResponseSucceed(),
     val openTimePickerDialog : Boolean = false,
+    val openConfirmDeleteDialog : Boolean = false,
     val isMultiSelectModeActivated : Boolean = false,
 )
 
@@ -169,6 +202,9 @@ sealed class DailyNotificationEvent {
     data object OnDismissTimePickerDialog : DailyNotificationEvent()
     data object OnLoadListNotification : DailyNotificationEvent()
     data object OnBackPressWhenMultiSelectModeActivated : DailyNotificationEvent()
+    data object OnClickTrashButton : DailyNotificationEvent()
+    data object OnConfirmDeleteDialog : DailyNotificationEvent()
+    data object OnDismissDeleteDialog : DailyNotificationEvent()
     class OnCreateNewDailyNotification(val minute : Int, val hour : Int) : DailyNotificationEvent()
     class OnLongClickDailyNotificationCard(val dailyNotification: DailyNotificationEntity) : DailyNotificationEvent()
     class OnClickItemWhenMultiSelectModeActivated(val dailyNotification : DailyNotificationUiModel) : DailyNotificationEvent()

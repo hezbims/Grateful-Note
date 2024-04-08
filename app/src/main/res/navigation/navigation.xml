@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/notificationSettingsFragment"
         android:name="com.example.gratefulnote.daily_notification.presentation.DailyNotificationFragment"
-        android:label="Notification Settings" />
+        android:label="Daily Reminder" />
     <fragment
         android:id="@+id/backupRestoreFragment"
         android:name="com.example.gratefulnote.backuprestore.presentation.main_screen.MainScreenViewFragment"

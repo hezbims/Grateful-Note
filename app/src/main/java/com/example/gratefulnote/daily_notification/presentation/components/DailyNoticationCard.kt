@@ -1,4 +1,4 @@
-package com.example.gratefulnote.daily_notification.presentation
+package com.example.gratefulnote.daily_notification.presentation.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gratefulnote.daily_notification.presentation.DailyNotificationUiModel
 import com.example.gratefulnote.database.DailyNotificationEntity
 
 @OptIn(ExperimentalFoundationApi::class)

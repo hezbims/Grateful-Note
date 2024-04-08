@@ -2,8 +2,8 @@ package com.example.gratefulnote.daily_notification.data.repository
 
 import com.example.gratefulnote.common.data.dto.ResponseWrapper
 import com.example.gratefulnote.daily_notification.domain.repository.IDailyNotificationRepository
-import com.example.gratefulnote.database.DailyNotificationEntity
 import com.example.gratefulnote.database.DailyNotificationDao
+import com.example.gratefulnote.database.DailyNotificationEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -39,9 +39,11 @@ class DailyNotificationRepository(
     }
 
     override fun deleteDailyNotification(
-        dailyNotifications: Collection<DailyNotificationEntity>
-    ): Flow<ResponseWrapper<Nothing>> {
-        throw Exception()
+        vararg dailyNotifications: DailyNotificationEntity
+    ) = flow<ResponseWrapper<Nothing>> {
+        emit(ResponseWrapper.ResponseLoading())
+        dao.delete(*dailyNotifications)
+        emit(ResponseWrapper.ResponseSucceed())
     }
 
     override fun getAllDailyNotification() = flow<ResponseWrapper<List<DailyNotificationEntity>>> {

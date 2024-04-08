@@ -13,6 +13,7 @@ import com.example.gratefulnote.daily_notification.domain.service.IDailyNotifica
 import com.example.gratefulnote.database.DailyNotificationEntity
 import com.example.gratefulnote.database.GratefulNoteDatabase
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import java.util.Locale
@@ -61,8 +62,18 @@ class DailyNotificationManager (private val app : Context) : IDailyNotificationM
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteDailyNotification(dailyNotification: DailyNotificationEntity): Flow<ResponseWrapper<Nothing>> {
-        TODO("Not yet implemented")
+    override suspend fun deleteDailyNotification(
+        dailyNotifications: List<DailyNotificationEntity>
+    )
+    = flow<ResponseWrapper<Nothing>> {
+        emit(ResponseWrapper.ResponseLoading())
+        repository.deleteDailyNotification(
+            *dailyNotifications.toTypedArray()
+        ).collect {
+            // TODO : cancel semua alarm yang nyala
+
+            emit(ResponseWrapper.ResponseSucceed())
+        }
     }
 
     override fun getAllDailyNotification(): Flow<ResponseWrapper<List<DailyNotificationEntity>>> =
