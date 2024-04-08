@@ -25,7 +25,7 @@ class DailyNotificationRepository(
                     hour = hour,
                     minute = minute,
                 )
-            ).single()
+            ).single().toInt()
             emit(ResponseWrapper.ResponseSucceed(id))
         } catch (t : Throwable){
             emit(ResponseWrapper.ResponseError(t))

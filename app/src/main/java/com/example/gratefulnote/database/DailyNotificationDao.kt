@@ -22,7 +22,7 @@ interface DailyNotificationDao {
     fun getAllDailyNotification() : Flow<List<DailyNotificationEntity>>
 
     @Query("SELECT * FROM daily_notification_table WHERE id = :id")
-    suspend fun getDailyNotification(id: Long) : DailyNotificationEntity?
+    suspend fun getDailyNotification(id: Int) : DailyNotificationEntity?
 
     suspend fun updateAndGetADailyNotification(
         dailyNotification: DailyNotificationEntity

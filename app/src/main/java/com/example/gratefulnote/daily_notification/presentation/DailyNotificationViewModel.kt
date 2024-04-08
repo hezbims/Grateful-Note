@@ -191,7 +191,7 @@ class DailyNotificationViewModel @Inject constructor(
 
 data class DailyNotificationState(
     val listDailyNotification : List<DailyNotificationUiModel> = emptyList(),
-    val createNewDailyNotificationStatus : ResponseWrapper<Long> = ResponseWrapper.ResponseSucceed(),
+    val createNewDailyNotificationStatus : ResponseWrapper<Int> = ResponseWrapper.ResponseSucceed(),
     val openTimePickerDialog : Boolean = false,
     val openConfirmDeleteDialog : Boolean = false,
     val isMultiSelectModeActivated : Boolean = false,
