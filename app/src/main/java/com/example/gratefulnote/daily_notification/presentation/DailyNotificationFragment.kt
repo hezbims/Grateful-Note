@@ -88,20 +88,23 @@ fun DailyNotificationScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             contentPadding = PaddingValues(all = 24.dp)
         ) {
-            items(state.listDailyNotification, key = {item ->  item.data.id}){
+            items(state.listDailyNotification, key = {item ->  item.data.id}){ item ->
                 DailyNotificationCard(
-                    dailyNotificationUiModel = it,
+                    dailyNotificationUiModel = item,
                     onLongClick = {
                       onEvent(DailyNotificationEvent
-                        .OnLongClickDailyNotificationCard(it.data))
+                        .OnLongClickDailyNotificationCard(item.data))
                     },
                     onClickWhenSelectModeActivated =
                         if (state.isMultiSelectModeActivated)({
                             onEvent(DailyNotificationEvent.OnClickItemWhenMultiSelectModeActivated(
-                                dailyNotification = it,
+                                dailyNotification = item,
                             ))
                         })
                         else null,
+                    onToogleSwitch = {
+                        onEvent(DailyNotificationEvent.OnToogleSwithListItem(item.data))
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
             }

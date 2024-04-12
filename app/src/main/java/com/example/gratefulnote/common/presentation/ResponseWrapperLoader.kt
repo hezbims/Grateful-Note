@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.common.domain.ResponseWrapper
 
 @Composable
 fun <T>ResponseWrapperLoader(

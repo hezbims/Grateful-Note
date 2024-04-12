@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.example.gratefulnote.backuprestore.presentation.main_screen.BackupRestoreStateEvent
 import com.example.gratefulnote.backuprestore.presentation.main_screen.BackupRestoreViewState
 import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
-import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
 @Composable

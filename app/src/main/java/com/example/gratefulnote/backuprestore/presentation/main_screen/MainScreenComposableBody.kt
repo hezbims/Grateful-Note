@@ -22,7 +22,7 @@ import com.example.gratefulnote.backuprestore.presentation.confirm_restore_dialo
 import com.example.gratefulnote.backuprestore.presentation.main_screen.component.BottomActionCard
 import com.example.gratefulnote.backuprestore.presentation.main_screen.component.FileList
 import com.example.gratefulnote.backuprestore.presentation.new_backup_dialog.NewBackupDialogSetup
-import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
 @Composable

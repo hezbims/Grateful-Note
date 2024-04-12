@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManager
-import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

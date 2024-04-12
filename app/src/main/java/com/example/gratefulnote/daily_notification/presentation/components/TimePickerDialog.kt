@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.daily_notification.presentation.DailyNotificationEvent
 import com.example.gratefulnote.daily_notification.presentation.DailyNotificationState
 

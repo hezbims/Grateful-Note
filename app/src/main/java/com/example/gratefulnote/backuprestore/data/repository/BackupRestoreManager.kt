@@ -7,7 +7,7 @@ import androidx.documentfile.provider.DocumentFile
 import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
 import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManager
 import com.example.gratefulnote.common.constants.Constants
-import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.google.gson.Gson

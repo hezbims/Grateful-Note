@@ -2,7 +2,7 @@ package com.example.gratefulnote.daily_notification.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gratefulnote.common.data.dto.ResponseWrapper
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.daily_notification.domain.service.IDailyNotificationManager
 import com.example.gratefulnote.database.DailyNotificationEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,6 +44,9 @@ class DailyNotificationViewModel @Inject constructor(
                 activateMultipleSelectMode(event.dailyNotification)
             is DailyNotificationEvent.OnClickItemWhenMultiSelectModeActivated ->
                 onClickItemWhenSelectModeActivated(event.dailyNotification)
+            is DailyNotificationEvent.OnToogleSwithListItem ->
+                updateDailyNotificationIsEnabled(event.dailyNotification)
+
         }
     }
     init {
@@ -187,6 +190,28 @@ class DailyNotificationViewModel @Inject constructor(
             }
         }
     }
+
+    private fun updateDailyNotificationIsEnabled(dailyNotification: DailyNotificationEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            dailyNotificationManager.toogleDailyNotification(dailyNotification).collect { response ->
+                if (response is ResponseWrapper.ResponseSucceed) {
+                    val updatedDataId = dailyNotification.id
+
+                    val newList = _state.value.listDailyNotification.map {
+                        if (it.data.id == updatedDataId) {
+                            it.copy(data = response.data!!)
+                        }
+                        else
+                            it
+                    }
+
+                    _state.update {
+                        it.copy(listDailyNotification = newList)
+                    }
+                }
+            }
+        }
+    }
 }
 
 data class DailyNotificationState(
@@ -208,4 +233,5 @@ sealed class DailyNotificationEvent {
     class OnCreateNewDailyNotification(val minute : Int, val hour : Int) : DailyNotificationEvent()
     class OnLongClickDailyNotificationCard(val dailyNotification: DailyNotificationEntity) : DailyNotificationEvent()
     class OnClickItemWhenMultiSelectModeActivated(val dailyNotification : DailyNotificationUiModel) : DailyNotificationEvent()
+    class OnToogleSwithListItem(val dailyNotification: DailyNotificationEntity) : DailyNotificationEvent()
 }

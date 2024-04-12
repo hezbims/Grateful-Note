@@ -28,6 +28,7 @@ fun DailyNotificationCard(
     dailyNotificationUiModel : DailyNotificationUiModel,
     onLongClick : () -> Unit,
     modifier : Modifier = Modifier,
+    onToogleSwitch : (Boolean) -> Unit,
     onClickWhenSelectModeActivated : (() -> Unit)? = null,
 ){
     val data = dailyNotificationUiModel.data
@@ -60,9 +61,7 @@ fun DailyNotificationCard(
             else
                 Switch(
                     checked = data.isEnabled,
-                    onCheckedChange = {
-
-                    },
+                    onCheckedChange = onToogleSwitch,
                     modifier = Modifier.scale(0.8f)
                 )
         }
@@ -86,6 +85,7 @@ fun PreviewEnabledDailyNotificationCard(){
                 isSelectedForDeleteCandidate = false,
             ),
             onLongClick = {},
+            onToogleSwitch = {},
             modifier = Modifier.padding(24.dp)
         )
     }
@@ -108,6 +108,7 @@ fun PreviewDisabledDailyNotificationCard(){
                 isSelectedForDeleteCandidate = false,
             ),
             onLongClick = {},
+            onToogleSwitch = {},
             modifier = Modifier.padding(24.dp))
     }
 }
