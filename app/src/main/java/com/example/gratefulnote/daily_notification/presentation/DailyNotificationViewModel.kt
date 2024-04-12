@@ -30,7 +30,7 @@ class DailyNotificationViewModel @Inject constructor(
                 onDismissTimePickerDialog()
             DailyNotificationEvent.OnLoadListNotification ->
                 loadListNotification()
-            DailyNotificationEvent.OnBackPressWhenMultiSelectModeActivated ->
+            DailyNotificationEvent.OnCancelMultiSelectMode ->
                 disableMultiSelectMode()
             DailyNotificationEvent.OnConfirmDeleteDialog ->
                 deleteSelectedItems()
@@ -46,6 +46,8 @@ class DailyNotificationViewModel @Inject constructor(
                 onClickItemWhenSelectModeActivated(event.dailyNotification)
             is DailyNotificationEvent.OnToogleSwithListItem ->
                 updateDailyNotificationIsEnabled(event.dailyNotification)
+            DailyNotificationEvent.OnDoneShowOrUnshowMultiSelectToolbar ->
+                doneShowOrUnshowMultiSelectModeToolbar()
 
         }
     }
@@ -74,6 +76,7 @@ class DailyNotificationViewModel @Inject constructor(
         _state.update { it.copy(
             listDailyNotification = uncheckedList,
             isMultiSelectModeActivated = false,
+            multiSelectMenuState = MultiSelectToolbarMenuState.UNSHOW,
         ) }
     }
 
@@ -143,6 +146,7 @@ class DailyNotificationViewModel @Inject constructor(
             it.copy(
                 isMultiSelectModeActivated = true,
                 listDailyNotification = newListData,
+                multiSelectMenuState = MultiSelectToolbarMenuState.SHOW
             )
         }
     }
@@ -212,6 +216,12 @@ class DailyNotificationViewModel @Inject constructor(
             }
         }
     }
+
+    private fun doneShowOrUnshowMultiSelectModeToolbar(){
+        _state.update {
+            it.copy(multiSelectMenuState = MultiSelectToolbarMenuState.DO_NOTHING)
+        }
+    }
 }
 
 data class DailyNotificationState(
@@ -220,16 +230,22 @@ data class DailyNotificationState(
     val openTimePickerDialog : Boolean = false,
     val openConfirmDeleteDialog : Boolean = false,
     val isMultiSelectModeActivated : Boolean = false,
+    val multiSelectMenuState : MultiSelectToolbarMenuState = MultiSelectToolbarMenuState.DO_NOTHING
 )
+
+enum class MultiSelectToolbarMenuState {
+    DO_NOTHING, SHOW, UNSHOW
+}
 
 sealed class DailyNotificationEvent {
     data object OnOpenTimePickerDialog : DailyNotificationEvent()
     data object OnDismissTimePickerDialog : DailyNotificationEvent()
     data object OnLoadListNotification : DailyNotificationEvent()
-    data object OnBackPressWhenMultiSelectModeActivated : DailyNotificationEvent()
+    data object OnCancelMultiSelectMode : DailyNotificationEvent()
     data object OnClickTrashButton : DailyNotificationEvent()
     data object OnConfirmDeleteDialog : DailyNotificationEvent()
     data object OnDismissDeleteDialog : DailyNotificationEvent()
+    data object OnDoneShowOrUnshowMultiSelectToolbar : DailyNotificationEvent()
     class OnCreateNewDailyNotification(val minute : Int, val hour : Int) : DailyNotificationEvent()
     class OnLongClickDailyNotificationCard(val dailyNotification: DailyNotificationEntity) : DailyNotificationEvent()
     class OnClickItemWhenMultiSelectModeActivated(val dailyNotification : DailyNotificationUiModel) : DailyNotificationEvent()

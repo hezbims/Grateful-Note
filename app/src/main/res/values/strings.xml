@@ -85,4 +85,6 @@
     <string name="confirm_add_save_request_key">ConfirmAddSaveRequestKey</string>
     <string name="confirm_add_save_value_key">ConfirmAddSaveValueKey</string>
     <string name="invalid_file_name">(invalid)</string>
+    <string name="unselect_all">Unselect All</string>
+    <string name="daily_reminder_fragment_title">Daily Reminder</string>
 </resources>

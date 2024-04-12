@@ -2,23 +2,33 @@ package com.example.gratefulnote.daily_notification.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,11 +39,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gratefulnote.R
 import com.example.gratefulnote.daily_notification.presentation.components.ComposeTimePickerDialog
 import com.example.gratefulnote.daily_notification.presentation.components.ConfirmDeleteDailyNotificationsDialog
 import com.example.gratefulnote.daily_notification.presentation.components.DailyNotificationCard
@@ -56,6 +72,65 @@ class DailyNotificationFragment : Fragment() {
                 DailyNotificationScreen(
                     viewModel = viewModel,
                 )
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            val menuProvider = object : MenuProvider {
+                override fun onMenuItemSelected(menuItem: MenuItem) =
+                    when (menuItem.itemId) {
+                        android.R.id.home -> {
+                            if (viewModel.state.value.isMultiSelectModeActivated){
+                                viewModel.onEvent(
+                                    DailyNotificationEvent.OnCancelMultiSelectMode
+                                )
+                                true
+                            }
+                            else
+                                false
+                        }
+                        else -> false
+                    }
+
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater){}
+            }
+
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED){
+                viewModel.state.collect { state ->
+                    when (state.multiSelectMenuState) {
+                        MultiSelectToolbarMenuState.SHOW -> {
+                            viewModel.onEvent(
+                                DailyNotificationEvent.OnDoneShowOrUnshowMultiSelectToolbar
+                            )
+                            requireActivity().addMenuProvider(
+                                menuProvider,
+                                viewLifecycleOwner,
+                                Lifecycle.State.RESUMED,
+                            )
+                            (requireActivity() as AppCompatActivity)
+                                .supportActionBar?.apply {
+                                    title = ""
+                                    setHomeAsUpIndicator(R.drawable.ic_close)
+                                }
+                        }
+                        MultiSelectToolbarMenuState.UNSHOW -> {
+                            viewModel.onEvent(
+                                DailyNotificationEvent.OnDoneShowOrUnshowMultiSelectToolbar
+                            )
+                            requireActivity().removeMenuProvider(menuProvider)
+                            (requireActivity() as AppCompatActivity)
+                                .supportActionBar?.apply {
+                                    setTitle(R.string.daily_reminder_fragment_title)
+                                    setHomeAsUpIndicator(0)
+                                }
+                        }
+
+                        else -> {}
+                    }
+                }
             }
         }
     }
@@ -110,17 +185,43 @@ fun DailyNotificationScreen(
             }
         }
 
-        if (state.isMultiSelectModeActivated)
-            FloatingActionButton(
+        if (state.isMultiSelectModeActivated) {
+            val totalDeleteCandidate = remember(state.listDailyNotification) {
+                state.listDailyNotification.count {
+                    it.isSelectedForDeleteCandidate
+                }
+            }
+            val context = LocalContext.current
+
+            Button(
                 onClick = {
-                    onEvent(DailyNotificationEvent.OnClickTrashButton)
+                    if (totalDeleteCandidate > 0)
+                        onEvent(DailyNotificationEvent.OnClickTrashButton)
+                    else
+                        Toast.makeText(
+                            context,
+                            "Tolong pilih satu atau lebih item!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                 },
                 modifier = Modifier
                     .padding(all = 48.dp)
-                    .align(Alignment.BottomEnd)
+                    .align(Alignment.BottomCenter)
             ) {
-                Icon(Icons.Filled.DeleteOutline, contentDescription = "Hapus item dipilih")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(
+                        vertical = 8.dp,
+                    )
+                ) {
+                    Text(text = "Hapus Item ($totalDeleteCandidate)")
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Icon(Icons.Filled.DeleteOutline, contentDescription = "Hapus item dipilih")
+                }
             }
+        }
 
         else
             FloatingActionButton(
@@ -163,7 +264,7 @@ fun HandleCustomBackPress(
         coroutineScope.launch {
             awaitFrame()
             if (state.isMultiSelectModeActivated)
-                onEvent(DailyNotificationEvent.OnBackPressWhenMultiSelectModeActivated)
+                onEvent(DailyNotificationEvent.OnCancelMultiSelectMode)
             else
                 onBackPressedDispatcher?.onBackPressed()
 
