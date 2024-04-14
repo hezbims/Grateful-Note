@@ -81,7 +81,11 @@ class DailyNotificationViewModel @Inject constructor(
     }
 
     private fun deleteSelectedItems(){
-        _state.update { it.copy(openConfirmDeleteDialog = false) }
+        _state.update { it.copy(
+            openConfirmDeleteDialog = false,
+            isMultiSelectModeActivated = false,
+            multiSelectMenuState = MultiSelectToolbarMenuState.UNSHOW,
+        ) }
         viewModelScope.launch (Dispatchers.IO) {
             dailyNotificationManager.deleteDailyNotification(
                 _state.value.listDailyNotification

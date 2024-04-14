@@ -5,12 +5,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSetter
 import java.util.Calendar
 import java.util.Locale
 
-class DailyAlarmSetter(private val context: Context) {
+class DailyAlarmSetter(private val context: Context) : IDailyAlarmSetter {
     private val alarmManager = context.getSystemService(AlarmManager::class.java) as AlarmManager
-    fun enableDailyAlarm(
+    override fun enableDailyAlarm(
         hour: Int,
         minute: Int,
         id: Int,
@@ -43,7 +44,7 @@ class DailyAlarmSetter(private val context: Context) {
         )
     }
 
-    fun disableDailyAlarm(
+    override fun disableDailyAlarm(
         id: Int,
     ){
         val pendingIntent = PendingIntent.getBroadcast(
