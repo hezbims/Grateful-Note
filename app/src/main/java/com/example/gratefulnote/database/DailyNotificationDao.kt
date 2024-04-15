@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DailyNotificationDao {
@@ -18,10 +17,10 @@ interface DailyNotificationDao {
     @Update
     suspend fun update(vararg dailyNotification: DailyNotificationEntity)
 
-    @Query("SELECT * FROM daily_notification_table")
-    fun getAllDailyNotification() : Flow<List<DailyNotificationEntity>>
+    @Query("SELECT * FROM ${DailyNotificationEntity.tableName}")
+    suspend fun getAllDailyNotification() : List<DailyNotificationEntity>
 
-    @Query("SELECT * FROM daily_notification_table WHERE id = :id")
+    @Query("SELECT * FROM ${DailyNotificationEntity.tableName} WHERE id = :id")
     suspend fun getDailyNotification(id: Int) : DailyNotificationEntity?
 
     suspend fun updateAndGetADailyNotification(

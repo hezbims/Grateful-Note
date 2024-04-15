@@ -4,9 +4,7 @@ import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.daily_notification.domain.repository.IDailyNotificationRepository
 import com.example.gratefulnote.database.DailyNotificationDao
 import com.example.gratefulnote.database.DailyNotificationEntity
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 
 class DailyNotificationRepository(
     private val dao : DailyNotificationDao
@@ -49,17 +47,9 @@ class DailyNotificationRepository(
         emit(ResponseWrapper.ResponseSucceed())
     }
 
-    override fun getAllDailyNotification() = flow<ResponseWrapper<List<DailyNotificationEntity>>> {
+    override fun getAllDailyNotification() = flow {
         emit(ResponseWrapper.ResponseLoading())
-        dao.getAllDailyNotification()
-            .map {
-                ResponseWrapper.ResponseSucceed(it)
-            }
-            .catch { t ->
-                emit(ResponseWrapper.ResponseError(t))
-            }
-            .collect {
-                emit(it)
-            }
+        val listDailyNotification = dao.getAllDailyNotification()
+        emit(ResponseWrapper.ResponseSucceed(data = listDailyNotification))
     }
 }

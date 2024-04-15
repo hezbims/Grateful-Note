@@ -5,9 +5,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.DrawerActions
-import androidx.test.espresso.contrib.DrawerMatchers.isClosed
+import androidx.test.espresso.contrib.DrawerMatchers
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
@@ -82,16 +82,6 @@ class MainHomeRobot {
         return this
     }
 
-    fun toBackupRestore() : MainHomeRobot{
-        onView(withId(R.id.drawer_layout))
-            .check(matches(isClosed(Gravity.LEFT)))
-            .perform(DrawerActions.open())
-        onView(withId(R.id.backupRestoreFragment))
-            .perform(click())
-
-        return this
-    }
-
     fun deleteNthPositiveEmotion(index : Int) : MainHomeRobot{
         onView(withId(R.id.recyclerView))
             .perform(
@@ -105,5 +95,30 @@ class MainHomeRobot {
 
         return this
     }
+
+    val navBar = MainNavBarRobot()
+    inner class MainNavBarRobot {
+        fun toBackupRestore() : MainHomeRobot{
+            onView(withId(R.id.drawer_layout))
+                .check(ViewAssertions.matches(DrawerMatchers.isClosed(Gravity.LEFT)))
+                .perform(DrawerActions.open())
+            onView(withId(R.id.backupRestoreFragment))
+                .perform(click())
+
+            return this@MainHomeRobot
+        }
+
+        fun toDailyReminder() : MainHomeRobot {
+            onView(withId(R.id.drawer_layout))
+                .check(ViewAssertions.matches(DrawerMatchers.isClosed(Gravity.LEFT)))
+                .perform(DrawerActions.open())
+            onView(withId(R.id.notificationSettingsFragment))
+                .perform(click())
+
+            return this@MainHomeRobot
+        }
+    }
+
+
 
 }

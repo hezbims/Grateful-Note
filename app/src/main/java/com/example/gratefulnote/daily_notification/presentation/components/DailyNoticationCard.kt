@@ -16,10 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gratefulnote.daily_notification.presentation.DailyNotificationUiModel
+import com.example.gratefulnote.daily_notification.test_tag.DailyNotificationTestTag
 import com.example.gratefulnote.database.DailyNotificationEntity
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -33,10 +35,12 @@ fun DailyNotificationCard(
 ){
     val data = dailyNotificationUiModel.data
     Card(
-        modifier = Modifier.combinedClickable(
-            onClick = onClickWhenSelectModeActivated ?: {},
-            onLongClick = onLongClick
-        )
+        modifier = Modifier
+            .combinedClickable(
+                onClick = onClickWhenSelectModeActivated ?: {},
+                onLongClick = onLongClick
+            )
+            .testTag(DailyNotificationTestTag.listItemCard)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -62,7 +66,9 @@ fun DailyNotificationCard(
                 Switch(
                     checked = data.isEnabled,
                     onCheckedChange = onToogleSwitch,
-                    modifier = Modifier.scale(0.8f)
+                    modifier = Modifier
+                        .scale(0.8f)
+                        .testTag(DailyNotificationTestTag.listItemSwitch)
                 )
         }
     }

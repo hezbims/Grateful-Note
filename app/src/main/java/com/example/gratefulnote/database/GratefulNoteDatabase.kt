@@ -10,9 +10,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 val MIGRATION_1_2 : Migration by lazy {
     object : Migration(1 , 2){
-        override fun migrate(database: SupportSQLiteDatabase) {
+        override fun migrate(db: SupportSQLiteDatabase) {
             val allPositiveEmotions = mutableListOf<PositiveEmotion>()
-            with(database.query("SELECT * FROM positive_emotion_table")){
+            with(db.query("SELECT * FROM positive_emotion_table")){
                 while (moveToNext()) {
                     val date = getString(3).split('/').map { it.toInt() }
                     allPositiveEmotions.add(
@@ -28,7 +28,7 @@ val MIGRATION_1_2 : Migration by lazy {
                     )
                 }
             }
-            with(database) {
+            with(db) {
                 execSQL("CREATE TABLE IF NOT EXISTS backup (" +
                         "type TEXT NOT NULL, " +
                         "what TEXT NOT NULL, " +
@@ -64,9 +64,9 @@ val MIGRATION_1_2 : Migration by lazy {
 }
 
 val MIGRATION_2_3 = object : Migration(2 , 3){
-    override fun migrate(database: SupportSQLiteDatabase) {
+    override fun migrate(db: SupportSQLiteDatabase) {
         val allPositiveEmotions = mutableListOf<PositiveEmotion>()
-        with(database.query("SELECT * FROM positive_emotion_table")){
+        with(db.query("SELECT * FROM positive_emotion_table")){
             while(moveToNext())
                 allPositiveEmotions.add(
                     PositiveEmotion(
@@ -81,7 +81,7 @@ val MIGRATION_2_3 = object : Migration(2 , 3){
                 )
         }
 
-        with(database){
+        with(db){
             execSQL("""CREATE TABLE IF NOT EXISTS backup (
                 type TEXT NOT NULL, 
                 what TEXT NOT NULL, 

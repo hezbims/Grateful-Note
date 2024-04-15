@@ -91,6 +91,7 @@ class EndToEndTest {
     }
     private fun When_the_user_navigate_to_backup_screen() {
         mainHomeRobot
+            .navBar
             .toBackupRestore()
     }
     private fun And_the_user_create_a_new_backup() {
@@ -113,6 +114,7 @@ class EndToEndTest {
     }
     private fun And_the_user_restore_the_latest_backup(){
         mainHomeRobot
+            .navBar
             .toBackupRestore()
         backupRestoreRobot
             .restoreBackupFile("backup-khusus-test")
