@@ -1,20 +1,21 @@
 package com.example.gratefulnote.mainfragment
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.example.gratefulnote.database.PositiveEmotion
+import com.example.gratefulnote.database.PositiveEmotionDao
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MainViewModel(app : Application) : AndroidViewModel(app){
-    private val dao = GratefulNoteDatabase.getInstance(app.applicationContext)
-        .positiveEmotionDao
-
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val dao: PositiveEmotionDao
+) : ViewModel() {
     private var deletedItemId = 0L
     fun setDeletedItemId(id : Long){ deletedItemId = id }
     /* Menghapus item kalau tong sampah dipencet */
