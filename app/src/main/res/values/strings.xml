@@ -47,7 +47,7 @@
     <string name="clock_picker_minute_key">ClockPickerMinuteKey</string>
     <string name="clock_picker_clock_key">ClockPickerClockKey</string>
     <string name="belum_ada_data">Belum ada data</string>
-    <string name="filter">Filter</string>
+    <string name="filter_dialog_title">Filter</string>
     <string name="new_gratitude">New Gratitude</string>
     <string name="feedback">Feedback</string>
     <string name="terapkan">terapkan</string>
@@ -76,8 +76,6 @@
     <string name="valuekey_bundle_key">ValueKeyBundleKey</string>
     <string name="backup_restore_process_status">Sedang melakukan proses %1$s…</string>
     <string name="confirm_delete_message">Yakin ingin menghapus data?</string>
-    <string name="confirm_delete_request_key">ConfirmDeleteRequestKey</string>
-    <string name="confirm_delete_value_key">Confirm Delete Value Key</string>
     <string name="confirm_add_cancel_message">Yakin ingin membuang data?</string>
     <string name="confirm_add_cancel_request_key">ConfirmAddCancelRequestKey</string>
     <string name="confirm_add_cancel_value_key">ConfirmAddCancelValueKey</string>

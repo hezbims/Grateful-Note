@@ -1,12 +1,20 @@
 package com.example.gratefulnote.addgratitudefragment
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.gratefulnote.database.PositiveEmotion
 import com.example.gratefulnote.database.PositiveEmotionDao
-import kotlinx.coroutines.*
-import java.lang.IllegalArgumentException
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AddGratitudeViewModel(private val database : PositiveEmotionDao) : ViewModel() {
+@HiltViewModel
+class AddGratitudeViewModel
+    @Inject constructor(private val database : PositiveEmotionDao) : ViewModel() {
     fun insert(newData : PositiveEmotion){
         viewModelScope.launch(Dispatchers.IO) {
             database.insert(newData)
@@ -28,16 +36,5 @@ class AddGratitudeViewModel(private val database : PositiveEmotionDao) : ViewMod
     }
     fun doneNavigatingToHelp(){
         _navigateToHelp.value = false
-    }
-}
-
-class AddGratitudeViewModelFactory(private val dataSource : PositiveEmotionDao) :
-    ViewModelProvider.Factory {
-
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddGratitudeViewModel::class.java))
-            return AddGratitudeViewModel(dataSource) as T
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -1,20 +1,21 @@
 package com.example.gratefulnote.editpositiveemotion
 
-import android.app.Application
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.database.GratefulNoteDatabase
+import com.example.gratefulnote.database.PositiveEmotionDao
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class EditPositiveEmotionViewModel(
-    app : Application ,
-    currentPositiveEmotion : PositiveEmotion
-    ) : AndroidViewModel(app) {
-
-    private val dao = GratefulNoteDatabase.getInstance(app).positiveEmotionDao
-
+@HiltViewModel(assistedFactory = EditPositiveEmotionViewModel.Factory::class)
+class EditPositiveEmotionViewModel @AssistedInject constructor(
+    private val dao : PositiveEmotionDao,
+    @Assisted currentPositiveEmotion : PositiveEmotion
+) : ViewModel() {
     private var _currentPositiveEmotion = currentPositiveEmotion
     val currentPositiveEmotion : PositiveEmotion
         get() = _currentPositiveEmotion
@@ -26,30 +27,8 @@ class EditPositiveEmotionViewModel(
         }
     }
 
-    companion object{
-        fun getViewModel(fragment : Fragment) : EditPositiveEmotionViewModel{
-            val viewModelFactory = EditPositiveEmotionViewModelFactory(
-                fragment.requireActivity().application,
-                EditPositiveEmotionArgs.fromBundle(fragment.requireArguments()).currentPositiveEmotion
-            )
-
-            return ViewModelProvider(
-                fragment ,
-                viewModelFactory)[EditPositiveEmotionViewModel::class.java]
-        }
-    }
-
-}
-
-class EditPositiveEmotionViewModelFactory(
-    private val app : Application,
-    private val currentPositiveEmotion : PositiveEmotion
-    )
-    : ViewModelProvider.Factory {
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(EditPositiveEmotionViewModel::class.java))
-            return EditPositiveEmotionViewModel(app, currentPositiveEmotion) as T
-        throw IllegalArgumentException("Unknown ViewModel class")
+    @AssistedFactory
+    interface Factory {
+        fun create(currentPositiveEmotion: PositiveEmotion) : EditPositiveEmotionViewModel
     }
 }

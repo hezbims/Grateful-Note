@@ -75,9 +75,9 @@ class TestDeleteItemAlarmCanceled {
                         isEnabled = true,
                     )
                 )
-            dao.getAllDailyNotification().collect {
-                Log.e("qqq total daily notification" , it.count().toString())
-            }
+            val listDailyNotification = dao.getAllDailyNotification()
+
+            Log.e("qqq total daily notification" , "${listDailyNotification.count()}")
         }
     }
 

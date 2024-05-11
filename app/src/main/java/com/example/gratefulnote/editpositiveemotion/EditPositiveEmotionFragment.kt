@@ -7,20 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.gratefulnote.databinding.FragmentEditPositiveEmotionBinding
+import dagger.hilt.android.lifecycle.withCreationCallback
 
-class EditPositiveEmotion : Fragment() {
+class EditPositiveEmotionFragment : Fragment() {
     private lateinit var binding : FragmentEditPositiveEmotionBinding
 
-    private lateinit var viewModel: EditPositiveEmotionViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel = EditPositiveEmotionViewModel.getViewModel(this)
-
-    }
-
+    private val viewModel: EditPositiveEmotionViewModel by viewModels(
+        extrasProducer = {
+            defaultViewModelCreationExtras.withCreationCallback {
+                factory : EditPositiveEmotionViewModel.Factory ->
+                factory.create(
+                    EditPositiveEmotionFragmentArgs
+                        .fromBundle(requireArguments()).currentPositiveEmotion
+                )
+            }
+        }
+    )
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

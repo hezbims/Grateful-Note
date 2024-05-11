@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,7 @@ import com.example.gratefulnote.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
     private lateinit var binding : FragmentMainBinding
-    private lateinit var viewModel : MainViewModel
+    private val viewModel : MainViewModel by viewModels()
     private lateinit var adapter : MainRecyclerViewAdapter
 
     private lateinit var confirmDeleteDialog : ConfirmDialog
@@ -27,15 +28,11 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel = MainViewModel.getInstance(
-            requireActivity().application,
-            this
-        )
 
         confirmDeleteDialog = ConfirmDialog.getInstance(
             message = getString(R.string.confirm_delete_message),
-            requestKey = getString(R.string.confirm_delete_request_key),
-            valueKey = getString(R.string.confirm_delete_value_key),
+            requestKey = MainDialogKey.confirmDeleteRequest,
+            valueKey = MainDialogKey.confirmDeleteValue,
             requireContext()
         )
 
@@ -75,7 +72,6 @@ class MainFragment : Fragment() {
 
         setNavigateToAddGratitudeFragment()
         onChangeRecyclerViewData()
-        onChangeFilterData()
         setConfirmDeleteDialogResultListener()
 
         return binding.root
@@ -83,10 +79,12 @@ class MainFragment : Fragment() {
 
     private fun setConfirmDeleteDialogResultListener(){
         childFragmentManager.setFragmentResultListener(
-            getString(R.string.confirm_delete_request_key),
+            MainDialogKey.confirmDeleteRequest,
             this
         ){ _ , bundle ->
-            if (bundle.getBoolean(getString(R.string.confirm_delete_value_key)))
+            if (bundle.getBoolean(
+                MainDialogKey.confirmDeleteValue
+            ))
                 viewModel.delete()
         }
     }
@@ -122,13 +120,6 @@ class MainFragment : Fragment() {
                     View.GONE
         }
     }
-
-    private fun onChangeFilterData(){
-        viewModel.filterState.observe(viewLifecycleOwner){
-            viewModel.updateRecyclerViewData(it!!)
-        }
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main_options_menu , menu)

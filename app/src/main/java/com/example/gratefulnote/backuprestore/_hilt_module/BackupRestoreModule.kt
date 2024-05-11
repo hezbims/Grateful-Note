@@ -3,6 +3,7 @@ package com.example.gratefulnote.backuprestore._hilt_module
 import android.content.Context
 import com.example.gratefulnote.backuprestore.data.repository.BackupRestoreManager
 import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManager
+import com.example.gratefulnote.database.PositiveEmotionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 object BackupRestoreModule {
     @Provides
     fun provideBackupRestoreManager(
-        @ApplicationContext context : Context
+        @ApplicationContext context : Context,
+        dao : PositiveEmotionDao,
     ) : IBackupRestoreManager =
-        BackupRestoreManager(context)
+        BackupRestoreManager(
+            app = context,
+            dao = dao,
+        )
 }

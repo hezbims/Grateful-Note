@@ -1,22 +1,26 @@
 package com.example.gratefulnote.addgratitudefragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gratefulnote.R
 import com.example.gratefulnote.common.presentation.ConfirmDialog
 import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.example.gratefulnote.databinding.FragmentAddGratitudeBinding
 
 class AddGratitudeFragment : Fragment() {
 
-    private lateinit var viewModel : AddGratitudeViewModel
+    private val viewModel : AddGratitudeViewModel by viewModels()
     private lateinit var binding : FragmentAddGratitudeBinding
 
     private lateinit var cancelDialog : ConfirmDialog
@@ -50,7 +54,6 @@ class AddGratitudeFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_add_gratitude , container , false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModel = ViewModelProvider(this , getViewModelFactory())[AddGratitudeViewModel::class.java]
         binding.viewModel = viewModel
 
         setSpinner()
@@ -89,12 +92,6 @@ class AddGratitudeFragment : Fragment() {
             if (it == true)
                 findNavController().navigateUp()
         }
-    }
-
-    private fun getViewModelFactory() : AddGratitudeViewModelFactory {
-        val application = requireNotNull(this.activity).application
-        val dataSource = GratefulNoteDatabase.getInstance(application).positiveEmotionDao
-        return AddGratitudeViewModelFactory(dataSource)
     }
 
 

@@ -1,38 +1,34 @@
 package com.example.gratefulnote.mainfragment
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.example.gratefulnote.R
-import com.example.gratefulnote.database.PositiveEmotion
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.gratefulnote.database.GratefulNoteDatabase
+import com.example.gratefulnote.database.PositiveEmotion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(private val app : Application) : AndroidViewModel(app){
-    private val dataSource = GratefulNoteDatabase.getInstance(app.applicationContext)
+class MainViewModel(app : Application) : AndroidViewModel(app){
+    private val dao = GratefulNoteDatabase.getInstance(app.applicationContext)
         .positiveEmotionDao
-
-    val typeOfPositiveEmotion : Array<String> =
-                arrayOf(getString(R.string.semua)) +
-                app.applicationContext
-                .resources
-                .getStringArray(R.array.type_of_positive_emotion_array)
 
     private var deletedItemId = 0L
     fun setDeletedItemId(id : Long){ deletedItemId = id }
     /* Menghapus item kalau tong sampah dipencet */
     fun delete(){
         viewModelScope.launch(Dispatchers.IO) {
-            dataSource.delete(deletedItemId)
+            dao.delete(deletedItemId)
             clickEdit = true
-            updateRecyclerViewData(_filterState.value!!)
+            fetchRecyclerViewDataWithCurrentFilterState()
         }
     }
 
     fun normalUpdate(positiveEmotion: PositiveEmotion){
         viewModelScope.launch(Dispatchers.IO) {
-            dataSource.normalUpdate(positiveEmotion)
+            dao.normalUpdate(positiveEmotion)
         }
     }
 
@@ -55,71 +51,31 @@ class MainViewModel(private val app : Application) : AndroidViewModel(app){
     val recyclerViewData : LiveData<List<PositiveEmotion>?>
         get() = _recyclerViewData
 
-    fun updateRecyclerViewData(currentFilterState : FilterState){
+    private fun fetchRecyclerViewDataWithCurrentFilterState(){
         viewModelScope.launch(Dispatchers.Main) {
             _recyclerViewData.value =
                 withContext(Dispatchers.IO) {
-                    val nextData = currentFilterState.let {
-                        dataSource.getAllPositiveEmotion(
-                            month = it.selectedMonth,
-                            year = it.selectedYear,
-                            type = it.selectedPositiveEmotion,
-                            onlyFavorite = it.onlyFavorite
-                        )
-                    }
-
-
-                    if (_filterState.value!!.switchState)
-                        nextData.reversed()
-                    else nextData
+                    dao.getAllPositiveEmotion(
+                        month = _filterState.selectedMonth,
+                        year = _filterState.selectedYear,
+                        type = _filterState.positiveEmotionType,
+                        onlyFavorite = _filterState.isOnlyFavorite,
+                        isSortedLatest = _filterState.isSortedLatest,
+                    )
                 }
         }
     }
 
-    private val _filterState = MutableLiveData(FilterState(app.applicationContext))
-    val filterState : LiveData<FilterState>
+    private var _filterState = FilterState()
+    val filterState : FilterState
         get() = _filterState
     var clickEdit = false
 
-    fun setFilterData(month : String , year : String ,
-        typeOfPE : String , newSwitchState : Boolean , onlyFavorite : Boolean){
-        _filterState.value = FilterState.getInstance(
-            newSelectedMonth = month ,
-            newSelectedYear = year ,
-            newSelectedPositiveEmotion = typeOfPE ,
-            newSwitchState = newSwitchState ,
-            newOnlyFavorite = onlyFavorite,
-            context = app.applicationContext
-        )
+    fun setNewFilterData(newFilterState: FilterState){
+        _filterState = newFilterState
+        fetchRecyclerViewDataWithCurrentFilterState()
     }
 
 
-    private val listOfYear = dataSource.getAllYear()
-    val listOfYearToString = listOfYear.map{intYear ->
-        listOf(getString(R.string.semua)) + intYear.map{it.toString()}
-    }
-
-
-
-    fun getString(id : Int) =
-        app.applicationContext.getString(id)
-
-    companion object{
-        fun getInstance(app: Application, owner: ViewModelStoreOwner) =
-            ViewModelProvider(
-                owner , MainViewModelFactory(app)
-            )[MainViewModel::class.java]
-    }
-}
-
-class MainViewModelFactory(
-    private val app: Application
-    ) : ViewModelProvider.Factory {
-
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java))
-            return MainViewModel(app) as T
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
+    val listOfYear = dao.getAllYear()
 }

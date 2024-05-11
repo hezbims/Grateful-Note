@@ -22,7 +22,7 @@ object FakeBackupRestoreModule {
     fun provideBackupRestoreManager() : IBackupRestoreManager{
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
-        return object : BackupRestoreManager(app = appContext){
+        return object : BackupRestoreManager(app = appContext, dao = ){
             override fun persistUriReadAndWritePermission(uri: Uri) {}
             override fun getBackupDirectoryFrom(uri: Uri): DocumentFile {
                 return DocumentFile.fromFile(File(uri.path!!))

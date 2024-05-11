@@ -14,7 +14,7 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".editpositiveemotion.EditPositiveEmotion"
+            tools:context=".editpositiveemotion.EditPositiveEmotionFragment"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout

@@ -14,21 +14,57 @@ interface PositiveEmotionDao {
 
     @Insert
     suspend fun insertAll(positiveEmotions : List<PositiveEmotion>)
+    @Query("""
+        SELECT *
+        FROM positive_emotion_table
+        WHERE (:month IS NULL OR month = :month) AND
+              (:year IS NULL OR year = :year) AND
+              (:type IS NULL OR type = :type) AND
+              (:onlyFavorite = 0 OR isFavorite = 1)
+        ORDER BY  year, month, day
+    """)
+    suspend fun getAllPositiveEmotionFromOldest(
+        month : Int? = null,
+        year : Int? = null,
+        type : String? =  null,
+        onlyFavorite : Boolean = false,
+    ) : List<PositiveEmotion>
 
     @Query("""
         SELECT *
         FROM positive_emotion_table
-        WHERE (:month = 0 OR month = :month) AND
+        WHERE (:month IS NULL OR month = :month) AND
               (:year IS NULL OR year = :year) AND
-              (:type = 'Semua' OR type = :type) AND
+              (:type IS NULL OR type = :type) AND
               (:onlyFavorite = 0 OR isFavorite = 1)
+        ORDER BY  year DESC, month DESC, day DESC
     """)
-    suspend fun getAllPositiveEmotion(
-        month : Int  = 0,
+    suspend fun getAllPositiveEmotionFromNewest(
+        month : Int? = null,
         year : Int? = null,
-        type : String =  "Semua",
-        onlyFavorite : Boolean = false
+        type : String? =  null,
+        onlyFavorite : Boolean = false,
     ) : List<PositiveEmotion>
+    suspend fun getAllPositiveEmotion(
+        month : Int? = null,
+        year : Int? = null,
+        type : String? =  null,
+        onlyFavorite : Boolean = false,
+        isSortedLatest : Boolean = true,
+    ) : List<PositiveEmotion> = if (isSortedLatest)
+            getAllPositiveEmotionFromNewest(
+                month = month,
+                year = year,
+                type = type,
+                onlyFavorite = onlyFavorite
+        )
+        else
+            getAllPositiveEmotionFromOldest(
+                month = month,
+                year = year,
+                type = type,
+                onlyFavorite = onlyFavorite
+            )
 
     @Query("SELECT DISTINCT year FROM positive_emotion_table")
     fun getAllYear() : LiveData<List<Int>>
