@@ -1,4 +1,4 @@
-package com.example.gratefulnote.steps_definition
+package com.example.gratefulnote.test_scenario
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents

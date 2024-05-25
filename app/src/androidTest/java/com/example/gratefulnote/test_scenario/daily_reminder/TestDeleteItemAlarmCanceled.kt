@@ -1,10 +1,7 @@
-package com.example.gratefulnote.steps_definition.daily_reminder
+package com.example.gratefulnote.test_scenario.daily_reminder
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.daily_notification._hilt_module.DailyAlarmSetterModule
 import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSetter
@@ -24,6 +21,7 @@ import org.junit.Test
 import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import javax.inject.Inject
 
 @HiltAndroidTest
 @UninstallModules(DailyAlarmSetterModule::class)
@@ -31,6 +29,9 @@ class TestDeleteItemAlarmCanceled {
 
     @BindValue
     val mockDailyAlarmSetter: IDailyAlarmSetter = mock(IDailyAlarmSetter::class.java)
+
+    @Inject
+    lateinit var db : GratefulNoteDatabase
 
     @Test
     fun test(){
@@ -42,6 +43,7 @@ class TestDeleteItemAlarmCanceled {
     }
     @Before
     fun prepare(){
+        hiltRule.inject()
         `when`(mockDailyAlarmSetter.disableDailyAlarm(
             any(Int::class.java))
         ).then {
@@ -60,11 +62,7 @@ class TestDeleteItemAlarmCanceled {
     }
 
     private fun prepareDatabaseData(){
-        val app : Context = ApplicationProvider.getApplicationContext()
-
-        val dao = Room.inMemoryDatabaseBuilder(app, GratefulNoteDatabase::class.java)
-            .build()
-            .dailyNotificationDao
+        val dao = db.dailyNotificationDao
         runTest {
             for (i in 1..3)
                 dao.insert(
@@ -75,9 +73,6 @@ class TestDeleteItemAlarmCanceled {
                         isEnabled = true,
                     )
                 )
-            val listDailyNotification = dao.getAllDailyNotification()
-
-            Log.e("qqq total daily notification" , "${listDailyNotification.count()}")
         }
     }
 
