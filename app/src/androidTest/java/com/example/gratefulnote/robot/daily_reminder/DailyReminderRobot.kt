@@ -18,16 +18,15 @@ class DailyReminderRobot(
     ) : DailyReminderRobot {
         val paddedHour = hour.toString().padStart(2 , '0')
         val paddedMinute = minute.toString().padStart(2 , '0')
+        val clockString = "$paddedHour:$paddedMinute"
 
-        val targetListItemCard = hasAnyDescendant(
-            hasText("$paddedHour:$paddedMinute")
-        ) and hasTestTag(DailyNotificationTestTag.listItemCard)
+        val targetListItemCard = hasAnyDescendant(hasText(clockString)) and
+            hasTestTag(DailyNotificationTestTag.listItemCard)
+        composeRule.onNode(targetListItemCard, useUnmergedTree = true).assertExists()
 
         val allListItemSwitches = hasTestTag(DailyNotificationTestTag.listItemSwitch)
-
         val targetSwitch = allListItemSwitches and hasParent(targetListItemCard)
-
-        composeRule.onNode(targetSwitch).performClick()
+        composeRule.onNode(targetSwitch, useUnmergedTree = true).performClick()
 
         return this
     }

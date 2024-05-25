@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @UninstallModules(DailyAlarmSetterModule::class)
-class TestDeleteItemAlarmCanceled {
+class TestDisableItemAlarmCanceled {
 
     @BindValue
     val mockDailyAlarmSetter: IDailyAlarmSetter = mock(IDailyAlarmSetter::class.java)
