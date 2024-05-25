@@ -3,43 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/main_crud_graph">
 
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.gratefulnote.mainfragment.MainFragment"
-        android:label="Main Menu"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_mainFragment_to_addGratetitudeFragment"
-            app:destination="@id/addGratetitudeFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_editPositiveEmotion"
-            app:destination="@id/editPositiveEmotion" />
-    </fragment>
-    <fragment
-        android:id="@+id/addGratetitudeFragment"
-        android:name="com.example.gratefulnote.addgratitudefragment.AddGratitudeFragment"
-        android:label="Add New Positive Emotion"
-        tools:layout="@layout/fragment_add_gratitude">
-        <action
-            android:id="@+id/action_addGratetitudeFragment_to_topeHelpFragment"
-            app:destination="@id/topeHelpFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/topeHelpFragment"
-        android:name="com.example.gratefulnote.topehelpfragment.TopeHelpFragment"
-        android:label="Positive Emotion Info"
-        tools:layout="@layout/fragment_tope_help" />
-    <fragment
-        android:id="@+id/editPositiveEmotion"
-        android:name="com.example.gratefulnote.editpositiveemotion.EditPositiveEmotionFragment"
-        android:label="@string/edit"
-        tools:layout="@layout/fragment_edit_positive_emotion">
-        <argument
-            android:name="currentPositiveEmotion"
-            app:argType="com.example.gratefulnote.database.PositiveEmotion" />
-    </fragment>
     <fragment
         android:id="@+id/notificationSettingsFragment"
         android:name="com.example.gratefulnote.daily_notification.presentation.DailyNotificationFragment"
@@ -48,4 +13,50 @@
         android:id="@+id/backupRestoreFragment"
         android:name="com.example.gratefulnote.backuprestore.presentation.main_screen.MainScreenViewFragment"
         android:label="Backup and Restore" />
+    <navigation android:id="@+id/main_crud_graph"
+        app:startDestination="@id/mainFragment">
+        <fragment
+            android:id="@+id/mainFragment"
+            android:name="com.example.gratefulnote.mainfragment.MainFragment"
+            android:label="Main Menu"
+            tools:layout="@layout/fragment_main">
+            <action
+                android:id="@+id/action_mainFragment_to_addGratetitudeFragment"
+                app:destination="@id/addGratetitudeFragment" />
+            <action
+                android:id="@+id/action_mainFragment_to_editPositiveEmotion"
+                app:destination="@id/editPositiveEmotion" />
+            <action
+                android:id="@+id/action_mainFragment_to_filterDialogFragment"
+                app:destination="@id/filterDialogFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/editPositiveEmotion"
+            android:name="com.example.gratefulnote.editpositiveemotion.EditPositiveEmotionFragment"
+            android:label="@string/edit"
+            tools:layout="@layout/fragment_edit_positive_emotion">
+            <argument
+                android:name="currentPositiveEmotion"
+                app:argType="com.example.gratefulnote.database.PositiveEmotion" />
+        </fragment>
+        <fragment
+            android:id="@+id/addGratetitudeFragment"
+            android:name="com.example.gratefulnote.addgratitudefragment.AddGratitudeFragment"
+            android:label="Add New Positive Emotion"
+            tools:layout="@layout/fragment_add_gratitude">
+            <action
+                android:id="@+id/action_addGratetitudeFragment_to_topeHelpFragment"
+                app:destination="@id/topeHelpFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/topeHelpFragment"
+            android:name="com.example.gratefulnote.topehelpfragment.TopeHelpFragment"
+            android:label="Positive Emotion Info"
+            tools:layout="@layout/fragment_tope_help" />
+        <dialog
+            android:id="@+id/filterDialogFragment"
+            android:name="com.example.gratefulnote.mainfragment.FilterDialogFragment"
+            tools:layout="@layout/fragment_filter_dialog"
+            android:label="FilterDialogFragment" />
+    </navigation>
 </navigation>

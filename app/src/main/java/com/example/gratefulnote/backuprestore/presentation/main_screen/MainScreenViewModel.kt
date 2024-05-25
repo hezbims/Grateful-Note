@@ -36,12 +36,12 @@ class MainScreenViewModel @Inject constructor(
                 }
             is BackupRestoreStateEvent.RequestDismissNewBackupDialog -> {
                 // enggak bisa ngedismiss dialog pas lagi proses loading
-                if (event.dialogStatus !is ResponseWrapper.ResponseLoading<*>) {
+                if (event.dialogStatus !is ResponseWrapper.Loading<*>) {
                     _backupRestoreState.update {
                         it.copy(openCreateNewBackupDialog = false)
                     }
                     // Kalo berhasil, load files ulang agar menampilkan hasil bakup terbaru juga
-                    if (event.dialogStatus is ResponseWrapper.ResponseSucceed<*>)
+                    if (event.dialogStatus is ResponseWrapper.Succeed<*>)
                         reloadFiles()
                 }
             }
@@ -52,7 +52,7 @@ class MainScreenViewModel @Inject constructor(
             is BackupRestoreStateEvent.OpenRestoreConfirmationDialog ->
                 _backupRestoreState.update { it.copy(restoreFile = event.file) }
             is BackupRestoreStateEvent.RequestDismissRestoreConfirmationDialog ->
-                if (event.dialogStatus !is ResponseWrapper.ResponseLoading)
+                if (event.dialogStatus !is ResponseWrapper.Loading)
                     _backupRestoreState.update { it.copy(restoreFile = null) }
 
         }
@@ -62,7 +62,7 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             backupRestoreManager.getPersistedBackupUri().collect { response ->
                 _backupRestoreState.update { it.copy(pathLocation = response) }
-                if (response is ResponseWrapper.ResponseSucceed && response.data != null)
+                if (response is ResponseWrapper.Succeed && response.data != null)
                     reloadFiles()
             }
 
@@ -72,8 +72,8 @@ class MainScreenViewModel @Inject constructor(
     private fun updatePathLocation(newUri: Uri){
         _backupRestoreState.update {
             it.copy(
-                pathLocation = ResponseWrapper.ResponseSucceed(newUri),
-                backupFiles = ResponseWrapper.ResponseLoading()
+                pathLocation = ResponseWrapper.Succeed(newUri),
+                backupFiles = ResponseWrapper.Loading()
             )
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -85,7 +85,7 @@ class MainScreenViewModel @Inject constructor(
     private fun reloadFiles(){
         viewModelScope.launch(Dispatchers.IO) {
             val uri =
-                (_backupRestoreState.value.pathLocation as ResponseWrapper.ResponseSucceed).data!!
+                (_backupRestoreState.value.pathLocation as ResponseWrapper.Succeed).data!!
             backupRestoreManager.loadListOfFilesFrom(uri).collect { result ->
                 _backupRestoreState.update {
                     it.copy(backupFiles = result)
@@ -97,7 +97,7 @@ class MainScreenViewModel @Inject constructor(
     private fun deleteFile(deletedFile: DocumentFileDto){
         viewModelScope.launch(Dispatchers.IO) {
             backupRestoreManager.deleteDocumentFile(deletedFile.file).collect {result ->
-                if (result is ResponseWrapper.ResponseSucceed)
+                if (result is ResponseWrapper.Succeed)
                     reloadFiles()
             }
         }
@@ -105,7 +105,7 @@ class MainScreenViewModel @Inject constructor(
 }
 
 data class BackupRestoreViewState(
-    val pathLocation : ResponseWrapper<Uri> = ResponseWrapper.ResponseLoading(),
+    val pathLocation : ResponseWrapper<Uri> = ResponseWrapper.Loading(),
     val backupFiles : ResponseWrapper<List<DocumentFileDto>>? = null,
     val openCreateNewBackupDialog : Boolean = false,
     val restoreFile : DocumentFileDto? = null,

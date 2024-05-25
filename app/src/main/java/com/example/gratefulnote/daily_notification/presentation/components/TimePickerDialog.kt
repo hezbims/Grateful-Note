@@ -46,7 +46,7 @@ fun ComposeTimePickerDialog(
                         Text(text = "Batal")
                     }
 
-                    if (state.createNewDailyNotificationStatus is ResponseWrapper.ResponseLoading)
+                    if (state.createNewDailyNotificationStatus is ResponseWrapper.Loading)
                         CircularProgressIndicator()
                     else
                         TextButton(onClick = {

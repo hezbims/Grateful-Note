@@ -60,7 +60,7 @@ fun NewBackupDialogSetup(
     val currentContext = LocalContext.current
 
     LaunchedEffect(state.createNewBackupStatus){
-        if (state.createNewBackupStatus is ResponseWrapper.ResponseSucceed<*>) {
+        if (state.createNewBackupStatus is ResponseWrapper.Succeed<*>) {
             Toast.makeText(
                 currentContext,
                 "Berhasil membuat backup baru!" ,
@@ -107,9 +107,9 @@ private fun NewBackupDialog(
                     onValueChange = { newValue ->
                         onEvent(CreateNewBackupDialogEvent.OnChangeBackupTitle(newValue))
                     },
-                    isError = state.createNewBackupStatus is ResponseWrapper.ResponseError,
+                    isError = state.createNewBackupStatus is ResponseWrapper.Error,
                     supportingText = {
-                        if (state.createNewBackupStatus is ResponseWrapper.ResponseError)
+                        if (state.createNewBackupStatus is ResponseWrapper.Error)
                             Text(
                                 text = state.createNewBackupStatus.exception?.message ?:
                                     "Unknown Error occured",
@@ -142,7 +142,7 @@ private fun NewBackupDialog(
                     Spacer(modifier = Modifier.width(24.dp))
 
 
-                    if (state.createNewBackupStatus !is ResponseWrapper.ResponseLoading)
+                    if (state.createNewBackupStatus !is ResponseWrapper.Loading)
                         TextButton(
                             colors = ButtonDefaults.textButtonColors(
                                 contentColor = Color.Blue

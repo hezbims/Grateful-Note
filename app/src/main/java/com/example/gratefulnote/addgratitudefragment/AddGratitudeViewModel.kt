@@ -14,10 +14,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddGratitudeViewModel
-    @Inject constructor(private val database : PositiveEmotionDao) : ViewModel() {
+    @Inject constructor(private val dao : PositiveEmotionDao) : ViewModel() {
     fun insert(newData : PositiveEmotion){
         viewModelScope.launch(Dispatchers.IO) {
-            database.insert(newData)
+            dao.insert(newData)
             withContext(Dispatchers.Main) {
                 _backToMain.value = true
             }

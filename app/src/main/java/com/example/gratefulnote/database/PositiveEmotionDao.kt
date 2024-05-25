@@ -10,7 +10,7 @@ import androidx.room.Update
 @Dao
 interface PositiveEmotionDao {
     @Insert
-    suspend fun insert(positiveEmotion : PositiveEmotion)
+    suspend fun insert(positiveEmotion : PositiveEmotion) : Long
 
     @Insert
     suspend fun insertAll(positiveEmotions : List<PositiveEmotion>)
@@ -20,8 +20,8 @@ interface PositiveEmotionDao {
         WHERE (:month IS NULL OR month = :month) AND
               (:year IS NULL OR year = :year) AND
               (:type IS NULL OR type = :type) AND
-              (:onlyFavorite = 0 OR isFavorite = 1)
-        ORDER BY  year, month, day
+              (:onlyFavorite = 0 OR is_favorite = 1)
+        ORDER BY  updated_at
     """)
     suspend fun getAllPositiveEmotionFromOldest(
         month : Int? = null,
@@ -36,8 +36,8 @@ interface PositiveEmotionDao {
         WHERE (:month IS NULL OR month = :month) AND
               (:year IS NULL OR year = :year) AND
               (:type IS NULL OR type = :type) AND
-              (:onlyFavorite = 0 OR isFavorite = 1)
-        ORDER BY  year DESC, month DESC, day DESC
+              (:onlyFavorite = 0 OR is_favorite = 1)
+        ORDER BY  updated_at DESC
     """)
     suspend fun getAllPositiveEmotionFromNewest(
         month : Int? = null,

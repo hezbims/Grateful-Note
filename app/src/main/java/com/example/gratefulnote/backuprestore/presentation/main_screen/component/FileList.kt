@@ -23,7 +23,7 @@ fun FileList(
     modifier: Modifier = Modifier
 ){
     ResponseWrapperLoader(
-        response = state.backupFiles ?: ResponseWrapper.ResponseLoading(),
+        response = state.backupFiles ?: ResponseWrapper.Loading(),
         onRetry = {
             onEvent(BackupRestoreStateEvent.ReloadBackupFileList)
         },

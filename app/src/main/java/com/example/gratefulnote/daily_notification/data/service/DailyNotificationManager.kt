@@ -21,7 +21,7 @@ class DailyNotificationManager (
     override suspend fun addNewDailyNotification(hour: Int, minute: Int) =
         database.withTransaction {
             repository.createNewDailyNotification(hour = hour, minute = minute).onEach { response ->
-                if (response is ResponseWrapper.ResponseSucceed)
+                if (response is ResponseWrapper.Succeed)
                     dailyAlarmSetter.enableDailyAlarm(
                         hour = hour,
                         minute = minute,
@@ -35,7 +35,7 @@ class DailyNotificationManager (
             repository.updateDailyNotification(
                 dailyNotification.copy(isEnabled = !dailyNotification.isEnabled)
             ).onEach { response ->
-                if (response is ResponseWrapper.ResponseSucceed) {
+                if (response is ResponseWrapper.Succeed) {
                     // dari nyala ke mati, maka cancel alarm
                     if (dailyNotification.isEnabled)
                         dailyAlarmSetter.disableDailyAlarm(dailyNotification.id)
@@ -55,7 +55,7 @@ class DailyNotificationManager (
         repository.deleteDailyNotification(
             *dailyNotifications.toTypedArray()
         ).onEach { response ->
-            if (response is ResponseWrapper.ResponseSucceed)
+            if (response is ResponseWrapper.Succeed)
                 for (dailyNotification in dailyNotifications)
                     dailyAlarmSetter.disableDailyAlarm(dailyNotification.id)
         }

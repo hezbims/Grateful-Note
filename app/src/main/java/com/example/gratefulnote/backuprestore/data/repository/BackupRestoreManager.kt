@@ -20,12 +20,12 @@ open class BackupRestoreManager (
 ) : IBackupRestoreManager {
     private val contentResolver = app.contentResolver
     override fun loadListOfFilesFrom(uri: Uri) = flow {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
 
         try {
-            emit(ResponseWrapper.ResponseSucceed(getListOfFilesFrom(uri)))
+            emit(ResponseWrapper.Succeed(getListOfFilesFrom(uri)))
         } catch (e : Throwable){
-            emit(ResponseWrapper.ResponseError(e))
+            emit(ResponseWrapper.Error(e))
         }
     }
 
@@ -50,17 +50,17 @@ open class BackupRestoreManager (
         DocumentFile.fromTreeUri(app , uri)!!
 
     override fun deleteDocumentFile(file: DocumentFile) = flow<ResponseWrapper<Nothing>>{
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
         emit(
             if (file.delete())
-                ResponseWrapper.ResponseSucceed()
+                ResponseWrapper.Succeed()
             else
-                ResponseWrapper.ResponseError()
+                ResponseWrapper.Error()
         )
     }
 
     override fun restoreFile(file : DocumentFile) = flow<ResponseWrapper<Nothing>> {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
 
         try {
             val fileContent = contentResolver.openInputStream(file.uri)!!.use { inputStream ->
@@ -72,9 +72,9 @@ open class BackupRestoreManager (
             val positiveEmotionList = Gson().fromJson(fileContent, type) as List<PositiveEmotion>
 
             dao.restorePositiveEmotions(positiveEmotionList)
-            emit(ResponseWrapper.ResponseSucceed())
+            emit(ResponseWrapper.Succeed())
         } catch (e : Exception){
-            emit(ResponseWrapper.ResponseError(e))
+            emit(ResponseWrapper.Error(e))
         }
     }
 
@@ -82,12 +82,12 @@ open class BackupRestoreManager (
         Constants.SharedPrefs.BackupRestore.name, Context.MODE_PRIVATE,
     )
     override fun getPersistedBackupUri() = flow<ResponseWrapper<Uri>> {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
         val uriString = sharedPref.getString("backup_restore_uri", null)
         if (uriString == null)
-            emit(ResponseWrapper.ResponseSucceed(null))
+            emit(ResponseWrapper.Succeed(null))
         else
-            emit(ResponseWrapper.ResponseSucceed(Uri.parse(uriString)))
+            emit(ResponseWrapper.Succeed(Uri.parse(uriString)))
     }
 
     override suspend fun persistBackupPath(uri : Uri): ResponseWrapper<Nothing> {
@@ -96,9 +96,9 @@ open class BackupRestoreManager (
             sharedPref.edit()
                 .putString("backup_restore_uri", uri.toString())
                 .apply()
-            ResponseWrapper.ResponseSucceed()
+            ResponseWrapper.Succeed()
         } catch (e : Exception){
-            ResponseWrapper.ResponseError(e)
+            ResponseWrapper.Error(e)
         }
     }
 
@@ -112,7 +112,7 @@ open class BackupRestoreManager (
         backupDirectoryUri: Uri,
         backupTitle: String
     ) = flow<ResponseWrapper<Nothing>> {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
 
         var file: DocumentFile? = null
         try {
@@ -139,11 +139,11 @@ open class BackupRestoreManager (
                 )
             }
 
-            emit(ResponseWrapper.ResponseSucceed())
+            emit(ResponseWrapper.Succeed())
 
         } catch (e : Exception){
             file?.delete()
-            emit(ResponseWrapper.ResponseError(e))
+            emit(ResponseWrapper.Error(e))
         }
     }
 }

@@ -111,7 +111,7 @@ private fun PreviewLoading(){
     Surface {
         BackupRestoreFragmentBody(
             state = BackupRestoreViewState(
-                pathLocation = ResponseWrapper.ResponseSucceed(
+                pathLocation = ResponseWrapper.Succeed(
                     Uri.parse("http://www.google.com.v.abc.pens.ac.id.google.com")
                 )
             ),
@@ -127,10 +127,10 @@ private fun PreviewWithListFile(){
     Surface {
         BackupRestoreFragmentBody(
             state = BackupRestoreViewState(
-                pathLocation = ResponseWrapper.ResponseSucceed(
+                pathLocation = ResponseWrapper.Succeed(
                     Uri.parse("Download/Backups"),
                 ),
-                backupFiles = ResponseWrapper.ResponseSucceed(
+                backupFiles = ResponseWrapper.Succeed(
                     data = List(100){ index ->
                         DocumentFileDto(
                             file = DocumentFile.fromSingleUri(

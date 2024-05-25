@@ -8,19 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.navigation.navGraphViewModels
 import com.example.gratefulnote.R
 import com.example.gratefulnote.databinding.FragmentFilterDialogBinding
 
 class FilterDialogFragment : DialogFragment() {
-    private val viewModel : MainViewModel by viewModels()
+    private val viewModel : MainViewModel by navGraphViewModels(R.id.main_crud_graph)
     private lateinit var binding: FragmentFilterDialogBinding
     private lateinit var semuaText : String
     private lateinit var monthList : Array<String>
     private lateinit var positiveEmotionTypeList : Array<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentFilterDialogBinding.inflate(layoutInflater)
         semuaText = getString(R.string.semua)
 
         requireContext().resources.apply {
@@ -80,6 +79,8 @@ class FilterDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        binding = FragmentFilterDialogBinding.inflate(layoutInflater)
+
         return AlertDialog.Builder(
             requireActivity()
         )

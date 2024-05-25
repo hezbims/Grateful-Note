@@ -21,7 +21,7 @@ import org.hamcrest.CoreMatchers.allOf
 
 class MainHomeRobot {
     fun toAddGratitude() : MainHomeRobot {
-        onView(withId(R.id.add_new_gratitude))
+        onView(withId(R.id.add_new_gratitude_action_icon))
             .perform(click())
         return this
     }

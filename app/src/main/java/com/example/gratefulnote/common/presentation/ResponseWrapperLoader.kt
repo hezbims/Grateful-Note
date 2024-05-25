@@ -24,7 +24,7 @@ fun <T>ResponseWrapperLoader(
         modifier = modifier,
     ) {
         when (response){
-            is ResponseWrapper.ResponseLoading ->
+            is ResponseWrapper.Loading ->
                 Column {
                     CircularProgressIndicator()
                     if (response.message != null)
@@ -33,13 +33,13 @@ fun <T>ResponseWrapperLoader(
                             text = response.message
                         )
                 }
-            is ResponseWrapper.ResponseError ->
+            is ResponseWrapper.Error ->
                 DefaultErrorDisplay(
                     exception = response.exception,
                     onRefresh = onRetry
                 )
 
-            is ResponseWrapper.ResponseSucceed -> {
+            is ResponseWrapper.Succeed -> {
                 content(response.data)
             }
         }
@@ -51,7 +51,7 @@ fun <T>ResponseWrapperLoader(
 private fun PreviewLoading(){
     Surface {
         ResponseWrapperLoader<String>(
-            response = ResponseWrapper.ResponseLoading(),
+            response = ResponseWrapper.Loading(),
             onRetry = {  },
             content = { _  -> }
         )

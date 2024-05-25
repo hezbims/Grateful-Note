@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object GratefulNoteAppModule {
+object GratefulNoteDatabaseModule {
     @Provides
     @Singleton
     fun provideGratefulNoteDatabase(@ApplicationContext app: Context) =

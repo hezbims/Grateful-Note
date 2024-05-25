@@ -96,7 +96,7 @@ class DailyNotificationViewModel @Inject constructor(
                         it.data
                     }
             ).collect {
-                if (it !is ResponseWrapper.ResponseLoading)
+                if (it !is ResponseWrapper.Loading)
                     loadListNotification()
             }
         }
@@ -159,10 +159,10 @@ class DailyNotificationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dailyNotificationManager.getAllDailyNotification()
             .filter {
-                it is ResponseWrapper.ResponseSucceed
+                it is ResponseWrapper.Succeed
             }
             .map { response ->
-                (response as ResponseWrapper.ResponseSucceed).data!!
+                (response as ResponseWrapper.Succeed).data!!
                     .map {
                         DailyNotificationUiModel(
                             data = it,
@@ -185,7 +185,7 @@ class DailyNotificationViewModel @Inject constructor(
                 // TODO : Tambahin method untuk ngedisplay toast kalo ada response error
                 _state.update {
                     val openTimePickerDialog =
-                        if (response is ResponseWrapper.ResponseSucceed) false
+                        if (response is ResponseWrapper.Succeed) false
                         else _state.value.openTimePickerDialog
 
                     it.copy(
@@ -193,7 +193,7 @@ class DailyNotificationViewModel @Inject constructor(
                         openTimePickerDialog = openTimePickerDialog,
                     )
                 }
-                if (response is ResponseWrapper.ResponseSucceed)
+                if (response is ResponseWrapper.Succeed)
                     loadListNotification()
             }
         }
@@ -202,7 +202,7 @@ class DailyNotificationViewModel @Inject constructor(
     private fun updateDailyNotificationIsEnabled(dailyNotification: DailyNotificationEntity){
         viewModelScope.launch(Dispatchers.IO) {
             dailyNotificationManager.toogleDailyNotification(dailyNotification).collect { response ->
-                if (response is ResponseWrapper.ResponseSucceed) {
+                if (response is ResponseWrapper.Succeed) {
                     val updatedDataId = dailyNotification.id
 
                     val newList = _state.value.listDailyNotification.map {
@@ -230,7 +230,7 @@ class DailyNotificationViewModel @Inject constructor(
 
 data class DailyNotificationState(
     val listDailyNotification : List<DailyNotificationUiModel> = emptyList(),
-    val createNewDailyNotificationStatus : ResponseWrapper<Int> = ResponseWrapper.ResponseSucceed(),
+    val createNewDailyNotificationStatus : ResponseWrapper<Int> = ResponseWrapper.Succeed(),
     val openTimePickerDialog : Boolean = false,
     val openConfirmDeleteDialog : Boolean = false,
     val isMultiSelectModeActivated : Boolean = false,

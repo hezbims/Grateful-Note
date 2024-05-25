@@ -13,7 +13,7 @@ class DailyNotificationRepository(
         hour: Int,
         minute: Int
     ) = flow {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
 
         try {
             val id = dao.insert(
@@ -23,33 +23,33 @@ class DailyNotificationRepository(
                     minute = minute,
                 )
             ).single().toInt()
-            emit(ResponseWrapper.ResponseSucceed(id))
+            emit(ResponseWrapper.Succeed(id))
         } catch (t : Throwable){
-            emit(ResponseWrapper.ResponseError(t))
+            emit(ResponseWrapper.Error(t))
         }
     }
 
     override fun updateDailyNotification(
         dailyNotification: DailyNotificationEntity
     ) = flow {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
         dao.update(dailyNotification)
 
         val newData = dao.getDailyNotification(dailyNotification.id)
-        emit(ResponseWrapper.ResponseSucceed(data = newData))
+        emit(ResponseWrapper.Succeed(data = newData))
     }
 
     override fun deleteDailyNotification(
         vararg dailyNotifications: DailyNotificationEntity
     ) = flow<ResponseWrapper<Nothing>> {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
         dao.delete(*dailyNotifications)
-        emit(ResponseWrapper.ResponseSucceed())
+        emit(ResponseWrapper.Succeed())
     }
 
     override fun getAllDailyNotification() = flow {
-        emit(ResponseWrapper.ResponseLoading())
+        emit(ResponseWrapper.Loading())
         val listDailyNotification = dao.getAllDailyNotification()
-        emit(ResponseWrapper.ResponseSucceed(data = listDailyNotification))
+        emit(ResponseWrapper.Succeed(data = listDailyNotification))
     }
 }

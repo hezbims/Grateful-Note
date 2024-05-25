@@ -1,6 +1,7 @@
 package com.example.gratefulnote.mainfragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,21 +10,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gratefulnote.R
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.common.presentation.ConfirmDialog
 import com.example.gratefulnote.databinding.FragmentMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
+    private val viewModel : MainViewModel by hiltNavGraphViewModels(R.id.main_crud_graph)
     private lateinit var binding : FragmentMainBinding
-    private val viewModel : MainViewModel by viewModels()
-    private lateinit var adapter : MainRecyclerViewAdapter
-
+    private lateinit var recyclerViewAdapter : MainRecyclerViewAdapter
     private lateinit var confirmDeleteDialog : ConfirmDialog
-    private val filterDialog = FilterDialogFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +33,8 @@ class MainFragment : Fragment() {
 
         confirmDeleteDialog = ConfirmDialog.getInstance(
             message = getString(R.string.confirm_delete_message),
-            requestKey = MainDialogKey.confirmDeleteRequest,
-            valueKey = MainDialogKey.confirmDeleteValue,
+            requestKey = MainFragmentKey.confirmDeleteRequest,
+            valueKey = MainFragmentKey.confirmDeleteValue,
             requireContext()
         )
 
@@ -45,18 +47,16 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_main , container , false)
 
-        binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         // RecyclerView Adapter
-        adapter = MainRecyclerViewAdapter(PositiveAdapterClickListener(
+        recyclerViewAdapter = MainRecyclerViewAdapter(PositiveAdapterClickListener(
             delete = {itemId ->
                 viewModel.setDeletedItemId(itemId)
                 if (!confirmDeleteDialog.isAdded)
                     confirmDeleteDialog.show(childFragmentManager , "TAG")
             },
             edit = {currentPositiveEmotion ->
-                viewModel.clickEdit = true
                 val action = MainFragmentDirections
                     .actionMainFragmentToEditPositiveEmotion(currentPositiveEmotion)
                 findNavController().navigate(action)
@@ -65,13 +65,13 @@ class MainFragment : Fragment() {
                 viewModel.normalUpdate(it)
             }
         ))
-        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        recyclerViewAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = recyclerViewAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        setNavigateToAddGratitudeFragment()
-        onChangeRecyclerViewData()
+        observeNavigationState()
+        observeListData()
         setConfirmDeleteDialogResultListener()
 
         return binding.root
@@ -79,45 +79,64 @@ class MainFragment : Fragment() {
 
     private fun setConfirmDeleteDialogResultListener(){
         childFragmentManager.setFragmentResultListener(
-            MainDialogKey.confirmDeleteRequest,
+            MainFragmentKey.confirmDeleteRequest,
             this
         ){ _ , bundle ->
             if (bundle.getBoolean(
-                MainDialogKey.confirmDeleteValue
+                MainFragmentKey.confirmDeleteValue
             ))
                 viewModel.delete()
         }
     }
 
-    private fun setNavigateToAddGratitudeFragment(){
-        viewModel.eventMoveToAddGratitude.observe(viewLifecycleOwner){
-            if (it == true){
-                findNavController().navigate(R.id.action_mainFragment_to_addGratetitudeFragment)
-                viewModel.doneNavigating()
+    private fun observeNavigationState(){
+        val navController = findNavController()
+        viewModel.navEvent.observe(viewLifecycleOwner){ navEvent ->
+            Log.e("qqq" , "${navEvent?.javaClass?.name}")
+
+            if (navEvent == null)
+                return@observe
+            viewModel.doneNavigating()
+
+            val nextDestination = when (navEvent) {
+                MainFragmentNavEvent.MoveToAddGratitude ->
+                    MainFragmentDirections.actionMainFragmentToAddGratetitudeFragment()
+                MainFragmentNavEvent.OpenFilterDialog ->
+                    MainFragmentDirections.actionMainFragmentToFilterDialogFragment()
+            }
+            if (navController.currentDestination?.id == R.id.mainFragment) {
+                navController.navigate(nextDestination)
             }
         }
     }
 
-    private fun onChangeRecyclerViewData(){
-        viewModel.recyclerViewData.observe(viewLifecycleOwner){ positiveEmotionList ->
-            adapter.submitList(positiveEmotionList) {
-                if (!viewModel.clickEdit) {
-                    binding.recyclerView.scrollToPosition(0)
+    private fun observeListData(){
+        viewModel.recyclerViewData.observe(viewLifecycleOwner){ recyclerViewState ->
+            val recyclerViewDataResponse = recyclerViewState.listDataResponse
+            when (recyclerViewDataResponse) {
+                is ResponseWrapper.Succeed -> {
+                    val listData = recyclerViewDataResponse.data!!
+
+                    binding.emptyTextIndicator.visibility =
+                        if (listData.isEmpty())
+                            View.VISIBLE
+                        else
+                            View.GONE
+                    binding.loadingIndicator.visibility = View.GONE
+
+                    recyclerViewAdapter.submitList(listData){
+                        // callback setelah submit berhasil
+                        if (recyclerViewState.scrollToPositionZero){
+                            binding.recyclerView.scrollToPosition(0)
+                            viewModel.doneScrollToPositionZero()
+                        }
+                    }
                 }
-                viewModel.clickEdit = false
+                is ResponseWrapper.Loading -> {
+                    binding.loadingIndicator.visibility = View.VISIBLE
+                }
+                else -> throw Exception("Ada kesalahan dalam program")
             }
-
-            binding.emptyTextIndicator.visibility =
-                if (positiveEmotionList?.isEmpty() == true)
-                    View.VISIBLE
-                else
-                    View.GONE
-
-            binding.loadingIndicator.visibility =
-                if (positiveEmotionList == null)
-                    View.VISIBLE
-                else
-                    View.GONE
         }
     }
 
@@ -126,15 +145,19 @@ class MainFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.recycler_view_filter) {
-            if (!filterDialog.isAdded) {
-                filterDialog.show(childFragmentManager, "TAG")
+        return when (item.itemId){
+            R.id.filter_list_positive_emotion_action_icon -> {
+                viewModel.onNavEvent(MainFragmentNavEvent.OpenFilterDialog)
+                true
             }
+            R.id.add_new_gratitude_action_icon -> {
+                viewModel.onNavEvent(MainFragmentNavEvent.MoveToAddGratitude)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        else if (item.itemId == R.id.add_new_gratitude)
-            viewModel.onClickAddNewGratitude()
-        return super.onOptionsItemSelected(item)
     }
 
 

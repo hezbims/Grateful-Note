@@ -80,8 +80,8 @@ class EndToEndTest {
     }
     private fun Then_the_second_positive_emotion_edited() {
         mainHomeRobot
-            .assertNthRecyclerViewTitle(itemIndex = 1, title= "title berubah")
-            .toEditGratitudeWithNthItem(index = 1)
+            .assertNthRecyclerViewTitle(itemIndex = 0, title= "title berubah")
+            .toEditGratitudeWithNthItem(index = 0)
         editScreenRobot
             .assertFieldValue(
                 what = "title berubah",
@@ -107,9 +107,10 @@ class EndToEndTest {
         backupRestoreRobot.pressBack()
     }
     private fun And_the_user_delete_the_second_positive_emotion(){
+
         mainHomeRobot
             .deleteNthPositiveEmotion(1)
-            .assertNthRecyclerViewTitle(0 , "saya senang")
+            .assertNthRecyclerViewTitle(0 , "title berubah")
             .assertNthRecyclerViewTitle(1 , "Saya terhibur")
     }
     private fun And_the_user_restore_the_latest_backup(){
@@ -119,7 +120,6 @@ class EndToEndTest {
         backupRestoreRobot
             .restoreBackupFile("backup-khusus-test")
             .pressBack()
-
     }
     private fun Then_there_will_be_three_positive_emotion(){
 

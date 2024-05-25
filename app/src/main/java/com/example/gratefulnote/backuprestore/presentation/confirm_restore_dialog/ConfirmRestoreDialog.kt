@@ -56,7 +56,7 @@ private fun ConfirmRestoreDialog(
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
     LaunchedEffect(state.restoreState){
-        if (state.restoreState is ResponseWrapper.ResponseSucceed){
+        if (state.restoreState is ResponseWrapper.Succeed){
             Toast.makeText(
                 context,
                 "Berhasil merestore file!",
@@ -64,7 +64,7 @@ private fun ConfirmRestoreDialog(
             ).show()
             onDismissRequest(state.restoreState)
         }
-        else if (state.restoreState is ResponseWrapper.ResponseError){
+        else if (state.restoreState is ResponseWrapper.Error){
             Toast.makeText(
                 context,
                 "Gagal merestore file : ${
@@ -120,7 +120,7 @@ private fun ConfirmRestoreDialog(
             }
         },
         confirmButton = {
-            if (state.restoreState is ResponseWrapper.ResponseLoading)
+            if (state.restoreState is ResponseWrapper.Loading)
                 CircularProgressIndicator()
             else
                 TextButton(onClick = {
