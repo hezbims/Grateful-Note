@@ -1,6 +1,5 @@
 package com.example.gratefulnote.test_scenario.daily_reminder
 
-import android.util.Log
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.daily_notification._hilt_module.DailyAlarmSetterModule
@@ -20,6 +19,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import javax.inject.Inject
 
@@ -38,24 +40,24 @@ class TestDisableItemAlarmCanceled {
         mainHomeRobot.navBar.toDailyReminder()
         dailyReminderRobot
             .waitUntilItemCount(3)
-            .toogleSwitchOnNthItem(minute = 2, hour = 2)
-            .toogleSwitchOnNthItem(minute = 3, hour = 3)
+            .toogleSwitchOnNthItem(minute = 2, hour = 2) // Disable switch on position-2
+            .toogleSwitchOnNthItem(minute = 3, hour = 3) // Disable switch on position 3
+
+        verify(mockDailyAlarmSetter, never()).disableDailyAlarm(1)
+        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(2)
+        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(3)
     }
     @Before
     fun prepare(){
         hiltRule.inject()
         `when`(mockDailyAlarmSetter.disableDailyAlarm(
             any(Int::class.java))
-        ).then {
-            Log.e("qqq", "daily alarm setter mock")
-        }
+        ).then {}
         `when`(mockDailyAlarmSetter.enableDailyAlarm(
             any(Int::class.java),
             any(Int::class.java),
             any(Int::class.java)
-        )).then {
-            Log.e("qqq", "daily alarm setter mock")
-        }
+        )).then {}
 
         appDataManager.clearAppData()
         prepareDatabaseData()
