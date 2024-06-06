@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.never
-import org.mockito.Mockito.only
+import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import javax.inject.Inject
 
@@ -35,9 +35,9 @@ class TestDeleteEnabledItemAlarmCanceled {
             .performDeleteSelectedItem()
             .waitUntilItemCount(1)
 
-        verify(mockDailyAlarmSetter, only()).disableDailyAlarm(1)
+        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(1)
         verify(mockDailyAlarmSetter, never()).disableDailyAlarm(2)
-        verify(mockDailyAlarmSetter, only()).disableDailyAlarm(3)
+        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(3)
     }
 
     @Before
