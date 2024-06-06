@@ -86,4 +86,6 @@
     <string name="unselect_all">Unselect All</string>
     <string name="daily_reminder_fragment_title">Daily Reminder</string>
     <string name="hapus_item_dipilih">Hapus item dipilih</string>
+    <string name="buat_daily_notification_baru">Buat daily notification baru</string>
+    <string name="konfirmasi">Konfirmasi</string>
 </resources>

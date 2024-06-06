@@ -14,11 +14,15 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.gratefulnote.R
 import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.daily_notification.presentation.DailyNotificationEvent
 import com.example.gratefulnote.daily_notification.presentation.DailyNotificationState
+import com.example.gratefulnote.daily_notification.test_tag.DailyNotificationTestTag
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +38,10 @@ fun ComposeTimePickerDialog(
             Column(
                 modifier = Modifier.padding(24.dp)
             ) {
-                TimePicker(state = timePickerState)
+                TimePicker(
+                    state = timePickerState,
+                    modifier = Modifier.testTag(DailyNotificationTestTag.timePicker)
+                )
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -56,7 +63,7 @@ fun ComposeTimePickerDialog(
                                 )
                             )
                         }) {
-                            Text(text = "Konfirmasi")
+                            Text(text = stringResource(R.string.konfirmasi))
                         }
                 }
             }

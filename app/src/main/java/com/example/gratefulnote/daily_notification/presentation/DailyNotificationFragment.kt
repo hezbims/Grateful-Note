@@ -236,7 +236,7 @@ fun DailyNotificationScreen(
                     .padding(all = 48.dp)
                     .align(Alignment.BottomEnd)
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Buat daily notification baru")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.buat_daily_notification_baru))
             }
     }
 

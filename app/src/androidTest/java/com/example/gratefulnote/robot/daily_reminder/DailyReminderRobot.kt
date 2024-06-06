@@ -76,7 +76,29 @@ class DailyReminderRobot(
         composeRule.waitUntilNodeCount(
             matcher = hasTestTag(DailyNotificationTestTag.listItemCard) and isNotCached(),
             count = expectedCount,
+            timeoutMillis = 5000
         )
+
+        return this
+    }
+
+    fun addNewAlarm(hour: Int, minute: Int) : DailyReminderRobot {
+        if (minute < 0 || minute > 11){
+            throw Exception("Nilai menit harus berada di antara 0-11")
+        }
+
+        composeRule.onNodeWithContentDescription(
+            appContext.getString(R.string.buat_daily_notification_baru)
+        ).performClick()
+
+        // ngeprint semantics tree dalam pemilihan hour di time picker
+        // composeRule.onNodeWithTag(DailyNotificationTestTag.timePicker).printToLog("qqq")
+        composeRule.onNodeWithContentDescription("$hour hours").performClick()
+
+        // ngeprint semantics tree dalam pemilihan menit di time picker
+        // composeRule.onNodeWithTag(DailyNotificationTestTag.timePicker).printToLog("qqq")
+        composeRule.onNodeWithContentDescription("${minute * 5} minutes").performClick()
+        composeRule.onNodeWithText(appContext.getString(R.string.konfirmasi)).performClick()
 
         return this
     }
