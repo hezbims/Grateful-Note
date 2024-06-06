@@ -1,4 +1,4 @@
-package com.example.gratefulnote.robot._common.utils
+package com.example.gratefulnote.robot._common.node_interaction
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

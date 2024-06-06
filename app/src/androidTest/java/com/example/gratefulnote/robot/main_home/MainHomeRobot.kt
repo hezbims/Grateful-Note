@@ -15,8 +15,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
-import com.example.gratefulnote.robot._common.utils.ClickRecyclerViewItemAction
-import com.example.gratefulnote.robot._common.utils.WaitViewUntil
+import com.example.gratefulnote.robot._common.node_interaction.ClickRecyclerViewItemAction
+import com.example.gratefulnote.robot._common.node_interaction.WaitViewUntil
 import org.hamcrest.CoreMatchers.allOf
 
 class MainHomeRobot {

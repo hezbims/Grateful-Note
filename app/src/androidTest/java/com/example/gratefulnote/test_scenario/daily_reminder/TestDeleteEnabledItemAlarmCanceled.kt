@@ -14,40 +14,46 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.never
-import org.mockito.Mockito.times
+import org.mockito.Mockito.only
 import org.mockito.Mockito.verify
 import javax.inject.Inject
 
+/**
+ * Memastikan kalau sebuah item daily notification sebelumnya dalam kondisi enable,
+ * apabila item tersebut di delete,
+ * maka alarm yang ada di dalam item tersebut akan tercancel
+ */
 @HiltAndroidTest
-class TestDisableItemAlarmCanceled {
+class TestDeleteEnabledItemAlarmCanceled {
+    @Test
+    fun begin(){
+        mainHomeRobot.navBar.toDailyReminder()
+        dailyReminderRobot
+            .waitUntilItemCount(3)
+            .longClickOnListItem(hour = 1, minute = 1)
+            .toogleCheckbox(hour = 3, minute = 3)
+            .performDeleteSelectedItem()
+            .waitUntilItemCount(1)
+
+        verify(mockDailyAlarmSetter, only()).disableDailyAlarm(1)
+        verify(mockDailyAlarmSetter, never()).disableDailyAlarm(2)
+        verify(mockDailyAlarmSetter, only()).disableDailyAlarm(3)
+    }
+
+    @Before
+    fun before(){
+        hiltRule.inject()
+        appDataManager.clearAppData()
+        db.prepareThreeEnabledDailyNotifications()
+    }
+
     @Inject
     lateinit var mockDailyAlarmSetter: IDailyAlarmSetter
     @Inject
     lateinit var db : GratefulNoteDatabase
 
-    @Test
-    fun test(){
-        mainHomeRobot.navBar.toDailyReminder()
-        dailyReminderRobot
-            .waitUntilItemCount(3)
-            .toogleSwitchOnNthItem(minute = 2, hour = 2) // Disable switch on position-2
-            .toogleSwitchOnNthItem(minute = 3, hour = 3) // Disable switch on position 3
-
-        verify(mockDailyAlarmSetter, never()).disableDailyAlarm(1)
-        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(2)
-        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(3)
-    }
-    @Before
-    fun prepare(){
-        hiltRule.inject()
-
-        appDataManager.clearAppData()
-        db.prepareThreeEnabledDailyNotifications()
-    }
-
     @get:Rule(order = 1)
     var hiltRule = HiltAndroidRule(this)
-
     @get:Rule(order = 2)
     val composeRule = createAndroidComposeRule<MainActivity>()
 

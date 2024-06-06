@@ -85,4 +85,5 @@
     <string name="invalid_file_name">(invalid)</string>
     <string name="unselect_all">Unselect All</string>
     <string name="daily_reminder_fragment_title">Daily Reminder</string>
+    <string name="hapus_item_dipilih">Hapus item dipilih</string>
 </resources>

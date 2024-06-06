@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -218,7 +219,10 @@ fun DailyNotificationScreen(
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    Icon(Icons.Filled.DeleteOutline, contentDescription = "Hapus item dipilih")
+                    Icon(
+                        Icons.Filled.DeleteOutline,
+                        contentDescription = stringResource(R.string.hapus_item_dipilih)
+                    )
                 }
             }
         }

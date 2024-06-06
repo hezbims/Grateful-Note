@@ -3,7 +3,7 @@ package com.example.gratefulnote.test_scenario
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents
 import com.example.gratefulnote.MainActivity
-import com.example.gratefulnote.robot._common.utils.TestAppDataManager
+import com.example.gratefulnote.robot._common.node_interaction.TestAppDataManager
 import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
 import com.example.gratefulnote.robot.backup_and_restore.BackupRestoreRobot
 import com.example.gratefulnote.robot.edit_screen.EditScreenRobot

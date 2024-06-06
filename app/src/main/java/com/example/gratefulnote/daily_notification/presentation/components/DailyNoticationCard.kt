@@ -60,6 +60,8 @@ fun DailyNotificationCard(
                 Checkbox(
                     checked = dailyNotificationUiModel.isSelectedForDeleteCandidate,
                     onCheckedChange = null,
+                    modifier = Modifier
+                        .testTag(DailyNotificationTestTag.listItemSwitch),
                 )
 
             else
