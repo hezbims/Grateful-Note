@@ -7,55 +7,58 @@ import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.example.gratefulnote.robot._common.node_interaction.TestAppDataManager
 import com.example.gratefulnote.robot.daily_reminder.DailyReminderRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
-import com.example.gratefulnote.test_scenario.daily_reminder.test_data.prepareThreeEnabledDailyNotifications
+import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDeleteEnabledItemAlarmCanceled
+import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDisableItemAlarmCanceled
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.never
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
 import javax.inject.Inject
 
-/**
- * Memastikan kalau sebuah item daily notification sebelumnya dalam kondisi enable,
- * apabila item tersebut di delete,
- * maka alarm yang ada di dalam item tersebut akan tercancel
- */
 @HiltAndroidTest
-class TestDeleteEnabledItemAlarmCanceled {
-    @Test
-    fun begin(){
-        mainHomeRobot.navBar.toDailyReminder()
-        dailyReminderRobot
-            .waitUntilItemCount(3)
-            .longClickOnListItem(hour = 1, minute = 1)
-            .toogleCheckbox(hour = 3, minute = 3)
-            .performDeleteSelectedItem()
-            .waitUntilItemCount(1)
+class DailyReminderScenario {
 
-        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(1)
-        verify(mockDailyAlarmSetter, never()).disableDailyAlarm(2)
-        verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(3)
+    /**
+     * memastikan kalau item dihapus,
+     * maka alarm nya akan tercancel
+     */
+    @Test
+    fun testDisableItemAlarmCanceled(){
+        TestDisableItemAlarmCanceled(
+            mockDailyAlarmSetter = mockDailyAlarmSetter,
+            db = db,
+            mainHomeRobot = mainHomeRobot,
+            dailyReminderRobot = dailyReminderRobot
+        ).begin()
+    }
+
+    @Test
+    fun testDeleteItemAlarmCanceled(){
+        TestDeleteEnabledItemAlarmCanceled(
+            dailyReminderRobot = dailyReminderRobot,
+            db = db,
+            mainHomeRobot = mainHomeRobot,
+            mockDailyAlarmSetter = mockDailyAlarmSetter,
+        ).begin()
     }
 
     @Before
-    fun before(){
+    fun prepare(){
         hiltRule.inject()
         appDataManager.clearAppData()
-        db.prepareThreeEnabledDailyNotifications()
     }
+
+    @get:Rule(order = 1)
+    var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 2)
+    val composeRule = createAndroidComposeRule<MainActivity>()
 
     @Inject
     lateinit var mockDailyAlarmSetter: IDailyAlarmSetter
     @Inject
     lateinit var db : GratefulNoteDatabase
-
-    @get:Rule(order = 1)
-    var hiltRule = HiltAndroidRule(this)
-    @get:Rule(order = 2)
-    val composeRule = createAndroidComposeRule<MainActivity>()
 
     private val appDataManager = TestAppDataManager()
     private val mainHomeRobot = MainHomeRobot()

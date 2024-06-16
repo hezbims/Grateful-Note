@@ -57,7 +57,8 @@ class DailyNotificationManager (
         ).onEach { response ->
             if (response is ResponseWrapper.Succeed)
                 for (dailyNotification in dailyNotifications)
-                    dailyAlarmSetter.disableDailyAlarm(dailyNotification.id)
+                    if (dailyNotification.isEnabled)
+                        dailyAlarmSetter.disableDailyAlarm(dailyNotification.id)
         }
 
     override fun getAllDailyNotification() =
