@@ -6,11 +6,11 @@ import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSet
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 object DailyAlarmSetterModule {
     @Provides
     fun provideDailyReminderAlarmSetter(

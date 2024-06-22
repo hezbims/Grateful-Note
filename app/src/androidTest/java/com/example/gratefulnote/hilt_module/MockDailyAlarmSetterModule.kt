@@ -29,5 +29,6 @@ object MockDailyAlarmSetterModule {
                     Mockito.any(Int::class.java)
                 )
             ).then {}
+            Mockito.`when`(this.canScheduleExactAlarm()).thenReturn(true)
         }
 }

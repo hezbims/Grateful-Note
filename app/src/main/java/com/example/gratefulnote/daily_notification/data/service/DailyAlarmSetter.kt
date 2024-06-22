@@ -9,6 +9,9 @@ import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSet
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * Berfungsi untuk meset dan meng-unset alarm dengan alarm manager
+ */
 class DailyAlarmSetter(private val context: Context) : IDailyAlarmSetter {
     private val alarmManager = context.getSystemService(AlarmManager::class.java) as AlarmManager
     override fun enableDailyAlarm(
@@ -55,4 +58,8 @@ class DailyAlarmSetter(private val context: Context) : IDailyAlarmSetter {
         )
         alarmManager.cancel(pendingIntent)
     }
+
+    override fun canScheduleExactAlarm() =
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+        alarmManager.canScheduleExactAlarms()
 }

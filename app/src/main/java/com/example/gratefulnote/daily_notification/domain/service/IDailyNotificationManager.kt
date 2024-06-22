@@ -9,4 +9,5 @@ interface IDailyNotificationManager {
     suspend fun toogleDailyNotification(dailyNotification: DailyNotificationEntity) : Flow<ResponseWrapper<DailyNotificationEntity>>
     suspend fun deleteDailyNotification(dailyNotifications: List<DailyNotificationEntity>) : Flow<ResponseWrapper<Nothing>>
     fun getAllDailyNotification() : Flow<ResponseWrapper<List<DailyNotificationEntity>>>
+    fun canScheduleDailyReminder() : Boolean
 }

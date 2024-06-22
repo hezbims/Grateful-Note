@@ -1,37 +1,37 @@
 package com.example.gratefulnote
 
-import android.app.AlarmManager
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.example.gratefulnote.daily_notification.domain.service.IDailyNotificationManager
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController : NavController
     private lateinit var drawerLayout : DrawerLayout
-    private lateinit var alarmManager: AlarmManager
+    @Inject lateinit var dailyNotificationManager: IDailyNotificationManager
     private lateinit var exactAlarmPermissionRequestLauncher : ActivityResultLauncher<Intent>
 
 
+    @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        alarmManager = getSystemService()!!
         drawerLayout = findViewById(R.id.drawer_layout)
         navController = findNavController(R.id.nav_host)
         exactAlarmPermissionRequestLauncher =  registerForActivityResult(
@@ -78,8 +78,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.notificationSettingsFragment -> {
                     // Untuk android dibawah S, kita udah langsung bisa ngegunain exact alarm
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                        !alarmManager.canScheduleExactAlarms()){
+                    if (!dailyNotificationManager.canScheduleDailyReminder()){
                         exactAlarmPermissionRequestLauncher.launch(
                             Intent(
                                 Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,

@@ -63,4 +63,6 @@ class DailyNotificationManager (
 
     override fun getAllDailyNotification() =
         repository.getAllDailyNotification()
+
+    override fun canScheduleDailyReminder() = dailyAlarmSetter.canScheduleExactAlarm()
 }
