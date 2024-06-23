@@ -5,8 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
-import com.example.gratefulnote.daily_notification.data.constant.DailyReminderExtraKey
+import com.example.gratefulnote.daily_notification.data.constant.DailyReminderKey
 import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSetter
 import java.util.Calendar
 import java.util.Locale
@@ -36,9 +35,10 @@ class DailyAlarmSetter(private val context: Context) : IDailyAlarmSetter {
             context,
             id,
             Intent(context, DailyNotificationBroadcastReceiver::class.java).apply {
-                putExtra(DailyReminderExtraKey.ID, id)
-                putExtra(DailyReminderExtraKey.HOUR_OF_DAY, hour)
-                putExtra(DailyReminderExtraKey.MINUTE, minute)
+                putExtra(DailyReminderKey.ID, id)
+                putExtra(DailyReminderKey.HOUR_OF_DAY, hour)
+                putExtra(DailyReminderKey.MINUTE, minute)
+                action = DailyReminderKey.ACTION
             },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -46,6 +46,7 @@ class DailyAlarmSetter(private val context: Context) : IDailyAlarmSetter {
         assert(
             Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
                 alarmManager.canScheduleExactAlarms())
+
 
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
@@ -72,9 +73,9 @@ class DailyAlarmSetter(private val context: Context) : IDailyAlarmSetter {
 
     fun enableDailyAlarm(intent: Intent){
         intent.let {
-            val hour = it.getIntExtra(DailyReminderExtraKey.HOUR_OF_DAY, -1)
-            val minute = it.getIntExtra(DailyReminderExtraKey.MINUTE, -1)
-            val id = it.getIntExtra(DailyReminderExtraKey.ID, -1)
+            val hour = it.getIntExtra(DailyReminderKey.HOUR_OF_DAY, -1)
+            val minute = it.getIntExtra(DailyReminderKey.MINUTE, -1)
+            val id = it.getIntExtra(DailyReminderKey.ID, -1)
 
             assert(hour >= 0 && minute >= 0 && id >= 0)
 
