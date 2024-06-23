@@ -8,10 +8,12 @@ import androidx.core.content.ContextCompat
 
 class DailyNotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context : Context, intent : Intent) {
+        val alarmSetter = DailyAlarmSetter(context)
+        alarmSetter.enableDailyAlarm(intent)
+
         val notificationManager = ContextCompat.getSystemService(context ,
                 NotificationManager::class.java
             ) as NotificationManager
         notificationManager.sendNotification(context)
     }
-
 }
