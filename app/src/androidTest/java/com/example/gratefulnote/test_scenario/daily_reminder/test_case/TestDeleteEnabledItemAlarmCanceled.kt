@@ -29,6 +29,7 @@ class TestDeleteEnabledItemAlarmCanceled(
             .toogleCheckbox(hour = 1, minute = 1)
             .performDeleteSelectedItem()
             .waitUntilItemCount(1)
+            .assertDailyReminderDisplayed(hour = 3, minute = 3, index = 0)
 
         verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(1)
         verify(mockDailyAlarmSetter, never()).disableDailyAlarm(2)

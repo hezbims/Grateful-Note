@@ -7,7 +7,8 @@ object DailyReminderTestData {
         DailyNotificationEntity(
             isEnabled = true,
             hour = it + 1,
-            minute = it + 1
+            minute = it + 1,
+            id = it + 1
         )
     }
 }

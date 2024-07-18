@@ -1,13 +1,16 @@
 package com.example.gratefulnote.robot.daily_reminder
 
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasParent
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
@@ -81,6 +84,13 @@ class DailyReminderRobot(
 
         return this
     }
+
+    fun assertDailyReminderDisplayed(hour : Int, minute : Int, index: Int){
+        composeRule.onNodeWithTag(DailyNotificationTestTag.listDailyNotificationLazyColumn)
+            .onChildren()[index]
+            .assertTextEquals(getClockString(hour = hour, minute = minute))
+    }
+
 
     fun addNewAlarm(hour: Int, minute: Int) : DailyReminderRobot {
         if (minute < 0 || minute > 11){

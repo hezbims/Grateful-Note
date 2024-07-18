@@ -1,4 +1,4 @@
-package com.example.gratefulnote.test_scenario
+package com.example.gratefulnote.test_scenario.e2e_test
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.intent.Intents

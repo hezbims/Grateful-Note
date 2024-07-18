@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.MenuProvider
@@ -54,6 +55,7 @@ import com.example.gratefulnote.R
 import com.example.gratefulnote.daily_notification.presentation.components.ComposeTimePickerDialog
 import com.example.gratefulnote.daily_notification.presentation.components.ConfirmDeleteDailyNotificationsDialog
 import com.example.gratefulnote.daily_notification.presentation.components.DailyNotificationCard
+import com.example.gratefulnote.daily_notification.test_tag.DailyNotificationTestTag
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -162,7 +164,8 @@ fun DailyNotificationScreen(
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            contentPadding = PaddingValues(all = 24.dp)
+            contentPadding = PaddingValues(all = 24.dp),
+            modifier = Modifier.testTag(DailyNotificationTestTag.listDailyNotificationLazyColumn)
         ) {
             items(state.listDailyNotification, key = {item ->  item.data.id}){ item ->
                 DailyNotificationCard(
