@@ -7,6 +7,7 @@ import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.example.gratefulnote.robot._common.node_interaction.TestAppDataManager
 import com.example.gratefulnote.robot.daily_reminder.DailyReminderRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
+import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestAddNewDailyNotificationAlarmEnabled
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDeleteEnabledItemAlarmCanceled
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDisableItemAlarmCanceled
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -39,6 +40,15 @@ class DailyReminderScenario {
             dailyReminderRobot = dailyReminderRobot,
             db = db,
             mainHomeRobot = mainHomeRobot,
+            mockDailyAlarmSetter = mockDailyAlarmSetter,
+        ).begin()
+    }
+
+    @Test
+    fun testAddNewDailyNotificationAlarmEnabled(){
+        TestAddNewDailyNotificationAlarmEnabled(
+            mainHomeRobot = mainHomeRobot,
+            dailyReminderRobot = dailyReminderRobot,
             mockDailyAlarmSetter = mockDailyAlarmSetter,
         ).begin()
     }

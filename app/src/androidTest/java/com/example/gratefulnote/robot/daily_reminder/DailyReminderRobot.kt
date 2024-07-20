@@ -1,13 +1,17 @@
 package com.example.gratefulnote.robot.daily_reminder
 
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasParent
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isOff
+import androidx.compose.ui.test.isOn
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -36,6 +40,21 @@ class DailyReminderRobot(
         val targetSwitch = allListItemSwitches and hasParent(targetListItemCard)
         composeRule.onNode(targetSwitch, useUnmergedTree = true).performClick()
 
+        return this
+    }
+
+    fun waitUntilSwitch(index: Int, isSwitchOff: Boolean) : DailyReminderRobot {
+        composeRule.waitUntil {
+            try {
+                val targetSwitch = composeRule
+                    .onNodeWithTag(DailyNotificationTestTag.listDailyNotificationLazyColumn)
+                    .onChildren()[index].onChild()
+                targetSwitch.assert((if (isSwitchOff) isOff() else isOn()))
+                true
+            } catch (e : AssertionError) {
+                false
+            }
+        }
         return this
     }
 
@@ -92,8 +111,8 @@ class DailyReminderRobot(
     }
 
 
-    fun addNewAlarm(hour: Int, minute: Int) : DailyReminderRobot {
-        if (minute < 0 || minute > 11){
+    fun addNewAlarm(jarumJam: Int, jarumMenit: Int) : DailyReminderRobot {
+        if (jarumMenit < 0 || jarumMenit > 11){
             throw Exception("Nilai menit harus berada di antara 0-11")
         }
 
@@ -103,11 +122,11 @@ class DailyReminderRobot(
 
         // ngeprint semantics tree dalam pemilihan hour di time picker
         // composeRule.onNodeWithTag(DailyNotificationTestTag.timePicker).printToLog("qqq")
-        composeRule.onNodeWithContentDescription("$hour hours").performClick()
+        composeRule.onNodeWithContentDescription("$jarumJam hours").performClick()
 
         // ngeprint semantics tree dalam pemilihan menit di time picker
         // composeRule.onNodeWithTag(DailyNotificationTestTag.timePicker).printToLog("qqq")
-        composeRule.onNodeWithContentDescription("${minute * 5} minutes").performClick()
+        composeRule.onNodeWithContentDescription("${jarumMenit * 5} minutes").performClick()
         composeRule.onNodeWithText(appContext.getString(R.string.konfirmasi)).performClick()
 
         return this
