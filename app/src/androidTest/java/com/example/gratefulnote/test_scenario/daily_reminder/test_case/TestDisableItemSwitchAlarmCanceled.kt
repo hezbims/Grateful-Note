@@ -11,7 +11,7 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 
-class TestDisableItemAlarmCanceled(
+class TestDisableItemSwitchAlarmCanceled(
     private val mockDailyAlarmSetter : IDailyAlarmSetter,
     private val db : GratefulNoteDatabase,
     private val mainHomeRobot: MainHomeRobot,
@@ -22,8 +22,8 @@ class TestDisableItemAlarmCanceled(
         mainHomeRobot.navBar.toDailyReminder()
         dailyReminderRobot
             .waitUntilItemCount(3)
-            .toogleSwitchOnNthItem(minute = 2, hour = 2)
-            .toogleSwitchOnNthItem(minute = 3, hour = 3)
+            .toogleSwitchOnItem(minute = 2, hour = 2)
+            .toogleSwitchOnItem(minute = 3, hour = 3)
             .waitUntilSwitch(2 , isSwitchOff = true)
 
         verify(mockDailyAlarmSetter, never()).disableDailyAlarm(1)

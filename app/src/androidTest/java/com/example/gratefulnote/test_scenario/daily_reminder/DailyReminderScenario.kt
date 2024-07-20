@@ -9,7 +9,8 @@ import com.example.gratefulnote.robot.daily_reminder.DailyReminderRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestAddNewDailyNotificationAlarmEnabled
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDeleteEnabledItemAlarmCanceled
-import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDisableItemAlarmCanceled
+import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDisableItemSwitchAlarmCanceled
+import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestEnableItemSwitchAlarmEnabled
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -25,8 +26,8 @@ class DailyReminderScenario {
      * maka alarm nya akan tercancel
      */
     @Test
-    fun testDisableItemAlarmCanceled(){
-        TestDisableItemAlarmCanceled(
+    fun testDisableItemSwitchAlarmCanceled(){
+        TestDisableItemSwitchAlarmCanceled(
             mockDailyAlarmSetter = mockDailyAlarmSetter,
             db = db,
             mainHomeRobot = mainHomeRobot,
@@ -50,6 +51,16 @@ class DailyReminderScenario {
             mainHomeRobot = mainHomeRobot,
             dailyReminderRobot = dailyReminderRobot,
             mockDailyAlarmSetter = mockDailyAlarmSetter,
+        ).begin()
+    }
+
+    @Test
+    fun testEnabletemSwitchAlarmEnabled(){
+        TestEnableItemSwitchAlarmEnabled(
+            dailyReminderRobot = dailyReminderRobot,
+            mainHomeRobot = mainHomeRobot,
+            dailyAlarmSetter = mockDailyAlarmSetter,
+            db = db,
         ).begin()
     }
 

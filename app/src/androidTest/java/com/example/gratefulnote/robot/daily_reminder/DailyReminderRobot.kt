@@ -26,7 +26,7 @@ import com.example.gratefulnote.robot._common.node_interaction.isNotCached
 class DailyReminderRobot(
     private val composeRule : ComposeTestRule
 ) {
-    fun toogleSwitchOnNthItem(
+    fun toogleSwitchOnItem(
         hour : Int,
         minute : Int,
     ) : DailyReminderRobot {
