@@ -9,4 +9,5 @@ interface IDailyNotificationRepository {
     fun updateDailyNotification(dailyNotification: DailyNotificationEntity) : Flow<ResponseWrapper<DailyNotificationEntity>>
     fun deleteDailyNotification(vararg dailyNotifications : DailyNotificationEntity) : Flow<ResponseWrapper<Nothing>>
     fun getAllDailyNotification() : Flow<ResponseWrapper<List<DailyNotificationEntity>>>
+    suspend fun getAllEnabledDailyNotifications() : List<DailyNotificationEntity>
 }

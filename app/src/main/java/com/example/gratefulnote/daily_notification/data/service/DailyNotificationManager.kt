@@ -65,4 +65,15 @@ class DailyNotificationManager (
         repository.getAllDailyNotification()
 
     override fun canScheduleDailyReminder() = dailyAlarmSetter.canScheduleExactAlarm()
+
+    override suspend fun setAlarmForAllEnabledDailyNotifications() {
+        val dailyNotifications = repository.getAllEnabledDailyNotifications()
+        for (dailyNotification in dailyNotifications) {
+            dailyAlarmSetter.enableDailyAlarm(
+                hour = dailyNotification.hour,
+                minute = dailyNotification.minute,
+                id = dailyNotification.id,
+            )
+        }
+    }
 }

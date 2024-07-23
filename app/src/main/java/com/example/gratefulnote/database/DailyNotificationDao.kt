@@ -20,6 +20,9 @@ interface DailyNotificationDao {
     @Query("SELECT * FROM ${DailyNotificationEntity.tableName}")
     suspend fun getAllDailyNotification() : List<DailyNotificationEntity>
 
+    @Query("SELECT * FROM ${DailyNotificationEntity.tableName} WHERE is_enabled = 1")
+    suspend fun getAllEnabledDailyNotifications() : List<DailyNotificationEntity>
+
     @Query("SELECT * FROM ${DailyNotificationEntity.tableName} WHERE id = :id")
     suspend fun getDailyNotification(id: Int) : DailyNotificationEntity?
 

@@ -12,4 +12,8 @@ sealed class ResponseWrapper<T> {
             return "Response loading, message : $message"
         }
     }
+
+    fun isLoading() : Boolean = this is Loading
+    fun isSucceed() : Boolean = this is Succeed
+    fun isError() : Boolean = this is Error
 }

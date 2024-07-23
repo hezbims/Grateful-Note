@@ -52,4 +52,6 @@ class DailyNotificationRepository(
         val listDailyNotification = dao.getAllDailyNotification()
         emit(ResponseWrapper.Succeed(data = listDailyNotification))
     }
+
+    override suspend fun getAllEnabledDailyNotifications() = dao.getAllEnabledDailyNotifications()
 }
