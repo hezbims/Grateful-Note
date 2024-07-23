@@ -1,4 +1,4 @@
-package com.example.gratefulnote.test_scenario.daily_reminder
+package com.example.gratefulnote.test_scenario.daily_reminder.test_case
 
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
@@ -6,26 +6,20 @@ import com.example.gratefulnote.daily_notification.data.service.BootupAlarmSetRe
 import com.example.gratefulnote.daily_notification.data.service.DailyNotificationManager
 import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSetter
 import com.example.gratefulnote.database.GratefulNoteDatabase
-import com.example.gratefulnote.test_scenario.daily_reminder.test_data.prepareThreeDisabledAndEnabledDailyNotification
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import org.mockito.Mockito
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-@HiltAndroidTest
-class BootupBroadcastReceiverTest {
-    @Test
-    fun testBootupCompletedAllEnabledDailyNotificatinosAlarmSet(){
+class TestBootupCompletedAllEnabledDailyNotificationsAlarmSet(
+    private val db : GratefulNoteDatabase,
+    private val dailyAlarmSetter : IDailyAlarmSetter
+) {
+    fun begin(){
         val broadcastReceiver = BootupAlarmSetReceiver().apply {
             dailyNotificationManager = DailyNotificationManager(
-                database = mockDb,
-                dailyAlarmSetter = mockDailyAlarmSetter
+                database = db,
+                dailyAlarmSetter = dailyAlarmSetter
             )
         }
 
@@ -41,19 +35,19 @@ class BootupBroadcastReceiverTest {
             var currentIteration = 1
             while (true) {
                 try {
-                    Mockito.verify(mockDailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
+                    Mockito.verify(dailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
                         hour = 3,
                         minute = 3,
                         id = 3,
                         forceToNextDay = false,
                     )
-                    Mockito.verify(mockDailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
+                    Mockito.verify(dailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
                         hour = 1,
                         minute = 1,
                         id = 1,
                         forceToNextDay = false,
                     )
-                    Mockito.verify(mockDailyAlarmSetter, Mockito.never()).enableDailyAlarm(
+                    Mockito.verify(dailyAlarmSetter, Mockito.never()).enableDailyAlarm(
                         hour = 2,
                         minute = 2,
                         id = 2,
@@ -70,18 +64,4 @@ class BootupBroadcastReceiverTest {
             }
         }
     }
-
-    @Before
-    fun prepare(){
-        hiltRule.inject()
-        mockDb.prepareThreeDisabledAndEnabledDailyNotification()
-    }
-
-    @get:Rule(order = 1)
-    var hiltRule = HiltAndroidRule(this)
-
-    @Inject
-    lateinit var mockDailyAlarmSetter : IDailyAlarmSetter
-    @Inject
-    lateinit var mockDb : GratefulNoteDatabase
 }
