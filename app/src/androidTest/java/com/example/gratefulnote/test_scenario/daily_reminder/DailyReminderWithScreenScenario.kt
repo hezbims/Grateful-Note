@@ -19,7 +19,7 @@ import org.junit.Test
 import javax.inject.Inject
 
 @HiltAndroidTest
-class DailyReminderScenario {
+class DailyReminderWithScreenScenario {
 
     /**
      * memastikan kalau item dihapus,

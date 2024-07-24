@@ -1,28 +1,28 @@
 package com.example.gratefulnote.test_scenario.daily_reminder.test_case
 
+import android.app.AlarmManager
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.gratefulnote.daily_notification.data.service.BootupAlarmSetReceiver
+import com.example.gratefulnote.daily_notification.data.service.AlarmPermissionGrantedReceiver
 import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSetter
 import com.example.gratefulnote.daily_notification.domain.service.IDailyNotificationManager
 import com.example.gratefulnote.utils.waitUntil
 import kotlinx.coroutines.runBlocking
 import org.mockito.Mockito
 
-class TestBootupCompletedAllEnabledDailyNotificationsAlarmSet(
+class TestAlarmPermissionGrantedAllEnabledDailyNotificationsWillBeSet(
+    private val dailyAlarmSetter : IDailyAlarmSetter,
     private val dailyNotificationManager: IDailyNotificationManager,
-    private val dailyAlarmSetter : IDailyAlarmSetter
 ) {
     fun begin(){
-        val broadcastReceiver = BootupAlarmSetReceiver().apply {
-            dailyNotificationManager = this@TestBootupCompletedAllEnabledDailyNotificationsAlarmSet.dailyNotificationManager
+        val receiver = AlarmPermissionGrantedReceiver().apply {
+            dailyNotificationManager =
+                this@TestAlarmPermissionGrantedAllEnabledDailyNotificationsWillBeSet
+                    .dailyNotificationManager
         }
-
-        broadcastReceiver.onReceive(
+        receiver.onReceive(
             context = InstrumentationRegistry.getInstrumentation().targetContext,
-            intent = Intent().apply {
-                action = Intent.ACTION_BOOT_COMPLETED
-            }
+            intent = Intent(AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED)
         )
 
         runBlocking {
@@ -47,10 +47,11 @@ class TestBootupCompletedAllEnabledDailyNotificationsAlarmSet(
                         forceToNextDay = false,
                     )
                     true
-                } catch (t : Throwable){
+                } catch (t : Throwable) {
                     false
                 }
             }
         }
+
     }
 }
