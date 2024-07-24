@@ -11,12 +11,15 @@ import androidx.test.espresso.contrib.DrawerMatchers
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
 import com.example.gratefulnote.robot._common.node_interaction.ClickRecyclerViewItemAction
 import com.example.gratefulnote.robot._common.node_interaction.WaitViewUntil
+import com.example.gratefulnote.utils.waitUntil
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.allOf
 
 class MainHomeRobot {
@@ -90,6 +93,18 @@ class MainHomeRobot {
                     ClickRecyclerViewItemAction.clickChildWithId(R.id.delete_positive_emotion)
                 )
             )
+        runBlocking {
+            waitUntil {
+                try {
+                    onView(withText(R.string.confirm_delete_message)).check(
+                        ViewAssertions.matches(isDisplayed())
+                    )
+                    true
+                } catch (t: Throwable) {
+                    false
+                }
+            }
+        }
         onView(withText("YA"))
             .perform(click())
 
