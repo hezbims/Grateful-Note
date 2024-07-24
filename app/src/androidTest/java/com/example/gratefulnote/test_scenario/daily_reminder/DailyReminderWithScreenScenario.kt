@@ -8,6 +8,7 @@ import com.example.gratefulnote.robot._common.node_interaction.TestAppDataManage
 import com.example.gratefulnote.robot.daily_reminder.DailyReminderRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestAddNewDailyNotificationAlarmEnabled
+import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestCancelMultiSelectModeByBackPress
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDeleteEnabledItemAlarmCanceled
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestDisableItemSwitchAlarmCanceled
 import com.example.gratefulnote.test_scenario.daily_reminder.test_case.TestEnableItemSwitchAlarmEnabled
@@ -60,6 +61,15 @@ class DailyReminderWithScreenScenario {
             dailyReminderRobot = dailyReminderRobot,
             mainHomeRobot = mainHomeRobot,
             dailyAlarmSetter = mockDailyAlarmSetter,
+            db = db,
+        ).begin()
+    }
+
+    @Test
+    fun testCancelMultiSelectModeByBackPress(){
+        TestCancelMultiSelectModeByBackPress(
+            dailyReminderRobot = dailyReminderRobot,
+            mainHomeRobot = mainHomeRobot,
             db = db,
         ).begin()
     }

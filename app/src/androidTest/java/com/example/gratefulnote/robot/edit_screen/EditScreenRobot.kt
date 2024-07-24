@@ -7,8 +7,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
 import com.example.gratefulnote.robot._common.Backable
+import com.example.gratefulnote.utils.MyComposeActivityRule
 
-class EditScreenRobot : Backable() {
+class EditScreenRobot(
+    composeRule: MyComposeActivityRule
+) : Backable(composeRule) {
     fun replaceWhatValue(whatValue : String): EditScreenRobot {
         onView(withId(R.id.edit_positive_emotion_title_value))
             .perform(replaceText(whatValue))

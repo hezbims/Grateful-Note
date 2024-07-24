@@ -9,7 +9,6 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isOff
 import androidx.compose.ui.test.isOn
-import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onChildren
@@ -21,11 +20,13 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.R
 import com.example.gratefulnote.daily_notification.test_tag.DailyNotificationTestTag
+import com.example.gratefulnote.robot._common.Backable
 import com.example.gratefulnote.robot._common.node_interaction.isNotCached
+import com.example.gratefulnote.utils.MyComposeActivityRule
 
 class DailyReminderRobot(
-    private val composeRule : ComposeTestRule
-) {
+    private val composeRule : MyComposeActivityRule
+) : Backable(composeRule) {
     fun toogleSwitchOnItem(
         hour : Int,
         minute : Int,
@@ -130,6 +131,13 @@ class DailyReminderRobot(
         composeRule.onNodeWithText(appContext.getString(R.string.konfirmasi)).performClick()
 
         return this
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    fun waitUntilMultiSelectModeIsDeactivated(){
+        composeRule.waitUntilDoesNotExist(
+            hasTestTag(DailyNotificationTestTag.listItemCheckbox)
+        )
     }
 
     private val appContext = InstrumentationRegistry.getInstrumentation().targetContext

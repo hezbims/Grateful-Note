@@ -133,7 +133,7 @@ class EndToEndTest {
 
     private val appDataManager = TestAppDataManager()
     private val mainHomeRobot = MainHomeRobot()
-    private val editScreenRobot = EditScreenRobot()
+    private val editScreenRobot = EditScreenRobot(composeRule)
     private val addGratitudeRobot = AddGratitudeRobot()
     private val backupRestoreRobot = BackupRestoreRobot(composeRule)
 }

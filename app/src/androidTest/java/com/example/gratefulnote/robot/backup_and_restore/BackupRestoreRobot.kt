@@ -8,7 +8,6 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -18,16 +17,15 @@ import androidx.core.net.toUri
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 import com.example.gratefulnote.robot._common.Backable
+import com.example.gratefulnote.utils.MyComposeActivityRule
 
 @OptIn(ExperimentalTestApi::class)
 class BackupRestoreRobot(
-    private val composeRule : AndroidComposeTestRule<ActivityScenarioRule<MainActivity> , MainActivity>
-) : Backable() {
+    private val composeRule : MyComposeActivityRule
+) : Backable(composeRule) {
     fun clickPilihLokasiBackup() : BackupRestoreRobot{
         val directoryUri = InstrumentationRegistry
             .getInstrumentation()

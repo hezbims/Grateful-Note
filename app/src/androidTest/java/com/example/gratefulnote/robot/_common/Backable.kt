@@ -1,11 +1,13 @@
 package com.example.gratefulnote.robot._common
 
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
+import com.example.gratefulnote.utils.MyComposeActivityRule
 
-abstract class Backable() {
+abstract class Backable(
+    private val composeRule : MyComposeActivityRule
+) {
     fun pressBack(){
-        Espresso.onView(ViewMatchers.isRoot()).perform(ViewActions.pressBack())
+        composeRule.activityRule.scenario.onActivity {
+            it.onBackPressedDispatcher.onBackPressed()
+        }
     }
 }
