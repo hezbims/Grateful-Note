@@ -1,7 +1,13 @@
 package com.example.gratefulnote.test_scenario.e2e_test
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.core.net.toUri
 import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.robot._common.node_interaction.TestAppDataManager
 import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
@@ -35,6 +41,23 @@ class EndToEndTest {
     fun clearAppData() {
         appDataManager.clearAppData()
         Intents.init()
+        prepareMockIntentResult()
+    }
+
+    private fun prepareMockIntentResult(){
+        val directoryUri = InstrumentationRegistry
+            .getInstrumentation()
+            .targetContext
+            .filesDir.toUri()
+
+        val intentResult = Intent().apply {
+            data = directoryUri
+        }
+        val intentMatcher = IntentMatchers.hasAction(Intent.ACTION_OPEN_DOCUMENT_TREE)
+
+        Intents.intending(intentMatcher).respondWith(
+            Instrumentation.ActivityResult(Activity.RESULT_OK, intentResult)
+        )
     }
 
     @After

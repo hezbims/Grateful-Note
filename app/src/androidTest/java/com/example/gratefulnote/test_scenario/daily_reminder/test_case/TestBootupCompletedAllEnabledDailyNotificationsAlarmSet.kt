@@ -5,7 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.daily_notification.data.service.BootupAlarmSetReceiver
 import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSetter
 import com.example.gratefulnote.daily_notification.domain.service.IDailyNotificationManager
-import com.example.gratefulnote.utils.waitUntil
+import com.example.gratefulnote.utils.waitUntilSucceed
 import kotlinx.coroutines.runBlocking
 import org.mockito.Mockito
 
@@ -26,30 +26,25 @@ class TestBootupCompletedAllEnabledDailyNotificationsAlarmSet(
         )
 
         runBlocking {
-            waitUntil {
-                try {
-                    Mockito.verify(dailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
-                        hour = 3,
-                        minute = 3,
-                        id = 3,
-                        forceToNextDay = false,
-                    )
-                    Mockito.verify(dailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
-                        hour = 1,
-                        minute = 1,
-                        id = 1,
-                        forceToNextDay = false,
-                    )
-                    Mockito.verify(dailyAlarmSetter, Mockito.never()).enableDailyAlarm(
-                        hour = 2,
-                        minute = 2,
-                        id = 2,
-                        forceToNextDay = false,
-                    )
-                    true
-                } catch (t : Throwable){
-                    false
-                }
+            waitUntilSucceed {
+                Mockito.verify(dailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
+                    hour = 3,
+                    minute = 3,
+                    id = 3,
+                    forceToNextDay = false,
+                )
+                Mockito.verify(dailyAlarmSetter, Mockito.times(1)).enableDailyAlarm(
+                    hour = 1,
+                    minute = 1,
+                    id = 1,
+                    forceToNextDay = false,
+                )
+                Mockito.verify(dailyAlarmSetter, Mockito.never()).enableDailyAlarm(
+                    hour = 2,
+                    minute = 2,
+                    id = 2,
+                    forceToNextDay = false,
+                )
             }
         }
     }

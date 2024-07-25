@@ -18,7 +18,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
 import com.example.gratefulnote.robot._common.node_interaction.ClickRecyclerViewItemAction
 import com.example.gratefulnote.robot._common.node_interaction.WaitViewUntil
-import com.example.gratefulnote.utils.waitUntil
+import com.example.gratefulnote.utils.waitUntilSucceed
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.allOf
 
@@ -94,15 +94,10 @@ class MainHomeRobot {
                 )
             )
         runBlocking {
-            waitUntil {
-                try {
-                    onView(withText(R.string.confirm_delete_message)).check(
-                        ViewAssertions.matches(isDisplayed())
-                    )
-                    true
-                } catch (t: Throwable) {
-                    false
-                }
+            waitUntilSucceed {
+                onView(withText(R.string.confirm_delete_message)).check(
+                    ViewAssertions.matches(isDisplayed())
+                )
             }
         }
         onView(withText("YA"))

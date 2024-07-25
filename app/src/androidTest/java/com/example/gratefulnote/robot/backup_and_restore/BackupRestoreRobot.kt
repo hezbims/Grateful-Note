@@ -1,7 +1,5 @@
 package com.example.gratefulnote.robot.backup_and_restore
 
-import android.app.Activity
-import android.app.Instrumentation
 import android.content.Intent
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasAnyAncestor
@@ -13,38 +11,28 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
-import androidx.core.net.toUri
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 import com.example.gratefulnote.robot._common.Backable
 import com.example.gratefulnote.utils.MyComposeActivityRule
+import com.example.gratefulnote.utils.waitUntilSucceed
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalTestApi::class)
 class BackupRestoreRobot(
     private val composeRule : MyComposeActivityRule
 ) : Backable(composeRule) {
     fun clickPilihLokasiBackup() : BackupRestoreRobot{
-        val directoryUri = InstrumentationRegistry
-            .getInstrumentation()
-            .targetContext
-            .filesDir.toUri()
-
-        val intentResult = Intent().apply {
-            data = directoryUri
-        }
-        val intentMatcher = hasAction(Intent.ACTION_OPEN_DOCUMENT_TREE)
-
-        intending(intentMatcher).respondWith(
-            Instrumentation.ActivityResult(Activity.RESULT_OK, intentResult)
-        )
         composeRule.waitUntilExactlyOneExists(hasText("Pilih Lokasi Backup"))
         composeRule.onNodeWithText("Pilih Lokasi Backup").performClick()
-
-        intended(intentMatcher)
-
+        runBlocking {
+            waitUntilSucceed {
+                Intents.intended(
+                    IntentMatchers.hasAction(Intent.ACTION_OPEN_DOCUMENT_TREE),
+                )
+            }
+        }
         composeRule.waitUntilExactlyOneExists(hasTestTag(BackupRestoreNodeTag.bottomActionCard))
 
         return this
