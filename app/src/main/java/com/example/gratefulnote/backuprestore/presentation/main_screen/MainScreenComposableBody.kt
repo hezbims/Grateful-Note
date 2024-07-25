@@ -27,7 +27,8 @@ import com.example.gratefulnote.common.presentation.ResponseWrapperLoader
 
 @Composable
 fun BackupRestoreFragmentBodySetup(
-    viewModel : MainScreenViewModel = viewModel()
+    viewModel : MainScreenViewModel = viewModel(),
+    notifyRestoreSucceedToMainScreen : () -> Unit,
 ){
     val getDocumentTreeAction = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocumentTree()
@@ -40,14 +41,16 @@ fun BackupRestoreFragmentBodySetup(
     BackupRestoreFragmentBody(
         state = viewModel.backupRestoreState.collectAsState().value,
         onEvent = viewModel::onEvent,
-        openDocumentTree = { getDocumentTreeAction.launch(null) }
+        openDocumentTree = { getDocumentTreeAction.launch(null) },
+        notifyRestoreSucceedToMainScreen = notifyRestoreSucceedToMainScreen,
     )
 }
 @Composable
 private fun BackupRestoreFragmentBody(
     state : BackupRestoreViewState,
     onEvent : (BackupRestoreStateEvent) -> Unit,
-    openDocumentTree : () -> Unit
+    openDocumentTree : () -> Unit,
+    notifyRestoreSucceedToMainScreen: () -> Unit,
 ){
     ResponseWrapperLoader(
         response = state.pathLocation,
@@ -91,12 +94,14 @@ private fun BackupRestoreFragmentBody(
                 )
             if (state.restoreFile != null)
                 ConfirmRestoreDialogSetup(
-                    onDismissRequest = {backupStatus ->
+                    onDismissRequest = { restoreResponse ->
                         onEvent(
                             BackupRestoreStateEvent.RequestDismissRestoreConfirmationDialog(
-                                backupStatus
+                                 restoreResponse
                             )
                         )
+                        if (restoreResponse?.isSucceed() == true)
+                            notifyRestoreSucceedToMainScreen()
                     },
                     restoreFile = state.restoreFile
                 )
@@ -116,7 +121,8 @@ private fun PreviewLoading(){
                 )
             ),
             onEvent = {},
-            openDocumentTree = {}
+            openDocumentTree = {},
+            notifyRestoreSucceedToMainScreen = {}
         )
     }
 }
@@ -144,7 +150,8 @@ private fun PreviewWithListFile(){
                 )
             ),
             onEvent = {},
-            openDocumentTree = {}
+            openDocumentTree = {},
+            notifyRestoreSucceedToMainScreen = {},
         )
     }
 }
@@ -156,7 +163,8 @@ private fun PreviewPathLocationNull(){
         BackupRestoreFragmentBody(
             state = BackupRestoreViewState(),
             onEvent = {},
-            openDocumentTree = {}
+            openDocumentTree = {},
+            notifyRestoreSucceedToMainScreen = {},
         )
     }
 }

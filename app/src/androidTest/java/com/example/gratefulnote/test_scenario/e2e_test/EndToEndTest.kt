@@ -133,6 +133,7 @@ class EndToEndTest {
 
         mainHomeRobot
             .deleteNthPositiveEmotion(1)
+            .waitForItemCount(2)
             .assertNthRecyclerViewTitle(0 , "title berubah")
             .assertNthRecyclerViewTitle(1 , "Saya terhibur")
     }
@@ -145,7 +146,8 @@ class EndToEndTest {
             .pressBack()
     }
     private fun Then_there_will_be_three_positive_emotion(){
-
+        mainHomeRobot
+            .waitForItemCount(3)
     }
 
     @get:Rule(order = 1)

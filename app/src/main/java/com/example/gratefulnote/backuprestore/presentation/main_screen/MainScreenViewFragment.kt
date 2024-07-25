@@ -7,13 +7,20 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.navigation.navGraphViewModels
+import com.example.gratefulnote.R
+import com.example.gratefulnote.mainfragment.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainScreenViewFragment : Fragment() {
+    private val mainViewModel : MainViewModel by navGraphViewModels(R.id.main_crud_graph)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+    private fun notifyRestoreSucceedToMainScreen(){
+        mainViewModel.fetchRecyclerViewDataWithCurrentFilterState()
     }
 
     override fun onCreateView(
@@ -24,7 +31,9 @@ class MainScreenViewFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                BackupRestoreFragmentBodySetup()
+                BackupRestoreFragmentBodySetup(
+                    notifyRestoreSucceedToMainScreen = ::notifyRestoreSucceedToMainScreen
+                )
             }
         }
     }

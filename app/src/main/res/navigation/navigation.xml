@@ -9,10 +9,7 @@
         android:id="@+id/notificationSettingsFragment"
         android:name="com.example.gratefulnote.daily_notification.presentation.DailyNotificationFragment"
         android:label="@string/daily_reminder_fragment_title" />
-    <fragment
-        android:id="@+id/backupRestoreFragment"
-        android:name="com.example.gratefulnote.backuprestore.presentation.main_screen.MainScreenViewFragment"
-        android:label="Backup and Restore" />
+
     <navigation android:id="@+id/main_crud_graph"
         app:startDestination="@id/mainFragment">
         <fragment
@@ -58,5 +55,9 @@
             android:name="com.example.gratefulnote.mainfragment.FilterDialogFragment"
             tools:layout="@layout/fragment_filter_dialog"
             android:label="FilterDialogFragment" />
+        <fragment
+            android:id="@+id/backupRestoreFragment"
+            android:name="com.example.gratefulnote.backuprestore.presentation.main_screen.MainScreenViewFragment"
+            android:label="Backup and Restore" />
     </navigation>
 </navigation>
