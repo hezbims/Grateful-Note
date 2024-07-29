@@ -21,8 +21,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+
 @HiltAndroidTest
-class EndToEndTest {
+class EndToEndTestScenario {
     @Test
     fun givenAnUserStartTheApp() {
         When_the_user_input_three_new_positive_emotion()
@@ -102,15 +103,7 @@ class EndToEndTest {
             .pressBack()
     }
     private fun Then_the_second_positive_emotion_edited() {
-        mainHomeRobot
-            .assertNthRecyclerViewTitle(itemIndex = 0, title= "title berubah")
-            .toEditGratitudeWithNthItem(index = 0)
-        editScreenRobot
-            .assertFieldValue(
-                what = "title berubah",
-                why = "\"\"\"\"",
-            )
-            .pressBack()
+        verifyNoteContent(index = 0, title = "title berubah", desc = "\"\"\"\"")
     }
     private fun When_the_user_navigate_to_backup_screen() {
         mainHomeRobot
@@ -146,8 +139,23 @@ class EndToEndTest {
             .pressBack()
     }
     private fun Then_there_will_be_three_positive_emotion(){
+        mainHomeRobot.waitForItemCount(3)
+
+        verifyNoteContent(0, "title berubah", "\"\"\"\"")
+        verifyNoteContent(1, "saya senang", "Saya senang karena bermain sepak bola di hari ini")
+        verifyNoteContent(2, "Saya terhibur", "karena diajak berwisata")
+    }
+
+    private fun verifyNoteContent(index : Int, title: String, desc: String){
         mainHomeRobot
-            .waitForItemCount(3)
+            .assertNthRecyclerViewTitle(itemIndex = index, title= title)
+            .toEditGratitudeWithNthItem(index = index)
+        editScreenRobot
+            .assertFieldValue(
+                what = title,
+                why = desc,
+            )
+            .pressBack()
     }
 
     @get:Rule(order = 1)

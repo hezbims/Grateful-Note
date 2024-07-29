@@ -1,7 +1,6 @@
 package com.example.gratefulnote.mainfragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -92,8 +91,6 @@ class MainFragment : Fragment() {
     private fun observeNavigationState(){
         val navController = findNavController()
         viewModel.navEvent.observe(viewLifecycleOwner){ navEvent ->
-            Log.e("qqq" , "${navEvent?.javaClass?.name}")
-
             if (navEvent == null)
                 return@observe
             viewModel.doneNavigating()

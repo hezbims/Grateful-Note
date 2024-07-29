@@ -121,12 +121,7 @@ class DailyReminderRobot(
             appContext.getString(R.string.buat_daily_notification_baru)
         ).performClick()
 
-        // ngeprint semantics tree dalam pemilihan hour di time picker
-        // composeRule.onNodeWithTag(DailyNotificationTestTag.timePicker).printToLog("qqq")
         composeRule.onNodeWithContentDescription("$jarumJam hours").performClick()
-
-        // ngeprint semantics tree dalam pemilihan menit di time picker
-        // composeRule.onNodeWithTag(DailyNotificationTestTag.timePicker).printToLog("qqq")
         composeRule.onNodeWithContentDescription("${jarumMenit * 5} minutes").performClick()
         composeRule.onNodeWithText(appContext.getString(R.string.konfirmasi)).performClick()
 
