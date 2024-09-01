@@ -168,7 +168,8 @@ val MIGRATION_4_5 : Migration by lazy {
     autoMigrations = [
         // Cuma nambahin tabel baru yaitu daily notification table
         AutoMigration(from = 3, to = 4)
-    ]
+    ],
+    exportSchema = true
 )
 abstract class GratefulNoteDatabase : RoomDatabase(){
 
