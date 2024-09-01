@@ -1,12 +1,12 @@
 plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.compose.compiler)
-    id("com.android.application")
-    id("com.google.devtools.ksp")
-    id("kotlin-kapt") // untuk data binding di xml
-    id("androidx.navigation.safeargs.kotlin")
-    id("org.jetbrains.kotlin.plugin.parcelize")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.ksp)
+    kotlin("kapt") // untuk data binding di xml
+    alias(libs.plugins.navigation.safeargs)
+    id("kotlin-parcelize")
+    alias(libs.plugins.hilt.android)
 }
 
 ksp {
