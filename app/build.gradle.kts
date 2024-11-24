@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.compose.compiler)
@@ -12,6 +15,8 @@ plugins {
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
+
+
 
 android {
     namespace = "com.example.gratefulnote"
@@ -30,12 +35,21 @@ android {
 
         // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner = "com.example.gratefulnote.runner.HiltTestRunner"
+    }
 
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments["room.schemaLocation"] = "$projectDir/schemas"
-//            }
-//        }
+    signingConfigs {
+        create("release"){
+            val keystoreProperties = Properties()
+            rootProject.file("key.properties").let {
+                if (it.exists())
+                    keystoreProperties.load(FileInputStream(it))
+            }
+
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+        }
     }
 
     buildTypes {
@@ -49,10 +63,13 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            // isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            signingConfig = signingConfigs.getByName("release")
         }
 
     }
@@ -80,21 +97,32 @@ android {
 }
 
 dependencies {
-    implementation("androidx.test.ext:junit-ktx:1.1.3")
-    implementation("androidx.test.espresso:espresso-contrib:3.5.1")
-
-    // room version
+    // Room
     annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     testImplementation(libs.room.testing)
 
-    // nav version
+    // Navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 
-    implementation("androidx.core:core-ktx:1.7.0")
+    // Espresso
+    implementation(libs.espresso.contrib)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.espresso.intents)
+
+    // Androidx.Test.Extension
+    implementation(libs.junit.ktx)
+    androidTestImplementation(libs.junit)
+
+    // Androidx.Test
+    androidTestImplementation(libs.test.runner)
+
+    // Androidx.Core
+    implementation(libs.core.ktx)
+
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("com.google.android.material:material:1.5.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
@@ -103,11 +131,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
 
     testImplementation("junit:junit:4.13.2")
-
-
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.test:runner:1.4.0")
 
 
     // Recycler view
@@ -134,7 +157,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
 
 
@@ -147,6 +169,6 @@ dependencies {
     androidTestImplementation(libs.hilt.android.test)
     kspAndroidTest(libs.hilt.android.compiler)
 
-    androidTestImplementation("org.mockito:mockito-core:5.11.0")
-    androidTestImplementation("org.mockito:mockito-android:5.11.0")
+    androidTestImplementation(libs.mockito.core)
+    androidTestImplementation(libs.mockito.android)
 }
