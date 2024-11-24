@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 
 @Dao
 interface PositiveEmotionDao {
@@ -14,57 +17,34 @@ interface PositiveEmotionDao {
 
     @Insert
     suspend fun insertAll(positiveEmotions : List<PositiveEmotion>)
-    @Query("""
-        SELECT *
-        FROM positive_emotion_table
-        WHERE (:month IS NULL OR month = :month) AND
-              (:year IS NULL OR year = :year) AND
-              (:type IS NULL OR type = :type) AND
-              (:onlyFavorite = 0 OR is_favorite = 1)
-        ORDER BY  updated_at
-    """)
-    suspend fun getAllPositiveEmotionFromOldest(
-        month : Int? = null,
-        year : Int? = null,
-        type : String? =  null,
-        onlyFavorite : Boolean = false,
-    ) : List<PositiveEmotion>
 
-    @Query("""
-        SELECT *
-        FROM positive_emotion_table
-        WHERE (:month IS NULL OR month = :month) AND
-              (:year IS NULL OR year = :year) AND
-              (:type IS NULL OR type = :type) AND
-              (:onlyFavorite = 0 OR is_favorite = 1)
-        ORDER BY  updated_at DESC
-    """)
-    suspend fun getAllPositiveEmotionFromNewest(
-        month : Int? = null,
-        year : Int? = null,
-        type : String? =  null,
-        onlyFavorite : Boolean = false,
-    ) : List<PositiveEmotion>
+    @RawQuery
+    suspend fun getAllPositiveEmotions(query : SupportSQLiteQuery) : List<PositiveEmotion>
+
     suspend fun getAllPositiveEmotion(
         month : Int? = null,
         year : Int? = null,
         type : String? =  null,
         onlyFavorite : Boolean = false,
         isSortedLatest : Boolean = true,
-    ) : List<PositiveEmotion> = if (isSortedLatest)
-            getAllPositiveEmotionFromNewest(
-                month = month,
-                year = year,
-                type = type,
-                onlyFavorite = onlyFavorite
-        )
-        else
-            getAllPositiveEmotionFromOldest(
-                month = month,
-                year = year,
-                type = type,
-                onlyFavorite = onlyFavorite
-            )
+    ) : List<PositiveEmotion> {
+        val onlyFavoriteInt = if (onlyFavorite) 1 else 0
+
+        val queryString = StringBuilder().run {
+            append("SELECT * FROM positive_emotion_table ")
+            append("WHERE ($onlyFavoriteInt = 0 OR is_favorite = 1) ")
+            if (month != null)
+                append("AND month = $month ")
+            if (year != null)
+                append("AND year = $year ")
+            if (type != null)
+                append("AND type = '$type' ")
+            append("ORDER BY updated_at ${if (isSortedLatest) "DESC" else "ASC"} ")
+
+            toString()
+        }
+        return getAllPositiveEmotions(SimpleSQLiteQuery(queryString))
+    }
 
     @Query("SELECT DISTINCT year FROM positive_emotion_table")
     fun getAllYear() : LiveData<List<Int>>
