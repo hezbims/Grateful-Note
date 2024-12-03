@@ -2,11 +2,9 @@ package com.example.gratefulnote.robot.diary_filter_dialog
 
 import com.example.gratefulnote.robot.diary_filter_dialog.components.ApplyFilterButton
 import com.example.gratefulnote.robot.diary_filter_dialog.components.IApplyFilterButton
-import com.example.gratefulnote.robot.diary_filter_dialog.components.IMonthDropdown
+import com.example.gratefulnote.robot.diary_filter_dialog.components.IFilterDropdownComponent
 import com.example.gratefulnote.robot.diary_filter_dialog.components.IOnlyFavoriteFilterSwitch
 import com.example.gratefulnote.robot.diary_filter_dialog.components.ISortByLatestSwitch
-import com.example.gratefulnote.robot.diary_filter_dialog.components.ITypeOfEmotionDropdown
-import com.example.gratefulnote.robot.diary_filter_dialog.components.IYearDropdown
 import com.example.gratefulnote.robot.diary_filter_dialog.components.MonthDropdown
 import com.example.gratefulnote.robot.diary_filter_dialog.components.OnlyFavoriteFilterSwitch
 import com.example.gratefulnote.robot.diary_filter_dialog.components.SortByLatestSwitch
@@ -21,9 +19,9 @@ class DiaryFilterRobot {
     // endregion
 
     // region Dropdowns
-    private val yearDropdown : IYearDropdown = YearDropdown()
-    private val monthDropdown : IMonthDropdown = MonthDropdown()
-    private val typeOfEmotionDropdown : ITypeOfEmotionDropdown = TypeOfEmotionDropdown()
+    private val yearDropdown : IFilterDropdownComponent = YearDropdown()
+    private val monthDropdown : IFilterDropdownComponent = MonthDropdown()
+    private val typeOfEmotionDropdown : IFilterDropdownComponent = TypeOfEmotionDropdown()
     // endregion
 
     private val applyFilterButton : IApplyFilterButton = ApplyFilterButton()
@@ -36,11 +34,11 @@ class DiaryFilterRobot {
                 sortByLatestSwitch.toogle()
 
             if (diaryType != null)
-                typeOfEmotionDropdown.chooseTypeOfEmotion(diaryType)
+                typeOfEmotionDropdown.chooseItem(diaryType)
             if (month != null)
-                monthDropdown.chooseMonth(month)
+                monthDropdown.chooseItem(month)
             if (year != null)
-                yearDropdown.chooseYear(year)
+                yearDropdown.chooseItem(year)
 
             applyFilterButton.tap()
         }
