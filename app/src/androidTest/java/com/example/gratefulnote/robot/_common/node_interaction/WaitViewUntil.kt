@@ -9,7 +9,8 @@ import org.hamcrest.Matchers.any
 class WaitViewUntil(
     /// contoh : View.GONE
     private val condition : (View) -> Boolean,
-    private val timeoutInMillis : Long = 5000L
+    private val timeoutInMillis : Long = 5000L,
+    private val tag: String? = null,
 ) : ViewAction {
     override fun getDescription(): String {
         return "Wait for view with condition"
@@ -28,7 +29,8 @@ class WaitViewUntil(
             uiController.loopMainThreadForAtLeast(100L)
         } while (System.currentTimeMillis() < endtime)
 
-        throw RuntimeException("Timeout ketika coba waiting view")
+
+        throw RuntimeException("Timeout ketika coba waiting view : $tag")
     }
 
 }

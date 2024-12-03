@@ -69,7 +69,8 @@ class MainHomeRobot {
                 val rView = view as RecyclerView
                 val viewHolder = rView.findViewHolderForAdapterPosition(itemIndex)
                 matcher.matches(viewHolder?.itemView)
-            }
+            },
+            tag = title
         ))
         return this
     }
@@ -104,6 +105,11 @@ class MainHomeRobot {
             .perform(click())
 
         return this
+    }
+
+    fun openFilterMenu(){
+        onView(withId(R.id.filter_list_positive_emotion_action_icon))
+            .perform(click())
     }
 
     val navBar = MainNavBarRobot()
