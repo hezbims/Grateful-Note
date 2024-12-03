@@ -1,9 +1,9 @@
 package com.example.gratefulnote.test_scenario.filter_test.test_data
 
 data class FilterInstruction(
-    val year: String? = null,
+    val year: DropdownItemIndex? = null,
 
-    val month: String? = null,
+    val month: DropdownItemIndex? = null,
 
     /**
      * memutuskan apakah harus mentoogle switch dari only favorite
@@ -15,7 +15,7 @@ data class FilterInstruction(
      */
     val toogleSwitchSortedLatest: Boolean = false,
 
-    val diaryType : String? = null,
+    val diaryType : DropdownItemIndex? = null,
 
     val expectedTitleAtIndex : Map<Int, String>
 ){
@@ -33,12 +33,19 @@ data class FilterInstruction(
                     )
                 ),
                 FilterInstruction(
-                    year = 2021.toString(),
+                    year = DropdownItemIndex.Y2021,
                     toogleSwitchSortedLatest = true,
                     expectedTitleAtIndex = mapOf(
                         0 to "Bermain Game",
                         1 to "Makan Siang Gratis",
                         2 to "Belajar Banyak Hal Baru",
+                    )
+                ),
+                FilterInstruction(
+                    month = DropdownItemIndex.NOV,
+                    toogleSwitchOnlyFavorite = true,
+                    expectedTitleAtIndex = mapOf(
+                        0 to "Selamat Sampai Tujuan",
                     )
                 ),
             )

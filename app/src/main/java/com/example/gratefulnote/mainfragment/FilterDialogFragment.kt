@@ -34,11 +34,12 @@ class FilterDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         viewModel.listOfYear.observe(viewLifecycleOwner) { yearList ->
+            val adapterEntries = listOf(semuaText) + yearList.map{it.toString()}
             binding.yearSpinner.setAdapter(
                 ArrayAdapter(
                     requireContext(),
                     R.layout.spinner_simple_item_list ,
-                    listOf(semuaText) + yearList.map{it.toString()}
+                    adapterEntries
                 )
             )
         }

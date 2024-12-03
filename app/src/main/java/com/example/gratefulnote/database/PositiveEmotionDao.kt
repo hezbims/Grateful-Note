@@ -46,7 +46,7 @@ interface PositiveEmotionDao {
         return getAllPositiveEmotions(SimpleSQLiteQuery(queryString))
     }
 
-    @Query("SELECT DISTINCT year FROM positive_emotion_table")
+    @Query("SELECT DISTINCT year FROM positive_emotion_table ORDER BY year DESC")
     fun getAllYear() : LiveData<List<Int>>
 
     @Query("SELECT * FROM positive_emotion_table WHERE id=:id")
