@@ -5,12 +5,13 @@ room = "2.6.1"
 androidx-navigation = "2.5.2"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.24"
-android-sdk = "8.1.4"
+android-sdk = "8.6.0"
 mockito = "5.11.0"
 espresso = "3.5.1"
 androidx-test = "1.4.0"
 androidx-test-ext = "1.1.3"
 androidx-core = "1.7.0"
+paging = "3.3.4"
 
 [libraries]
 # Hilt
@@ -48,6 +49,9 @@ test-runner = {group = "androidx.test", name = "runner", version.ref = "androidx
 
 # Androidx.Core
 core-ktx = {group = "androidx.core", name = "core-ktx", version.ref = "androidx-core"}
+
+# Pagination
+paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
 
 [plugins]
 hilt-android = {id = "com.google.dagger.hilt.android", version.ref = "hilt-android"}

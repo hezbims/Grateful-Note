@@ -2,14 +2,14 @@ package com.example.gratefulnote.robot._common.node_interaction
 
 import android.content.Context
 import android.content.Intent
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.common.constants.Constants
 import com.example.gratefulnote.database.GratefulNoteDatabase
 import java.io.File
 
 class TestAppDataManager {
     fun clearAppData(){
-        val appContext = ApplicationProvider.getApplicationContext<Context>()
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
         appContext.deleteDatabase(GratefulNoteDatabase.dbName)
         clearUrisPermissions(appContext)
