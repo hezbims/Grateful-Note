@@ -48,6 +48,13 @@ data class FilterInstruction(
                         0 to "Selamat Sampai Tujuan",
                     )
                 ),
+                FilterInstruction(
+                    diaryType = DropdownItemIndex.JOY,
+                    expectedTitleAtIndex = mapOf(
+                        0 to "Bermain Game",
+                        1 to "Senang Bermain Bola",
+                    )
+                )
             )
         }
     }
