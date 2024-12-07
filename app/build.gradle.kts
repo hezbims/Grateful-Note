@@ -25,6 +25,10 @@ android {
 
     testBuildType = "debugTest"
 
+    testOptions {
+        animationsDisabled = true
+    }
+
     defaultConfig {
         applicationId = "com.hezapp.gratefulnote"
         testApplicationId = "com.hezapp.gratefulnote_instrumentation"
@@ -82,12 +86,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
 
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
 
     sourceSets {
@@ -98,7 +102,6 @@ android {
 
 dependencies {
     // Room
-    annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
@@ -141,7 +144,11 @@ dependencies {
     // fragment
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
+    // GSON
     implementation("com.google.code.gson:gson:2.9.1")
+
+    // Paging
+    implementation(libs.paging.common)
 
 
     val composeBom = platform("androidx.compose:compose-bom:2023.10.01")

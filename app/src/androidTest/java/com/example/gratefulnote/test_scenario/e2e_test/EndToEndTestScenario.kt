@@ -25,7 +25,7 @@ import org.junit.Test
 @HiltAndroidTest
 class EndToEndTestScenario {
     @Test
-    fun givenAnUserStartTheApp() {
+    fun endToEndTest() {
         When_the_user_input_three_new_positive_emotion()
         Then_there_is_three_list_of_card_in_the_home_page()
         When_the_user_edit_the_second_positive_emotion()
