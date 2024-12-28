@@ -12,12 +12,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 val MIGRATION_1_2 : Migration by lazy {
     object : Migration(1 , 2){
         override fun migrate(db: SupportSQLiteDatabase) {
-            val allPositiveEmotions = mutableListOf<PositiveEmotion>()
+            val allPositiveEmotions = mutableListOf<Diary>()
             with(db.query("SELECT * FROM positive_emotion_table")){
                 while (moveToNext()) {
                     val date = getString(3).split('/').map { it.toInt() }
                     allPositiveEmotions.add(
-                        PositiveEmotion(
+                        Diary(
                             type = getString(0),
                             what = getString(1),
                             why = getString(2),
@@ -67,11 +67,11 @@ val MIGRATION_1_2 : Migration by lazy {
 // ada kolom baru isFavorite
 val MIGRATION_2_3 = object : Migration(2 , 3){
     override fun migrate(db: SupportSQLiteDatabase) {
-        val allPositiveEmotions = mutableListOf<PositiveEmotion>()
+        val allPositiveEmotions = mutableListOf<Diary>()
         with(db.query("SELECT * FROM positive_emotion_table")){
             while(moveToNext())
                 allPositiveEmotions.add(
-                    PositiveEmotion(
+                    Diary(
                         type = getString(0),
                         what = getString(1),
                         why = getString(2),
@@ -163,7 +163,7 @@ val MIGRATION_4_5 : Migration by lazy {
 }
 
 @Database(
-    entities = [PositiveEmotion::class , DailyNotificationEntity::class] ,
+    entities = [Diary::class , DailyNotificationEntity::class] ,
     version = 5,
     autoMigrations = [
         // Cuma nambahin tabel baru yaitu daily notification table
@@ -173,7 +173,7 @@ val MIGRATION_4_5 : Migration by lazy {
 )
 abstract class GratefulNoteDatabase : RoomDatabase(){
 
-    abstract val positiveEmotionDao : PositiveEmotionDao
+    abstract val diaryDao : DiaryDao
     abstract val dailyNotificationDao : DailyNotificationDao
 
     companion object {

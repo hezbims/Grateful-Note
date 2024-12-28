@@ -1,7 +1,7 @@
 package com.example.gratefulnote.test_scenario.filter_test.test_data
 
 import com.example.gratefulnote.database.GratefulNoteDatabase
-import com.example.gratefulnote.database.PositiveEmotion
+import com.example.gratefulnote.database.Diary
 import java.time.Month
 import java.util.Calendar
 
@@ -19,7 +19,7 @@ import java.util.Calendar
  * |  6 |`Interest`  | `Belajar Banyak Hal Baru` | `Aku tertarik banyak belajar hal baru`                | 14/09/2021  | `true`     |
  */
 suspend fun GratefulNoteDatabase.prepareWithFilterTestData(){
-    val dao = this.positiveEmotionDao
+    val dao = this.diaryDao
     val listDate = listOf(
         Calendar.getInstance().apply { set(Calendar.YEAR, 2020); set(Calendar.MONTH, Month.NOVEMBER.value); set(Calendar.DAY_OF_MONTH, 22) },
         Calendar.getInstance().apply { set(Calendar.YEAR, 2020); set(Calendar.MONTH, Month.NOVEMBER.value); set(Calendar.DAY_OF_MONTH, 20) },
@@ -30,7 +30,7 @@ suspend fun GratefulNoteDatabase.prepareWithFilterTestData(){
     )
 
     dao.insertAll(listOf(
-        PositiveEmotion(
+        Diary(
             type = "Joy",
             what = "Senang Bermain Bola",
             why = "Seneng aja cuy",
@@ -41,7 +41,7 @@ suspend fun GratefulNoteDatabase.prepareWithFilterTestData(){
             createdAt = listDate[0].timeInMillis,
             updatedAt = listDate[0].timeInMillis,
         ),
-        PositiveEmotion(
+        Diary(
             type = "Gratitude",
             what = "Selamat Sampai Tujuan",
             why = "Alhamdulillah selamat tadi pagi",
@@ -52,7 +52,7 @@ suspend fun GratefulNoteDatabase.prepareWithFilterTestData(){
             createdAt = listDate[1].timeInMillis,
             updatedAt = listDate[1].timeInMillis,
         ),
-        PositiveEmotion(
+        Diary(
             type = "Hope",
             what = "Masa Depan",
             why = "Masa depanku cerah",
@@ -63,7 +63,7 @@ suspend fun GratefulNoteDatabase.prepareWithFilterTestData(){
             createdAt = listDate[2].timeInMillis,
             updatedAt = listDate[2].timeInMillis,
         ),
-        PositiveEmotion(
+        Diary(
             type = "Gratitude",
             what = "Makan Siang Gratis",
             why = "Alhamdulillah perut kenyang dapat makan gratis tadi",
@@ -74,7 +74,7 @@ suspend fun GratefulNoteDatabase.prepareWithFilterTestData(){
             createdAt = listDate[3].timeInMillis,
             updatedAt = listDate[3].timeInMillis,
         ),
-        PositiveEmotion(
+        Diary(
             type = "Joy",
             what = "Bermain Game",
             why = "Seru banget main call of duty",
@@ -85,7 +85,7 @@ suspend fun GratefulNoteDatabase.prepareWithFilterTestData(){
             createdAt = listDate[4].timeInMillis,
             updatedAt = listDate[4].timeInMillis,
         ),
-        PositiveEmotion(
+        Diary(
             type = "Interest",
             what = "Belajar Banyak Hal Baru",
             why = "Aku tertarik banyak belajar hal baru",

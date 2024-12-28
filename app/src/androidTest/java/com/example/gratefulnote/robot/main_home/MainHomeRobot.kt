@@ -18,11 +18,16 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
 import com.example.gratefulnote.robot._common.node_interaction.ClickRecyclerViewItemAction
 import com.example.gratefulnote.robot._common.node_interaction.WaitViewUntil
+import com.example.gratefulnote.robot.main_home.components.EmptyIndicatorText
+import com.example.gratefulnote.robot.main_home.components.MainMenuDiaryList
 import com.example.gratefulnote.utils.waitUntilSucceed
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.allOf
 
 class MainHomeRobot {
+    val diaryList = MainMenuDiaryList(withId(R.id.recyclerView))
+    val emptyIndicatorText = EmptyIndicatorText(withId(R.id.empty_text_indicator))
+
     fun toAddGratitude() : MainHomeRobot {
         onView(withId(R.id.add_new_gratitude_action_icon))
             .perform(click())
@@ -31,7 +36,7 @@ class MainHomeRobot {
 
     fun toEditGratitudeWithTitle(title : String) : MainHomeRobot {
         val editButton = onView(allOf(
-            withId(R.id.edit_positive_emotion),
+            withId(R.id.edit_diary_icon),
 
             hasSibling(
                 withChild(
@@ -53,7 +58,7 @@ class MainHomeRobot {
             RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(
                 index,
                 ClickRecyclerViewItemAction.clickChildWithId(
-                    R.id.edit_positive_emotion
+                    R.id.edit_diary_icon
                 )
             )
         )
@@ -91,7 +96,7 @@ class MainHomeRobot {
             .perform(
                 RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(
                     index,
-                    ClickRecyclerViewItemAction.clickChildWithId(R.id.delete_positive_emotion)
+                    ClickRecyclerViewItemAction.clickChildWithId(R.id.delete_diary_icon)
                 )
             )
         runBlocking {

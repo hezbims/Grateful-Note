@@ -8,15 +8,15 @@ import com.example.gratefulnote.backuprestore.domain.model.DocumentFileDto
 import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManager
 import com.example.gratefulnote.common.constants.Constants
 import com.example.gratefulnote.common.domain.ResponseWrapper
-import com.example.gratefulnote.database.PositiveEmotion
-import com.example.gratefulnote.database.PositiveEmotionDao
+import com.example.gratefulnote.database.Diary
+import com.example.gratefulnote.database.DiaryDao
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.flow
 
 open class BackupRestoreManager (
     private val app : Context,
-    private val dao : PositiveEmotionDao,
+    private val dao : DiaryDao,
 ) : IBackupRestoreManager {
     private val contentResolver = app.contentResolver
     override fun loadListOfFilesFrom(uri: Uri) = flow {
@@ -68,10 +68,10 @@ open class BackupRestoreManager (
                     it.readText()
                 }
             }
-            val type = object : TypeToken<List<PositiveEmotion>>() {}.type
-            val positiveEmotionList = Gson().fromJson(fileContent, type) as List<PositiveEmotion>
+            val type = object : TypeToken<List<Diary>>() {}.type
+            val diaryList = Gson().fromJson(fileContent, type) as List<Diary>
 
-            dao.restorePositiveEmotions(positiveEmotionList)
+            dao.restoreDiaries(diaryList)
             emit(ResponseWrapper.Succeed())
         } catch (e : Exception){
             emit(ResponseWrapper.Error(e))
@@ -134,7 +134,7 @@ open class BackupRestoreManager (
             contentResolver.openOutputStream(file.uri)!!.use{
                 it.write(
                     Gson().toJson(
-                        dao.getAllPositiveEmotion()
+                        dao.getAllDiaries()
                     ).toByteArray()
                 )
             }

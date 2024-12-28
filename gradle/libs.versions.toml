@@ -12,6 +12,7 @@ androidx-test = "1.4.0"
 androidx-test-ext = "1.1.3"
 androidx-core = "1.7.0"
 paging = "3.3.4"
+paging-runtime-ktx = "3.3.4"
 
 [libraries]
 # Hilt
@@ -52,6 +53,7 @@ core-ktx = {group = "androidx.core", name = "core-ktx", version.ref = "androidx-
 
 # Pagination
 paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
+paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 
 [plugins]
 hilt-android = {id = "com.google.dagger.hilt.android", version.ref = "hilt-android"}

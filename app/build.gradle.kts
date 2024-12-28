@@ -149,6 +149,7 @@ dependencies {
 
     // Paging
     implementation(libs.paging.common)
+    implementation(libs.paging.runtime.ktx)
 
 
     val composeBom = platform("androidx.compose:compose-bom:2023.10.01")

@@ -14,7 +14,7 @@
         app:startDestination="@id/mainFragment">
         <fragment
             android:id="@+id/mainFragment"
-            android:name="com.example.gratefulnote.mainfragment.MainFragment"
+            android:name="com.example.gratefulnote.mainMenu.MainFragment"
             android:label="Main Menu"
             tools:layout="@layout/fragment_main">
             <action
@@ -29,18 +29,18 @@
         </fragment>
         <fragment
             android:id="@+id/editPositiveEmotion"
-            android:name="com.example.gratefulnote.editpositiveemotion.EditPositiveEmotionFragment"
+            android:name="com.example.gratefulnote.editDiary.EditDiaryFragment"
             android:label="@string/edit"
-            tools:layout="@layout/fragment_edit_positive_emotion">
+            tools:layout="@layout/fragment_edit_diary">
             <argument
-                android:name="currentPositiveEmotion"
-                app:argType="com.example.gratefulnote.database.PositiveEmotion" />
+                android:name="currentDiary"
+                app:argType="com.example.gratefulnote.database.Diary" />
         </fragment>
         <fragment
             android:id="@+id/addGratetitudeFragment"
-            android:name="com.example.gratefulnote.addgratitudefragment.AddGratitudeFragment"
+            android:name="com.example.gratefulnote.addNewDiary.AddNewDiaryFragment"
             android:label="Add New Positive Emotion"
-            tools:layout="@layout/fragment_add_gratitude">
+            tools:layout="@layout/fragment_add_new_diary">
             <action
                 android:id="@+id/action_addGratetitudeFragment_to_topeHelpFragment"
                 app:destination="@id/topeHelpFragment" />
@@ -52,7 +52,7 @@
             tools:layout="@layout/fragment_tope_help" />
         <dialog
             android:id="@+id/filterDialogFragment"
-            android:name="com.example.gratefulnote.mainfragment.FilterDialogFragment"
+            android:name="com.example.gratefulnote.mainMenu.FilterDialogFragment"
             tools:layout="@layout/fragment_filter_dialog"
             android:label="FilterDialogFragment" />
         <fragment

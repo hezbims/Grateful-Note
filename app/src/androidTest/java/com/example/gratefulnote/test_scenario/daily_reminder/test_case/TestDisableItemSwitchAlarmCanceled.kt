@@ -1,6 +1,5 @@
 package com.example.gratefulnote.test_scenario.daily_reminder.test_case
 
-import android.util.Log
 import com.example.gratefulnote.daily_notification.domain.service.IDailyAlarmSetter
 import com.example.gratefulnote.database.GratefulNoteDatabase
 import com.example.gratefulnote.robot.daily_reminder.DailyReminderRobot
@@ -31,7 +30,6 @@ class TestDisableItemSwitchAlarmCanceled(
         verify(mockDailyAlarmSetter, times(1)).disableDailyAlarm(Mockito.eq(2))
     }
     private fun prepare(){
-        Log.e("qqq" , "prepare test disable alarm canceled")
         db.prepareThreeEnabledDailyNotifications()
     }
 

@@ -6,7 +6,7 @@ import androidx.documentfile.provider.DocumentFile
 import com.example.gratefulnote.backuprestore._hilt_module.BackupRestoreModule
 import com.example.gratefulnote.backuprestore.data.repository.BackupRestoreManager
 import com.example.gratefulnote.backuprestore.domain.service.IBackupRestoreManager
-import com.example.gratefulnote.database.PositiveEmotionDao
+import com.example.gratefulnote.database.DiaryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.components.ViewModelComponent
@@ -23,7 +23,7 @@ object FakeBackupRestoreModule {
     @Provides
     fun provideBackupRestoreManager(
         @ApplicationContext appContext : Context,
-        dao : PositiveEmotionDao,
+        dao : DiaryDao,
     ) : IBackupRestoreManager{
         return object : BackupRestoreManager(app = appContext, dao = dao){
             override fun persistUriReadAndWritePermission(uri: Uri) {}

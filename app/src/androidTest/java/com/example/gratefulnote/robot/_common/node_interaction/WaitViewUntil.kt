@@ -9,7 +9,7 @@ import org.hamcrest.Matchers.any
 class WaitViewUntil(
     /// contoh : View.GONE
     private val condition : (View) -> Boolean,
-    private val timeoutInMillis : Long = 5000L,
+    private val timeoutInMillis : Long = 2500L,
     private val tag: String? = null,
 ) : ViewAction {
     override fun getDescription(): String {

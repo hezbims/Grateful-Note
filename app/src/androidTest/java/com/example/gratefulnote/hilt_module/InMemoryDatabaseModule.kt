@@ -29,5 +29,5 @@ object InMemoryDatabaseModule {
     @Provides
     @Singleton
     fun providePositiveEmotionDao(database: GratefulNoteDatabase) =
-        database.positiveEmotionDao
+        database.diaryDao
 }

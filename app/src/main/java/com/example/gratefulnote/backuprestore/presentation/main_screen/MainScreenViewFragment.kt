@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.navGraphViewModels
 import com.example.gratefulnote.R
-import com.example.gratefulnote.mainfragment.MainViewModel
+import com.example.gratefulnote.mainMenu.presentation.logic.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +20,7 @@ class MainScreenViewFragment : Fragment() {
         setHasOptionsMenu(true)
     }
     private fun notifyRestoreSucceedToMainScreen(){
-        mainViewModel.fetchRecyclerViewDataWithCurrentFilterState()
+        mainViewModel.refreshDiaryList()
     }
 
     override fun onCreateView(
