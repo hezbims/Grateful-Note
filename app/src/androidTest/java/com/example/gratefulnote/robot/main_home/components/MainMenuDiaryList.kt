@@ -2,12 +2,12 @@ package com.example.gratefulnote.robot.main_home.components
 
 import android.view.View
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
-import com.example.gratefulnote.mainMenu.presentation.component.DiaryPreviewViewHolder
-import com.example.gratefulnote.robot._common.EspressoInteractor
+import com.example.gratefulnote.robot._common.action.pagingScrollUntilPosition
+import com.example.gratefulnote.robot._common.assertion.itemMatchAtIndex
+import com.example.gratefulnote.robot._common.interactor.base.EspressoInteractor
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
@@ -23,6 +23,13 @@ class MainMenuDiaryList(matcher: Matcher<View>) : EspressoInteractor(matcher) {
 
     fun scrollToIndex(itemIndex : Int) {
         onView(viewMatcher)
-            .perform(scrollToPosition<DiaryPreviewViewHolder>(itemIndex))
+            .perform(pagingScrollUntilPosition(itemIndex))
+    }
+
+    fun assertTitleAtIndex(title: String, index: Int){
+        onView(viewMatcher).check(itemMatchAtIndex(
+            allOf(withId(R.id.title), withText(title)),
+            index
+        ))
     }
 }

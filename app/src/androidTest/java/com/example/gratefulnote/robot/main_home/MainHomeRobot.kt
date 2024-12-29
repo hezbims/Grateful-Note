@@ -16,6 +16,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withChild
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.example.gratefulnote.R
+import com.example.gratefulnote.robot._common.interactor.base.EspressoInteractor
 import com.example.gratefulnote.robot._common.node_interaction.ClickRecyclerViewItemAction
 import com.example.gratefulnote.robot._common.node_interaction.WaitViewUntil
 import com.example.gratefulnote.robot.main_home.components.EmptyIndicatorText
@@ -27,9 +28,10 @@ import org.hamcrest.CoreMatchers.allOf
 class MainHomeRobot {
     val diaryList = MainMenuDiaryList(withId(R.id.recyclerView))
     val emptyIndicatorText = EmptyIndicatorText(withId(R.id.empty_text_indicator))
+    val addNewDiaryButton = EspressoInteractor(withId(R.id.add_new_diary_action_icon))
 
     fun toAddGratitude() : MainHomeRobot {
-        onView(withId(R.id.add_new_gratitude_action_icon))
+        onView(withId(R.id.add_new_diary_action_icon))
             .perform(click())
         return this
     }

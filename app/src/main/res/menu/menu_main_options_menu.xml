@@ -8,7 +8,7 @@
         app:showAsAction="ifRoom"
         />
     <item
-        android:id="@+id/add_new_gratitude_action_icon"
+        android:id="@+id/add_new_diary_action_icon"
         android:title="@string/new_gratitude"
         android:icon="@drawable/ic_baseline_add"
         app:showAsAction="ifRoom"

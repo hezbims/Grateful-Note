@@ -10,7 +10,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.robot._common.node_interaction.TestAppDataManager
-import com.example.gratefulnote.robot.add_gratitude.AddGratitudeRobot
+import com.example.gratefulnote.robot.add_new_diary.AddNewDiaryRobot
 import com.example.gratefulnote.robot.backup_and_restore.BackupRestoreRobot
 import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
@@ -66,21 +66,21 @@ class EndToEndTestScenario {
 
     private fun When_the_user_input_three_new_positive_emotion() {
         mainHomeRobot.toAddGratitude()
-        addGratitudeRobot.fillFormAndSave(
+        addNewDiaryRobot.fillFormAndSave(
             spinnerValue = "Amusement",
             whatValue = "Saya terhibur",
             whyValue = "karena diajak berwisata"
         )
 
         mainHomeRobot.toAddGratitude()
-        addGratitudeRobot.fillFormAndSave(
+        addNewDiaryRobot.fillFormAndSave(
             spinnerValue = "Gratitude",
             whatValue = "saya bersyukur",
             whyValue = "karena lulus ujian"
         )
 
         mainHomeRobot.toAddGratitude()
-        addGratitudeRobot.fillFormAndSave(
+        addNewDiaryRobot.fillFormAndSave(
             spinnerValue = "Joy",
             whatValue = "saya senang",
             whyValue = "Saya senang karena bermain sepak bola di hari ini"
@@ -167,6 +167,6 @@ class EndToEndTestScenario {
     private val appDataManager = TestAppDataManager()
     private val mainHomeRobot = MainHomeRobot()
     private val editScreenRobot = EditScreenRobot(composeRule)
-    private val addGratitudeRobot = AddGratitudeRobot()
+    private val addNewDiaryRobot = AddNewDiaryRobot()
     private val backupRestoreRobot = BackupRestoreRobot(composeRule)
 }

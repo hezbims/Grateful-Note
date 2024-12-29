@@ -168,7 +168,7 @@ class MainFragment : Fragment() {
                 viewModel.onNavEvent(MainFragmentNavEvent.OpenFilterDialog)
                 true
             }
-            R.id.add_new_gratitude_action_icon -> {
+            R.id.add_new_diary_action_icon -> {
                 viewModel.onNavEvent(MainFragmentNavEvent.MoveToAddGratitude)
                 true
             }

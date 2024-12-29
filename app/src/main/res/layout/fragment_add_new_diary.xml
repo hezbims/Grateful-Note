@@ -67,7 +67,7 @@
                 android:layout_marginStart="24dp"
                 app:cardElevation="24dp">
                 <Spinner
-                    android:id="@+id/add_gratitude_spinner"
+                    android:id="@+id/emotion_type_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </com.google.android.material.card.MaterialCardView>

@@ -88,7 +88,7 @@ class AddNewDiaryFragment : Fragment() {
             _ , bundle ->
             if (bundle.getBoolean(getString(R.string.confirm_add_save_value_key))) {
                 val newData = Diary(
-                    type = binding.addGratitudeSpinner.selectedItem.toString(),
+                    type = binding.emotionTypeSpinner.selectedItem.toString(),
                     what = binding.whatValue.text.toString(),
                     why = binding.whyValue.text.toString()
                 )
@@ -109,7 +109,7 @@ class AddNewDiaryFragment : Fragment() {
 
 
     private fun setSpinner(){
-        binding.addGratitudeSpinner.adapter = ArrayAdapter(requireContext() ,
+        binding.emotionTypeSpinner.adapter = ArrayAdapter(requireContext() ,
             R.layout.spinner_simple_item_list ,
             resources.getStringArray(R.array.type_of_positive_emotion_array)
         )

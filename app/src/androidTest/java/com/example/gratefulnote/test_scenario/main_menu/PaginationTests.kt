@@ -4,7 +4,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.example.gratefulnote.MainActivity
 import com.example.gratefulnote.helper.MyCustomRunnerRule
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
-import com.example.gratefulnote.test_scenario.main_menu._dataset.MainMenuPaginationTestDataset
+import com.example.gratefulnote.test_scenario.main_menu._dataset.PagesDiaryDataset
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -17,7 +17,7 @@ class PaginationTests {
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var dataset: MainMenuPaginationTestDataset
+    lateinit var dataset: PagesDiaryDataset
     @get:Rule(order = 2)
     val seedingRule = MyCustomRunnerRule {
         hiltRule.inject()
@@ -33,7 +33,7 @@ class PaginationTests {
     fun paginationShouldWork_UsersAbleToScrollToTheLatestItem(){
         mainHomeRobot.diaryList.apply {
             scrollToIndex(39)
-            getDiaryCardWithTitle("what-1").assertVisible()
+            assertTitleAtIndex("what-1", 39)
         }
     }
 
