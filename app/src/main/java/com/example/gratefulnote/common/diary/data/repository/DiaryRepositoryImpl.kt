@@ -1,20 +1,25 @@
 package com.example.gratefulnote.common.diary.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.gratefulnote.common.domain.ResponseWrapper
+import com.example.gratefulnote.common.diary.data.cqrs.GetDiaryDetails
 import com.example.gratefulnote.common.diary.data.cqrs.GetDistinctYears
 import com.example.gratefulnote.common.diary.data.cqrs.GetPreviewDiaries
+import com.example.gratefulnote.common.diary.data.cqrs.UpdateDiaryDetails
 import com.example.gratefulnote.common.diary.domain.model.DiaryDetails
 import com.example.gratefulnote.common.diary.domain.model.FilterState
 import com.example.gratefulnote.common.diary.domain.repository.IDiaryRepository
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.common.general.domain.model.PagingResult
 import com.example.gratefulnote.mainMenu.domain.DiaryPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class DiaryRepositoryImpl @Inject constructor(
     private val getPreviewDiaries: GetPreviewDiaries,
     private val getDistinctYears: GetDistinctYears,
+    private val getDiaryDetails: GetDiaryDetails,
+    private val updateDiaryDetails: UpdateDiaryDetails
 ) : IDiaryRepository {
     override suspend fun getPreviewDiary(
         filterState: FilterState,
@@ -26,19 +31,33 @@ class DiaryRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getDiaryDetails(id: Long): Flow<ResponseWrapper<DiaryDetails>> {
+    override fun getDiaryDetails(id: Long): Flow<ResponseWrapper<DiaryDetails>> = flow {
+        emit(ResponseWrapper.Loading())
+        try {
+            emit(ResponseWrapper.Succeed(
+                getDiaryDetails.execute(id)
+            ))
+        } catch (e : Exception) {
+            emit(ResponseWrapper.Error())
+        }
+    }
+
+    override suspend fun toogleIsFavorite(id: Long): Flow<ResponseWrapper<Unit>> {
         throw NotImplementedError()
     }
 
-    override suspend fun toogleIsFavorite(id: Long): Flow<ResponseWrapper<Any>> {
-        throw NotImplementedError()
+    override suspend fun updateDetails(data: DiaryDetails): Flow<ResponseWrapper<Unit>> = flow {
+        emit(ResponseWrapper.Loading())
+        try {
+            emit(ResponseWrapper.Succeed(
+                updateDiaryDetails.execute(data)
+            ))
+        } catch (e : Exception) {
+            emit(ResponseWrapper.Error())
+        }
     }
 
-    override suspend fun updateDetails(data: DiaryDetails): Flow<ResponseWrapper<DiaryDetails>> {
-        throw NotImplementedError()
-    }
-
-    override suspend fun delete(id: Long): Flow<ResponseWrapper<Any>> {
+    override suspend fun delete(id: Long): Flow<ResponseWrapper<Unit>> {
         throw NotImplementedError()
     }
 

@@ -49,17 +49,17 @@ open class BackupRestoreManager (
     protected  open fun getBackupDirectoryFrom(uri : Uri) =
         DocumentFile.fromTreeUri(app , uri)!!
 
-    override fun deleteDocumentFile(file: DocumentFile) = flow<ResponseWrapper<Nothing>>{
+    override fun deleteDocumentFile(file: DocumentFile) = flow {
         emit(ResponseWrapper.Loading())
         emit(
             if (file.delete())
-                ResponseWrapper.Succeed()
+                ResponseWrapper.Succeed(Unit)
             else
                 ResponseWrapper.Error()
         )
     }
 
-    override fun restoreFile(file : DocumentFile) = flow<ResponseWrapper<Nothing>> {
+    override fun restoreFile(file : DocumentFile) = flow {
         emit(ResponseWrapper.Loading())
 
         try {
@@ -72,7 +72,7 @@ open class BackupRestoreManager (
             val diaryList = Gson().fromJson(fileContent, type) as List<Diary>
 
             dao.restoreDiaries(diaryList)
-            emit(ResponseWrapper.Succeed())
+            emit(ResponseWrapper.Succeed(Unit))
         } catch (e : Exception){
             emit(ResponseWrapper.Error(e))
         }
@@ -81,7 +81,7 @@ open class BackupRestoreManager (
     private val sharedPref = app.getSharedPreferences(
         Constants.SharedPrefs.BackupRestore.name, Context.MODE_PRIVATE,
     )
-    override fun getPersistedBackupUri() = flow<ResponseWrapper<Uri>> {
+    override fun getPersistedBackupUri() = flow<ResponseWrapper<Uri?>> {
         emit(ResponseWrapper.Loading())
         val uriString = sharedPref.getString("backup_restore_uri", null)
         if (uriString == null)
@@ -90,13 +90,13 @@ open class BackupRestoreManager (
             emit(ResponseWrapper.Succeed(Uri.parse(uriString)))
     }
 
-    override suspend fun persistBackupPath(uri : Uri): ResponseWrapper<Nothing> {
+    override suspend fun persistBackupPath(uri : Uri): ResponseWrapper<Unit> {
         return try {
             persistUriReadAndWritePermission(uri)
             sharedPref.edit()
                 .putString("backup_restore_uri", uri.toString())
                 .apply()
-            ResponseWrapper.Succeed()
+            ResponseWrapper.Succeed(Unit)
         } catch (e : Exception){
             ResponseWrapper.Error(e)
         }
@@ -111,7 +111,7 @@ open class BackupRestoreManager (
     override fun createNewBackup(
         backupDirectoryUri: Uri,
         backupTitle: String
-    ) = flow<ResponseWrapper<Nothing>> {
+    ) = flow {
         emit(ResponseWrapper.Loading())
 
         var file: DocumentFile? = null
@@ -139,7 +139,7 @@ open class BackupRestoreManager (
                 )
             }
 
-            emit(ResponseWrapper.Succeed())
+            emit(ResponseWrapper.Succeed(Unit))
 
         } catch (e : Exception){
             file?.delete()

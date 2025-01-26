@@ -1,6 +1,7 @@
 package com.example.gratefulnote.robot.main_home
 
 import android.view.Gravity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.Espresso.onView
@@ -24,11 +25,22 @@ import com.example.gratefulnote.robot.main_home.components.MainMenuDiaryList
 import com.example.gratefulnote.utils.waitUntilSucceed
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.allOf
+import javax.inject.Inject
 
-class MainHomeRobot {
+class MainHomeRobot @Inject constructor() {
     val diaryList = MainMenuDiaryList(withId(R.id.recyclerView))
     val emptyIndicatorText = EmptyIndicatorText(withId(R.id.empty_text_indicator))
     val addNewDiaryButton = EspressoInteractor(withId(R.id.add_new_diary_action_icon))
+
+    fun waitUntilScreenAppear(){
+        onView(withId(androidx.appcompat.R.id.action_bar)).perform(
+            WaitViewUntil(tag = "Wait toolbar title Main Menu") { view ->
+                if (view !is Toolbar)
+                    throw IllegalArgumentException()
+                hasDescendant(withText("Main Menu")).matches(view)
+            }
+        )
+    }
 
     fun toAddGratitude() : MainHomeRobot {
         onView(withId(R.id.add_new_diary_action_icon))

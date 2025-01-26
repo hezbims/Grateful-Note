@@ -105,7 +105,7 @@ class MainScreenViewModel @Inject constructor(
 }
 
 data class BackupRestoreViewState(
-    val pathLocation : ResponseWrapper<Uri> = ResponseWrapper.Loading(),
+    val pathLocation : ResponseWrapper<Uri?> = ResponseWrapper.Loading(),
     val backupFiles : ResponseWrapper<List<DocumentFileDto>>? = null,
     val openCreateNewBackupDialog : Boolean = false,
     val restoreFile : DocumentFileDto? = null,
@@ -115,9 +115,9 @@ sealed class BackupRestoreStateEvent {
     data object LoadPathFromSharedPref : BackupRestoreStateEvent()
     class UpdatePathLocation(val newUri: Uri) : BackupRestoreStateEvent()
     data object OpenNewBackupDialog : BackupRestoreStateEvent()
-    class RequestDismissNewBackupDialog(val dialogStatus : ResponseWrapper<Nothing>?) : BackupRestoreStateEvent()
+    class RequestDismissNewBackupDialog(val dialogStatus : ResponseWrapper<Unit>?) : BackupRestoreStateEvent()
     data object ReloadBackupFileList : BackupRestoreStateEvent()
     class DeleteFile(val file : DocumentFileDto) : BackupRestoreStateEvent()
     class OpenRestoreConfirmationDialog(val file : DocumentFileDto) : BackupRestoreStateEvent()
-    class RequestDismissRestoreConfirmationDialog(val dialogStatus : ResponseWrapper<Nothing>?) : BackupRestoreStateEvent()
+    class RequestDismissRestoreConfirmationDialog(val dialogStatus : ResponseWrapper<Unit>?) : BackupRestoreStateEvent()
 }

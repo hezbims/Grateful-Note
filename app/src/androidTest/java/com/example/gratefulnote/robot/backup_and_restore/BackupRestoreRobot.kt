@@ -6,6 +6,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -15,14 +16,12 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import com.example.gratefulnote.backuprestore.presentation.test_tag.BackupRestoreNodeTag
 import com.example.gratefulnote.robot._common.Backable
-import com.example.gratefulnote.utils.MyComposeActivityRule
 import com.example.gratefulnote.utils.waitUntilSucceed
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 @OptIn(ExperimentalTestApi::class)
-class BackupRestoreRobot(
-    private val composeRule : MyComposeActivityRule
-) : Backable(composeRule) {
+class BackupRestoreRobot @Inject constructor(private val composeRule: ComposeTestRule): Backable() {
     fun clickPilihLokasiBackup() : BackupRestoreRobot{
         composeRule.waitUntilExactlyOneExists(hasText("Pilih Lokasi Backup"))
         composeRule.onNodeWithText("Pilih Lokasi Backup").performClick()

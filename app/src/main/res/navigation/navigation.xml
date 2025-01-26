@@ -33,8 +33,8 @@
             android:label="@string/edit"
             tools:layout="@layout/fragment_edit_diary">
             <argument
-                android:name="currentDiary"
-                app:argType="com.example.gratefulnote.database.Diary" />
+                android:name="diaryId"
+                app:argType="long" />
         </fragment>
         <fragment
             android:id="@+id/addGratetitudeFragment"

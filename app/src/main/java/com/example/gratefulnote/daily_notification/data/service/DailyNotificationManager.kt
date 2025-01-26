@@ -25,7 +25,7 @@ class DailyNotificationManager (
                     dailyAlarmSetter.enableDailyAlarm(
                         hour = hour,
                         minute = minute,
-                        id = response.data!!,
+                        id = response.data,
                     )
             }
         }

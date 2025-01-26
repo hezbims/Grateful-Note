@@ -72,7 +72,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
     fun onToogleIsFavorite(id: Long){
         viewModelScope.launch(Dispatchers.IO) {
             repository.toogleIsFavorite(id)
@@ -80,10 +79,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private var _doScrollToTop = false
+    val doScrollToTop : Boolean
+        get() = _doScrollToTop
+    fun doneScrollToTop() { _doScrollToTop = false }
+
     fun refreshDiaryList(scrollToTop: Boolean = false){
         _pagingSource?.invalidate()
+        _doScrollToTop = scrollToTop
     }
-
 
     val listOfYear = repository.getDistinctYears()
 }
@@ -91,4 +95,5 @@ class MainViewModel @Inject constructor(
 sealed class MainFragmentNavEvent {
     data object MoveToAddGratitude : MainFragmentNavEvent()
     data object OpenFilterDialog : MainFragmentNavEvent()
+    data class ToEditDiary(val diaryId: Long) : MainFragmentNavEvent()
 }

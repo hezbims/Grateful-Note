@@ -45,7 +45,7 @@ class ConfirmRestoreDialogViewModel @Inject constructor(
 
 data class ConfirmRestoreDialogState(
     val restoreFile : DocumentFileDto? = null,
-    val restoreState : ResponseWrapper<Nothing>? = null
+    val restoreState : ResponseWrapper<Unit>? = null
 )
 
 sealed class ConfirmRestoreDialogEvent {

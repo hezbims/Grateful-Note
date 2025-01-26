@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gratefulnote.R
 import com.example.gratefulnote.common.presentation.ConfirmDialog
 import com.example.gratefulnote.databinding.FragmentMainBinding
-import com.example.gratefulnote.mainMenu.presentation.logic.DiaryPreviewPagingAdapter
 import com.example.gratefulnote.mainMenu.presentation.component.DiaryPreviewViewHolder
+import com.example.gratefulnote.mainMenu.presentation.logic.DiaryPreviewPagingAdapter
 import com.example.gratefulnote.mainMenu.presentation.logic.MainFragmentNavEvent
 import com.example.gratefulnote.mainMenu.presentation.logic.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,7 +84,8 @@ class MainFragment : Fragment() {
                         confirmDeleteDialog.show(childFragmentManager , "TAG")
                 },
                 onClickEdit = {
-
+                    viewModel.onNavEvent(MainFragmentNavEvent.ToEditDiary(
+                        diaryId = it.id))
                 },
                 onClickFavorite = {
                     viewModel.onToogleIsFavorite(it.id)
@@ -94,10 +95,19 @@ class MainFragment : Fragment() {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         binding.recyclerView.adapter = pagingAdapter
+            .apply { registerAdapterDataObserver(
+                object : RecyclerView.AdapterDataObserver(){
+                    override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                        if (viewModel.doScrollToTop)
+                            binding.recyclerView.scrollToPosition(0)
+                    }
+                }
+            ) }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.recycleViewPager.collectLatest {
-                    if (pagingAdapter.itemCount.equals(0))
+                    if (pagingAdapter.itemCount == 0)
                         binding.emptyTextIndicator.visibility = View.GONE
                     else
                         binding.emptyTextIndicator.visibility = View.VISIBLE
@@ -120,6 +130,9 @@ class MainFragment : Fragment() {
                     MainFragmentDirections.actionMainFragmentToAddGratetitudeFragment()
                 MainFragmentNavEvent.OpenFilterDialog ->
                     MainFragmentDirections.actionMainFragmentToFilterDialogFragment()
+                is MainFragmentNavEvent.ToEditDiary -> {
+                    MainFragmentDirections.actionMainFragmentToEditPositiveEmotion(navEvent.diaryId)
+                }
             }
             if (navController.currentDestination?.id == R.id.mainFragment) {
                 navController.navigate(nextDestination)
@@ -127,34 +140,6 @@ class MainFragment : Fragment() {
         }
     }
 
-
-//        viewModel.recyclerViewData.observe(viewLifecycleOwner){ recyclerViewState ->
-//            val recyclerViewDataResponse = recyclerViewState.listDataResponse
-//            when (recyclerViewDataResponse) {
-//                is ResponseWrapper.Succeed -> {
-//                    val listData = recyclerViewDataResponse.data!!
-//
-//                    binding.emptyTextIndicator.visibility =
-//                        if (listData.isEmpty())
-//                            View.VISIBLE
-//                        else
-//                            View.GONE
-//                    binding.loadingIndicator.visibility = View.GONE
-//
-//                    recyclerViewAdapter.submitList(listData){
-//                        // callback setelah submit berhasil
-//                        if (recyclerViewState.scrollToPositionZero){
-//                            binding.recyclerView.scrollToPosition(0)
-//                            viewModel.doneScrollToPositionZero()
-//                        }
-//                    }
-//                }
-//                is ResponseWrapper.Loading -> {
-//                    binding.loadingIndicator.visibility = View.VISIBLE
-//                }
-//                else -> throw Exception("Ada kesalahan dalam program")
-//            }
-//        }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main_options_menu , menu)
@@ -175,7 +160,4 @@ class MainFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
-
 }

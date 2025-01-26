@@ -3,8 +3,9 @@ package com.example.gratefulnote.test_scenario.e2e_test
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.core.net.toUri
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.platform.app.InstrumentationRegistry
@@ -26,6 +27,7 @@ import org.junit.Test
 class EndToEndTestScenario {
     @Test
     fun endToEndTest() {
+        ActivityScenario.launch(MainActivity::class.java)
         When_the_user_input_three_new_positive_emotion()
         Then_there_is_three_list_of_card_in_the_home_page()
         When_the_user_edit_the_second_positive_emotion()
@@ -162,11 +164,11 @@ class EndToEndTestScenario {
     var hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 2)
-    val composeRule = createAndroidComposeRule<MainActivity>()
+    val composeRule = createEmptyComposeRule()
 
     private val appDataManager = TestAppDataManager()
     private val mainHomeRobot = MainHomeRobot()
-    private val editScreenRobot = EditScreenRobot(composeRule)
+    private val editScreenRobot = EditScreenRobot()
     private val addNewDiaryRobot = AddNewDiaryRobot()
     private val backupRestoreRobot = BackupRestoreRobot(composeRule)
 }

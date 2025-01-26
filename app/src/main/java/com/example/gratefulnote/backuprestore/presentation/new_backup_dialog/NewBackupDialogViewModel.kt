@@ -55,7 +55,7 @@ class NewBackupDialogViewModel @Inject constructor(
 }
 
 data class CreateNewBackupDialogState(
-    val createNewBackupStatus : ResponseWrapper<Nothing>? = null,
+    val createNewBackupStatus : ResponseWrapper<Unit>? = null,
     val backupTitle : String = "",
 )
 

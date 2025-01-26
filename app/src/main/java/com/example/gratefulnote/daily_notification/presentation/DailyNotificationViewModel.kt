@@ -162,7 +162,7 @@ class DailyNotificationViewModel @Inject constructor(
                 it is ResponseWrapper.Succeed
             }
             .map { response ->
-                (response as ResponseWrapper.Succeed).data!!
+                (response as ResponseWrapper.Succeed).data
                     .map {
                         DailyNotificationUiModel(
                             data = it,
@@ -207,7 +207,7 @@ class DailyNotificationViewModel @Inject constructor(
 
                     val newList = _state.value.listDailyNotification.map {
                         if (it.data.id == updatedDataId) {
-                            it.copy(data = response.data!!)
+                            it.copy(data = response.data)
                         }
                         else
                             it
@@ -230,7 +230,7 @@ class DailyNotificationViewModel @Inject constructor(
 
 data class DailyNotificationState(
     val listDailyNotification : List<DailyNotificationUiModel> = emptyList(),
-    val createNewDailyNotificationStatus : ResponseWrapper<Int> = ResponseWrapper.Succeed(),
+    val createNewDailyNotificationStatus : ResponseWrapper<Int>? = null,
     val openTimePickerDialog : Boolean = false,
     val openConfirmDeleteDialog : Boolean = false,
     val isMultiSelectModeActivated : Boolean = false,

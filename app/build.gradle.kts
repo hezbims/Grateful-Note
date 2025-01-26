@@ -31,14 +31,15 @@ android {
 
     defaultConfig {
         applicationId = "com.hezapp.gratefulnote"
-        testApplicationId = "com.hezapp.gratefulnote_instrumentation"
+        testApplicationId = "com.example.gratefulnote.debug.test"
         minSdk = 23
         targetSdk = 34
         versionCode = 2
         versionName = "2.0"
 
         // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner = "com.example.gratefulnote.runner.HiltTestRunner"
+        // testInstrumentationRunner = "com.example.gratefulnote.runner.HiltTestRunner"
+        testInstrumentationRunner = "com.example.gratefulnote.debug.test.MyCucumberRunner"
     }
 
     signingConfigs {
@@ -179,4 +180,10 @@ dependencies {
 
     androidTestImplementation(libs.mockito.core)
     androidTestImplementation(libs.mockito.android)
+
+    androidTestImplementation(libs.cucumber.android)
+    androidTestImplementation(libs.cucumber.android.hilt)
+//    androidTestImplementation(libs.cucumber.picocontainer)
+
+    androidTestRuntimeOnly(libs.uiautomator)
 }

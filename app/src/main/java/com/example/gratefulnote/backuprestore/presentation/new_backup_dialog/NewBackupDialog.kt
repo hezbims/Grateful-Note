@@ -39,7 +39,7 @@ import com.example.gratefulnote.common.domain.ResponseWrapper
 
 @Composable
 fun NewBackupDialogSetup(
-    onDismissRequest: (ResponseWrapper<Nothing>?) -> Unit,
+    onDismissRequest: (ResponseWrapper<Unit>?) -> Unit,
     documentTreeUri: Uri,
     viewModel: NewBackupDialogViewModel = viewModel(),
 ){
@@ -78,7 +78,7 @@ fun NewBackupDialogSetup(
 }
 @Composable
 private fun NewBackupDialog(
-    onDismissRequest : (ResponseWrapper<Nothing>?) -> Unit,
+    onDismissRequest : (ResponseWrapper<Unit>?) -> Unit,
     state : CreateNewBackupDialogState,
     onEvent : (CreateNewBackupDialogEvent) -> Unit,
 ){

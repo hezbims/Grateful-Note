@@ -8,9 +8,9 @@ import org.hamcrest.Matchers.any
 
 class WaitViewUntil(
     /// contoh : View.GONE
-    private val condition : (View) -> Boolean,
     private val timeoutInMillis : Long = 2500L,
     private val tag: String? = null,
+    private val condition : (View?) -> Boolean,
 ) : ViewAction {
     override fun getDescription(): String {
         return "Wait for view with condition"
@@ -20,7 +20,7 @@ class WaitViewUntil(
         return any(View::class.java)
     }
 
-    override fun perform(uiController: UiController, view: View) {
+    override fun perform(uiController: UiController, view: View?) {
         val endtime = System.currentTimeMillis() + timeoutInMillis
         do {
             try {

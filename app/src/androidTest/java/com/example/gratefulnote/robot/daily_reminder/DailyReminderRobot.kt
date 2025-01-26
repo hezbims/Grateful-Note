@@ -9,6 +9,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isOff
 import androidx.compose.ui.test.isOn
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onChildren
@@ -22,11 +23,10 @@ import com.example.gratefulnote.R
 import com.example.gratefulnote.daily_notification.test_tag.DailyNotificationTestTag
 import com.example.gratefulnote.robot._common.Backable
 import com.example.gratefulnote.robot._common.node_interaction.isNotCached
-import com.example.gratefulnote.utils.MyComposeActivityRule
 
 class DailyReminderRobot(
-    private val composeRule : MyComposeActivityRule
-) : Backable(composeRule) {
+    private val composeRule : ComposeTestRule
+) : Backable() {
     fun toogleSwitchOnItem(
         hour : Int,
         minute : Int,

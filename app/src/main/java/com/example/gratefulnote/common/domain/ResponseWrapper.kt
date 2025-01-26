@@ -1,7 +1,7 @@
 package com.example.gratefulnote.common.domain
 
 sealed class ResponseWrapper<T> {
-    class Succeed<T>(val data : T? = null) : ResponseWrapper<T>()
+    class Succeed<T>(val data : T) : ResponseWrapper<T>()
     class Error<T>(val exception : Throwable? = null) : ResponseWrapper<T>() {
         override fun toString(): String {
             return exception?.message ?: "Unknown Error"

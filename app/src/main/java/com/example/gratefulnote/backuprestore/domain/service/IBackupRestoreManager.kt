@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface IBackupRestoreManager {
     fun loadListOfFilesFrom(uri : Uri) : Flow<ResponseWrapper<List<DocumentFileDto>>>
-    fun deleteDocumentFile(file : DocumentFile) : Flow<ResponseWrapper<Nothing>>
-    fun restoreFile(file : DocumentFile) : Flow<ResponseWrapper<Nothing>>
-    fun getPersistedBackupUri() : Flow<ResponseWrapper<Uri>>
-    suspend fun persistBackupPath(uri : Uri) : ResponseWrapper<Nothing>
+    fun deleteDocumentFile(file : DocumentFile) : Flow<ResponseWrapper<Unit>>
+    fun restoreFile(file : DocumentFile) : Flow<ResponseWrapper<Unit>>
+    fun getPersistedBackupUri() : Flow<ResponseWrapper<Uri?>>
+    suspend fun persistBackupPath(uri : Uri) : ResponseWrapper<Unit>
     fun createNewBackup(
         backupDirectoryUri : Uri,
         backupTitle : String
-    ) : Flow<ResponseWrapper<Nothing>>
+    ) : Flow<ResponseWrapper<Unit>>
 
 }

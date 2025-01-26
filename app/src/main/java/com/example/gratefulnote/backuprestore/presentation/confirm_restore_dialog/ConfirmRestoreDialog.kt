@@ -32,7 +32,7 @@ import com.example.gratefulnote.common.domain.ResponseWrapper
 
 @Composable
 fun ConfirmRestoreDialogSetup(
-    onDismissRequest: (ResponseWrapper<Nothing>?) -> Unit,
+    onDismissRequest: (ResponseWrapper<Unit>?) -> Unit,
     restoreFile: DocumentFileDto,
     viewModel: ConfirmRestoreDialogViewModel = viewModel()
 ){
@@ -50,7 +50,7 @@ fun ConfirmRestoreDialogSetup(
 }
 @Composable
 private fun ConfirmRestoreDialog(
-    onDismissRequest : (ResponseWrapper<Nothing>?) -> Unit,
+    onDismissRequest : (ResponseWrapper<Unit>?) -> Unit,
     viewModel: ConfirmRestoreDialogViewModel
 ){
     val state = viewModel.state.collectAsState().value
@@ -85,7 +85,7 @@ private fun ConfirmRestoreDialog(
 
 @Composable
 private fun ConfirmRestoreDialog(
-    onDismissRequest: (ResponseWrapper<Nothing>?) -> Unit,
+    onDismissRequest: (ResponseWrapper<Unit>?) -> Unit,
     state : ConfirmRestoreDialogState,
     onEvent : (ConfirmRestoreDialogEvent) -> Unit,
 ){

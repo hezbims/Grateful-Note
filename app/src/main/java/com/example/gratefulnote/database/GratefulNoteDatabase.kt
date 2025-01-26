@@ -1,12 +1,15 @@
 package com.example.gratefulnote.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.gratefulnote.BuildConfig
+import java.util.concurrent.Executors
 
 
 val MIGRATION_1_2 : Migration by lazy {
@@ -186,7 +189,7 @@ abstract class GratefulNoteDatabase : RoomDatabase(){
                 var instance = INSTANCE
 
                 if (instance == null) {
-                    instance = Room.databaseBuilder(
+                     val dbBuilder = Room.databaseBuilder(
                         context.applicationContext,
                         GratefulNoteDatabase::class.java,
                         dbName
@@ -194,7 +197,14 @@ abstract class GratefulNoteDatabase : RoomDatabase(){
                         .addMigrations(MIGRATION_1_2)
                         .addMigrations(MIGRATION_2_3)
                         .addMigrations(MIGRATION_4_5)
-                        .build()
+
+                    if (BuildConfig.DEBUG)
+                        dbBuilder.setQueryCallback({
+                          sqlQuery, bindArgs ->
+                            Log.i("vvv Diary DB", "query : $sqlQuery | args : $bindArgs")
+                        }, Executors.newSingleThreadExecutor())
+
+                    instance = dbBuilder.build()
                     INSTANCE = instance
                 }
                 return instance

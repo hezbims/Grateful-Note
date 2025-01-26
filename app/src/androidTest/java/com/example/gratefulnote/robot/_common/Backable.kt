@@ -1,13 +1,10 @@
 package com.example.gratefulnote.robot._common
 
-import com.example.gratefulnote.utils.MyComposeActivityRule
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 
-abstract class Backable(
-    private val composeRule : MyComposeActivityRule
-) {
+abstract class Backable {
     fun pressBack(){
-        composeRule.activityRule.scenario.onActivity {
-            it.onBackPressedDispatcher.onBackPressed()
-        }
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack()
     }
 }

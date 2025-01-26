@@ -35,16 +35,16 @@ class DailyNotificationRepository(
         emit(ResponseWrapper.Loading())
         dao.update(dailyNotification)
 
-        val newData = dao.getDailyNotification(dailyNotification.id)
+        val newData = dao.getDailyNotification(dailyNotification.id)!!
         emit(ResponseWrapper.Succeed(data = newData))
     }
 
     override fun deleteDailyNotification(
         vararg dailyNotifications: DailyNotificationEntity
-    ) = flow<ResponseWrapper<Nothing>> {
+    ) = flow {
         emit(ResponseWrapper.Loading())
         dao.delete(*dailyNotifications)
-        emit(ResponseWrapper.Succeed())
+        emit(ResponseWrapper.Succeed(Unit))
     }
 
     override fun getAllDailyNotification() = flow {
