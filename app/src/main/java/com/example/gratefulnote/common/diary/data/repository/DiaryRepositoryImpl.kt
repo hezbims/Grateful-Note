@@ -1,6 +1,7 @@
 package com.example.gratefulnote.common.diary.data.repository
 
 import androidx.lifecycle.LiveData
+import com.example.gratefulnote.common.diary.data.cqrs.DeleteDiary
 import com.example.gratefulnote.common.diary.data.cqrs.GetDiaryDetails
 import com.example.gratefulnote.common.diary.data.cqrs.GetDistinctYears
 import com.example.gratefulnote.common.diary.data.cqrs.GetPreviewDiaries
@@ -19,7 +20,8 @@ class DiaryRepositoryImpl @Inject constructor(
     private val getPreviewDiaries: GetPreviewDiaries,
     private val getDistinctYears: GetDistinctYears,
     private val getDiaryDetails: GetDiaryDetails,
-    private val updateDiaryDetails: UpdateDiaryDetails
+    private val updateDiaryDetails: UpdateDiaryDetails,
+    private val deleteDiary: DeleteDiary,
 ) : IDiaryRepository {
     override suspend fun getPreviewDiary(
         filterState: FilterState,
@@ -57,9 +59,8 @@ class DiaryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun delete(id: Long): Flow<ResponseWrapper<Unit>> {
-        throw NotImplementedError()
-    }
+    override suspend fun delete(id: Long): Flow<ResponseWrapper<Unit>> =
+        deleteDiary.execute(id)
 
     override fun getDistinctYears(): LiveData<List<Int>> = getDistinctYears.execute()
 }

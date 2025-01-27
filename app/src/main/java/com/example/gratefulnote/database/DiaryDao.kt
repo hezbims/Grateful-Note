@@ -20,7 +20,7 @@ interface DiaryDao {
     suspend fun insertAll(diaries : List<Diary>)
 
     @RawQuery
-    suspend fun getDiariesPaginated(query : SupportSQLiteQuery) : List<Diary>
+    suspend fun getDiaries(query : SupportSQLiteQuery) : List<Diary>
 
     suspend fun getDiariesPaginated(
         filterState: FilterState,
@@ -42,7 +42,7 @@ interface DiaryDao {
             }
             toString()
         }
-        return getDiariesPaginated(SimpleSQLiteQuery(queryString))
+        return getDiaries(SimpleSQLiteQuery(queryString))
     }
 
     @Query("SELECT * FROM positive_emotion_table")

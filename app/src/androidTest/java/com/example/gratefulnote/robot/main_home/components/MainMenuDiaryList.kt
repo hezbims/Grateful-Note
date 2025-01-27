@@ -1,7 +1,7 @@
 package com.example.gratefulnote.robot.main_home.components
 
 import android.view.View
-import androidx.compose.ui.test.hasAnyDescendant
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -10,13 +10,14 @@ import com.example.gratefulnote.R
 import com.example.gratefulnote.robot._common.action.pagingScrollUntilPosition
 import com.example.gratefulnote.robot._common.assertion.itemMatchAtIndex
 import com.example.gratefulnote.robot._common.interactor.base.EspressoInteractor
+import com.example.gratefulnote.robot._common.node_interaction.WaitViewUntil
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
 class MainMenuDiaryList(matcher: Matcher<View>) : EspressoInteractor(matcher) {
     fun getDiaryCardWithTitle(title: String) : DiaryCard {
         return DiaryCard(allOf(
-            ViewMatchers.withId(R.id.diary_card),
+            withId(R.id.diary_card),
             ViewMatchers.hasDescendant(withText(title)))
         )
     }
@@ -25,6 +26,14 @@ class MainMenuDiaryList(matcher: Matcher<View>) : EspressoInteractor(matcher) {
 //            withText("what-1")
 //        ))
 //    }
+    fun waitUntilItemCountAtLeast(itemCount: Int){
+        onView(viewMatcher).perform(WaitViewUntil{ view ->
+            if (view is RecyclerView){
+                return@WaitViewUntil (view.adapter?.itemCount ?: 0) >= itemCount
+            }
+            false
+        })
+    }
 
     fun scrollToIndex(itemIndex : Int) {
         onView(viewMatcher)

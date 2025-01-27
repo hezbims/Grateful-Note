@@ -90,16 +90,30 @@ class MainFragment : Fragment() {
                 onClickFavorite = {
                     viewModel.onToogleIsFavorite(it.id)
                 }
-            )
+            ),
         ).apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
+
         binding.recyclerView.adapter = pagingAdapter
             .apply { registerAdapterDataObserver(
                 object : RecyclerView.AdapterDataObserver(){
+                    fun onItemChanged(){
+                        if (itemCount != 0)
+                            binding.emptyTextIndicator.visibility = View.GONE
+                        else
+                            binding.emptyTextIndicator.visibility = View.VISIBLE
+                    }
+
                     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                        onItemChanged()
                         if (viewModel.doScrollToTop)
                             binding.recyclerView.scrollToPosition(0)
+                    }
+
+                    override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                        onItemChanged()
+                        super.onItemRangeRemoved(positionStart, itemCount)
                     }
                 }
             ) }
@@ -107,11 +121,6 @@ class MainFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.recycleViewPager.collectLatest {
-                    if (pagingAdapter.itemCount == 0)
-                        binding.emptyTextIndicator.visibility = View.GONE
-                    else
-                        binding.emptyTextIndicator.visibility = View.VISIBLE
-
                     pagingAdapter.submitData(it)
                 }
             }

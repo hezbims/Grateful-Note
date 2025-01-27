@@ -20,6 +20,7 @@ import com.example.gratefulnote.R
 import com.example.gratefulnote.robot._common.interactor.base.EspressoInteractor
 import com.example.gratefulnote.robot._common.node_interaction.ClickRecyclerViewItemAction
 import com.example.gratefulnote.robot._common.node_interaction.WaitViewUntil
+import com.example.gratefulnote.robot.main_home.components.ConfirmDeleteDialog
 import com.example.gratefulnote.robot.main_home.components.EmptyIndicatorText
 import com.example.gratefulnote.robot.main_home.components.MainMenuDiaryList
 import com.example.gratefulnote.utils.waitUntilSucceed
@@ -31,6 +32,7 @@ class MainHomeRobot @Inject constructor() {
     val diaryList = MainMenuDiaryList(withId(R.id.recyclerView))
     val emptyIndicatorText = EmptyIndicatorText(withId(R.id.empty_text_indicator))
     val addNewDiaryButton = EspressoInteractor(withId(R.id.add_new_diary_action_icon))
+    val confirmDeleteDialog = ConfirmDeleteDialog()
 
     fun waitUntilScreenAppear(){
         onView(withId(androidx.appcompat.R.id.action_bar)).perform(

@@ -12,4 +12,9 @@ class DiaryCard(matcher: Matcher<View>) : EspressoInteractor(matcher) {
         ViewMatchers.isDescendantOfA(this.viewMatcher),
         ViewMatchers.withId(R.id.edit_diary_icon))
     )
+
+    val deleteIcon = EspressoInteractor(allOf(
+        ViewMatchers.isDescendantOfA(this.viewMatcher),
+        ViewMatchers.withId(R.id.delete_diary_icon)
+    ))
 }

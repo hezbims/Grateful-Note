@@ -9,6 +9,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.gratefulnote.common.diary.domain.model.FilterState
 import com.example.gratefulnote.common.diary.domain.repository.IDiaryRepository
+import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.database.DiaryDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -67,8 +68,10 @@ class MainViewModel @Inject constructor(
 
     fun onDelete(){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.delete(deletedItemId)
-            refreshDiaryList()
+            repository.delete(deletedItemId).collect { response ->
+                if (response is ResponseWrapper.Succeed)
+                    refreshDiaryList()
+            }
         }
     }
 

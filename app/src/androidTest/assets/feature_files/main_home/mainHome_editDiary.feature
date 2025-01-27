@@ -1,5 +1,5 @@
 @base_rule
-Feature: Main Home and Edit Diary
+Feature: Main Home - Edit Diary
 
   Background:
     Given the user have "50" minimal diaries
