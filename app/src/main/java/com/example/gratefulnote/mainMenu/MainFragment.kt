@@ -107,8 +107,10 @@ class MainFragment : Fragment() {
 
                     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                         onItemChanged()
-                        if (viewModel.doScrollToTop)
+                        if (viewModel.doScrollToTop) {
+                            viewModel.doneScrollToTop()
                             binding.recyclerView.scrollToPosition(0)
+                        }
                     }
 
                     override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
