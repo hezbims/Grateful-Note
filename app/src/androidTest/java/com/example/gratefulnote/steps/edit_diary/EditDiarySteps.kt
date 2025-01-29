@@ -11,7 +11,7 @@ class EditDiarySteps {
     private val editDiaryRobot = EditScreenRobot()
     private val mainHomeRobot = MainHomeRobot()
 
-    @And("^edit title with '(.*)'$")
+    @And("edit title with {string}")
     fun editTitleWith(newTitle: String){
         editDiaryRobot.titleTextField.apply {
             clear()
@@ -19,7 +19,7 @@ class EditDiarySteps {
         }
     }
 
-    @And("^edit desc with '(.*)'$")
+    @And("edit desc with {string}")
     fun editDescWith(newDesc: String){
         editDiaryRobot.descTextField.apply {
             clear()
@@ -27,18 +27,18 @@ class EditDiarySteps {
         }
     }
 
-    @And("^user go back after edit the diary$")
+    @And("user go back after edit the diary")
     fun goBackAfterEditDiary(){
         editDiaryRobot.pressBack()
         mainHomeRobot.waitUntilScreenAppear()
     }
 
-    @Then("^the diary title in edit screen is '(.*)'$")
+    @Then("the diary title in edit screen is {string}")
     fun assertDiaryTitle(expectedTitle: String){
         editDiaryRobot.titleTextField.assertContent(expectedTitle)
     }
 
-    @And("^the diary description in edit screen is '(.*)'$")
+    @And("the diary description in edit screen is {string}")
     fun assertDiaryDescription(expectedDescription: String){
         editDiaryRobot.descTextField.assertContent(expectedDescription)
     }
