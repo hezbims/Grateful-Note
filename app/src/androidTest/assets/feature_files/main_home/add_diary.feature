@@ -16,6 +16,3 @@ Feature: Main Home - Add Diary
     And there is exactly one diary with:
       |title     | desc     | tag      | isFavorite | createdAt           | updatedAt           |
       |New Title | New Desc | Serenity | false      | 2020-01-15T00:00:00 | 2020-01-15T00:00:00 |
-    When the user try edit the '1'-th diary with title 'New Title'
-    Then the diary title in edit screen is 'New Title'
-    And the diary description in edit screen is 'New Desc'

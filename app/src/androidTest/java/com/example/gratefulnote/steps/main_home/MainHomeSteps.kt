@@ -8,10 +8,10 @@ import io.cucumber.java.en.When
 class MainHomeSteps {
     private val mainHomeRobot = MainHomeRobot()
 
-    @When("^the user try edit the '(.*)'-th diary with title '(.*)'$")
-    fun whenUserTryToEditNthData(n: String, title: String){
+    @When("the user go to edit the {int}-th diary with title {string}")
+    fun whenUserTryToEditNthData(n: Int, title: String){
         mainHomeRobot.diaryList.apply {
-            val index = n.toInt() - 1
+            val index = n - 1
 
             scrollToIndex(index)
             assertTitleAtIndex(title = title, index = index)

@@ -20,7 +20,7 @@ class DiaryMapper @Inject constructor() {
         return DiaryDetails(
             id = diary.id,
             title = diary.what,
-            description = diary.what,
+            description = diary.why,
             type = diary.type,
             updatedAt = diary.updatedAt,
             createdAt = diary.createdAt,
