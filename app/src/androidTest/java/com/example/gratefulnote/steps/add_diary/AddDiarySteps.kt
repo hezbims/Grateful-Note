@@ -6,27 +6,27 @@ import io.cucumber.java.en.And
 class AddDiarySteps {
     private val addNewDiaryRobot = AddNewDiaryRobot()
 
-    @And("^add title with '(.*)'$")
+    @And("add title with {string}")
     fun addDiaryTitle(title: String){
         addNewDiaryRobot.titleTextField.type(title)
     }
 
-    @And("^add description with '(.*)'$")
+    @And("add description with {string}")
     fun addDiaryDescription(description: String){
         addNewDiaryRobot.descTextField.type(description)
     }
 
-    @And("^add tag with '(.*)'$")
+    @And("add tag with {string}")
     fun addDiaryTag(tag: String){
         addNewDiaryRobot.tagDropdown.chooseTag(tag)
     }
 
-    @And("^click save new diary$")
+    @And("click save new diary")
     fun clickSaveNewDiaryIcon(){
         addNewDiaryRobot.saveButton.performClick()
     }
 
-    @And("^confirm to save new diary$")
+    @And("confirm to save new diary")
     fun confirmToSaveNewDiary(){
         addNewDiaryRobot.confirmSaveDialog.confirmButton.performClick()
     }

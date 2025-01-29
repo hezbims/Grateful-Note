@@ -2,7 +2,7 @@
 Feature: Main Home - Edit Diary
 
   Background:
-    Given the user have "50" minimal diaries
+    Given the user have 50 minimal diaries
     And user start the app
 
   Scenario: Edited Diary Must Be Visible on Top After Editing

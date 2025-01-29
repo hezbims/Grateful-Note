@@ -1,7 +1,7 @@
 @base_rule
 Feature: Main Home - Add Diary
   Background:
-    Given the user have "5" minimal diaries
+    Given the user have 5 minimal diaries
     And user start the app
   Scenario: Diary Data Should Added Correctly
     When user click add new diary button
@@ -11,7 +11,7 @@ Feature: Main Home - Add Diary
     And click save new diary
     And confirm to save new diary
     Then the 1-th diary in main home is titled 'New Title'
-    And the '1'-th diary has tag 'Serenity'
+    And the 1-th diary has tag 'Serenity'
     And there is '6' diaries in database
     And there is exactly one diary with:
       |title     | desc     | tag      | isFavorite | createdAt           | updatedAt           |

@@ -33,9 +33,9 @@ class MainHomeSteps {
         }
     }
 
-    @And("^the '(.*)'-th diary has tag '(.*)'$")
-    fun assertNthDiaryEmotionTag(n: String, expectedTag: String){
-        val index = n.toInt() - 1
+    @And("the {int}-th diary has tag {string}")
+    fun assertNthDiaryEmotionTag(n: Int, expectedTag: String){
+        val index = n - 1
         mainHomeRobot.diaryList.apply {
             waitUntilItemCountAtLeast(index + 1)
             scrollToIndex(index)
@@ -46,10 +46,10 @@ class MainHomeSteps {
         }
     }
 
-    @When("^the user click the delete icon at the '(.*)'-th diary with title '(.*)'$")
-    fun clickDeleteIcon(n: String, title: String){
+    @When("the user click the delete icon at the {int}-th diary with title {string}")
+    fun clickDeleteIcon(n: Int, title: String){
         mainHomeRobot.diaryList.apply {
-            val index = n.toInt() - 1
+            val index = n - 1
 
             scrollToIndex(index)
             assertTitleAtIndex(index = index, title = title)
@@ -59,12 +59,12 @@ class MainHomeSteps {
         }
     }
 
-    @And("^confirm the diary deletion$")
+    @And("confirm the diary deletion")
     fun confirmTheDiaryDeletion(){
         mainHomeRobot.confirmDeleteDialog.confirmDeletion()
     }
 
-    @When("^user click add new diary button$")
+    @When("user click add new diary button")
     fun clickAddNewDiaryButton(){
         mainHomeRobot.addNewDiaryButton.performClick()
     }

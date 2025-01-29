@@ -24,7 +24,7 @@ class DatabaseAssertionSteps {
     @Inject
     lateinit var timeProvider: ITimeProvider
 
-    @And("^diary titled '(.*)' will not be exist in the database$")
+    @And("diary titled {string} will not be exist in the database")
     fun diaryWillNotExistInTheDatabase(diaryTitle: String) = runTest {
         assertThat(diaryDao.getDiaries(SimpleSQLiteQuery(
             "SELECT * FROM positive_emotion_table " +
@@ -32,7 +32,7 @@ class DatabaseAssertionSteps {
         )), `is`(empty()))
     }
 
-    @And("^there is '(.*)' diaries in database$")
+    @And("there is {string} diaries in database")
     fun assertTotalDiaries(total: String) = runBlocking {
         val totalInt = total.toInt()
         assertThat(diaryDao.getDiaries(SimpleSQLiteQuery(

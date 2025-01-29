@@ -14,7 +14,7 @@ class AppStartupSteps(private val startupRule: BaseInstrumentedTestRule) {
     lateinit var diarySeeder : DiarySeeder
 
 
-    @Given("^the user have \"([^\"]*)\" minimal diaries$")
+    @Given("the user have {int} minimal diaries")
     fun theUserHaveDiaries(totalDiaries: Int) = runBlocking {
         diarySeeder.executeMinimal(totalDiaries)
     }
