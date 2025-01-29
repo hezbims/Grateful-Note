@@ -4,6 +4,7 @@ import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.cucumber.java.en.And
+import io.cucumber.java.en.Then
 
 @HiltAndroidTest
 class EditDiarySteps {
@@ -30,5 +31,15 @@ class EditDiarySteps {
     fun goBackAfterEditDiary(){
         editDiaryRobot.pressBack()
         mainHomeRobot.waitUntilScreenAppear()
+    }
+
+    @Then("^the diary title in edit screen is '(.*)'$")
+    fun assertDiaryTitle(expectedTitle: String){
+        editDiaryRobot.titleTextField.assertContent(expectedTitle)
+    }
+
+    @And("^the diary description in edit screen is '(.*)'$")
+    fun assertDiaryDescription(expectedDescription: String){
+        editDiaryRobot.descTextField.assertContent(expectedDescription)
     }
 }

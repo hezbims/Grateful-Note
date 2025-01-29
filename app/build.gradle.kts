@@ -38,7 +38,7 @@ android {
         versionName = "2.0"
 
         // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        // testInstrumentationRunner = "com.example.gratefulnote.runner.HiltTestRunner"
+//         testInstrumentationRunner = "com.example.gratefulnote.runner.HiltTestRunner"
         testInstrumentationRunner = "com.example.gratefulnote.debug.test.MyCucumberRunner"
     }
 

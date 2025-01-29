@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.gratefulnote.common.diary.domain.model.FilterState
@@ -62,6 +63,9 @@ interface DiaryDao {
 
     @Update
     suspend fun update(diary: Diary)
+
+    @Upsert
+    suspend fun saveDiary(diary: Diary)
 
     @Transaction
     suspend fun restoreDiaries(listDiaries : List<Diary>){

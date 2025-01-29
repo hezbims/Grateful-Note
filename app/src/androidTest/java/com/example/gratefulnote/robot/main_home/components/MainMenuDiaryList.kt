@@ -46,4 +46,11 @@ class MainMenuDiaryList(matcher: Matcher<View>) : EspressoInteractor(matcher) {
             index
         ))
     }
+
+    fun assertTagAtIndex(index: Int, tag: String){
+        onView(viewMatcher).check(itemMatchAtIndex(
+            allOf(withId(R.id.tipe), withText(tag)),
+            index
+        ))
+    }
 }

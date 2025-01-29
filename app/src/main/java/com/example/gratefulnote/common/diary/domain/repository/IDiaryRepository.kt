@@ -2,6 +2,7 @@ package com.example.gratefulnote.common.diary.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.example.gratefulnote.common.diary.domain.model.DiaryDetails
+import com.example.gratefulnote.common.diary.domain.model.DiaryUserInput
 import com.example.gratefulnote.common.diary.domain.model.FilterState
 import com.example.gratefulnote.common.domain.ResponseWrapper
 import com.example.gratefulnote.common.general.domain.model.PagingResult
@@ -22,6 +23,11 @@ interface IDiaryRepository {
     suspend fun toogleIsFavorite(id: Long) : Flow<ResponseWrapper<Unit>>
 
     suspend fun updateDetails(data: DiaryDetails) : Flow<ResponseWrapper<Unit>>
+
+    /**
+     * Update or insert diary
+     */
+    suspend fun saveDiary(data: DiaryUserInput) : Flow<ResponseWrapper<Unit>>
 
     suspend fun delete(id: Long) : Flow<ResponseWrapper<Unit>>
 

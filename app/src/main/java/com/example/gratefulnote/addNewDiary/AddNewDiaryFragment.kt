@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.gratefulnote.R
 import com.example.gratefulnote.common.presentation.ConfirmDialog
-import com.example.gratefulnote.database.Diary
 import com.example.gratefulnote.databinding.FragmentAddNewDiaryBinding
 import com.example.gratefulnote.mainMenu.presentation.logic.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,12 +86,11 @@ class AddNewDiaryFragment : Fragment() {
         ){
             _ , bundle ->
             if (bundle.getBoolean(getString(R.string.confirm_add_save_value_key))) {
-                val newData = Diary(
-                    type = binding.emotionTypeSpinner.selectedItem.toString(),
-                    what = binding.whatValue.text.toString(),
-                    why = binding.whyValue.text.toString()
+                viewModel.insert(
+                    title = binding.whatValue.text.toString(),
+                    description = binding.whyValue.text.toString(),
+                    tag = binding.emotionTypeSpinner.selectedItem.toString(),
                 )
-                viewModel.insert(newData)
             }
         }
     }

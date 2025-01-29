@@ -5,8 +5,10 @@ import com.example.gratefulnote.common.diary.data.cqrs.DeleteDiary
 import com.example.gratefulnote.common.diary.data.cqrs.GetDiaryDetails
 import com.example.gratefulnote.common.diary.data.cqrs.GetDistinctYears
 import com.example.gratefulnote.common.diary.data.cqrs.GetPreviewDiaries
+import com.example.gratefulnote.common.diary.data.cqrs.SaveDiary
 import com.example.gratefulnote.common.diary.data.cqrs.UpdateDiaryDetails
 import com.example.gratefulnote.common.diary.domain.model.DiaryDetails
+import com.example.gratefulnote.common.diary.domain.model.DiaryUserInput
 import com.example.gratefulnote.common.diary.domain.model.FilterState
 import com.example.gratefulnote.common.diary.domain.repository.IDiaryRepository
 import com.example.gratefulnote.common.domain.ResponseWrapper
@@ -22,6 +24,7 @@ class DiaryRepositoryImpl @Inject constructor(
     private val getDiaryDetails: GetDiaryDetails,
     private val updateDiaryDetails: UpdateDiaryDetails,
     private val deleteDiary: DeleteDiary,
+    private val saveDiary: SaveDiary,
 ) : IDiaryRepository {
     override suspend fun getPreviewDiary(
         filterState: FilterState,
@@ -58,6 +61,9 @@ class DiaryRepositoryImpl @Inject constructor(
             emit(ResponseWrapper.Error())
         }
     }
+
+    override suspend fun saveDiary(data: DiaryUserInput) =
+        saveDiary.execute(data)
 
     override suspend fun delete(id: Long): Flow<ResponseWrapper<Unit>> =
         deleteDiary.execute(id)

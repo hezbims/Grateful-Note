@@ -10,4 +10,9 @@ Feature: Main Home - Edit Diary
     And edit title with 'Title updated'
     And edit desc with 'desc updated'
     And user go back after edit the diary
-    Then the '1'-th diary in main home is titled 'Title updated'
+    Then the 1-th diary in main home is titled "Title updated"
+
+  Scenario: Diary Data Shouldn't Edited
+    When the user try edit the '25'-th diary with title 'what-26'
+    And user go back after edit the diary
+    Then the 25-th diary in main home is titled "what-26"
