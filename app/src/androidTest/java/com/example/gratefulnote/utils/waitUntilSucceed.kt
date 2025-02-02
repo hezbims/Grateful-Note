@@ -9,6 +9,7 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 suspend fun waitUntilSucceed(
     maxIteration : Int = 5,
+    tag: String? = null,
     body : () -> Unit,
 ) {
     var currentIteration = 1
@@ -18,7 +19,9 @@ suspend fun waitUntilSucceed(
             break
         } catch (t : Throwable) {
             if (currentIteration++ == maxIteration)
-                throw RuntimeException("Terlalu lama menunggu")
+                throw RuntimeException("Terlalu lama menunggu${ 
+                    tag?.let { " : $it" } ?: ""
+                }")
             delay(250.milliseconds)
         }
     }

@@ -21,3 +21,10 @@ Feature: Main Home - Edit Diary
     When the user go to edit the 2-th diary with title 'what-49'
     Then the diary title in edit screen is 'what-49'
     And the diary description in edit screen is 'why-49'
+
+  Scenario: Toggle Favorite Icon Should Make Diary As Favorite
+    When toggle favorite icon of 2-th diary with title 'what-49'
+    Then 2-th diary with title 'what-49' should have active favorite icon
+    And there is exactly one diary with:
+      | title   | isFavorite |
+      | what-49 | true       |

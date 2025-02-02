@@ -29,12 +29,14 @@ class DiaryPreviewViewHolder(
                 clickListener.onClickFavorite(emotion)
             }
             binding.favoriteSymbol.apply {
-                val nextDrawableId =
-                    if (emotion.isFavorite)
-                        R.drawable.ic_baseline_yellow_star
-                    else
-                        R.drawable.ic_outline_star_border
+                val nextDrawableId : Int =
+                if (emotion.isFavorite)
+                    R.drawable.ic_baseline_yellow_star
+                else
+                    R.drawable.ic_outline_star_border
+
                 setImageResource(nextDrawableId)
+                tag = nextDrawableId
             }
             binding.deleteDiaryIcon.setOnClickListener {
                 clickListener.onClickDelete(emotion)

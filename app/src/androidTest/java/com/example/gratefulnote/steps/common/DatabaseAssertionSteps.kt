@@ -12,9 +12,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.`is`
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -42,38 +39,37 @@ class DatabaseAssertionSteps {
 
     @And("there is exactly one diary with:")
     fun assertDiaries(dataTable: DataTable) = runBlocking {
-        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").apply {
-            timeZone = timeProvider.getCurrentTimezone()
-        }
         dataTable.asMaps().forEach { rawDiary ->
-            val expectedTitle = rawDiary["title"]
-            val expectedDescription = rawDiary["desc"]
-            val expectedTag = rawDiary["tag"]
-            val expectedIsFavorite = rawDiary["isFavorite"].toBoolean()
-            val expectedCreatedAt = rawDiary["createdAt"]
-            val expectedUpdatedAt = rawDiary["updatedAt"]
+            val expectedTitle : String? = rawDiary["title"]
+            val expectedDescription : String? = rawDiary["desc"]
+            val expectedTag : String? = rawDiary["tag"]
+            val expectedIsFavorite : Int? = rawDiary["isFavorite"]?.let {
+                when(it){
+                    "true" -> 1
+                    "false" -> 0
+                    else -> throw RuntimeException("isFavorite salah tulis")
+                }
+            }
+            val expectedCreatedAt : String? = rawDiary["createdAt"]
+            val expectedUpdatedAt : String? = rawDiary["updatedAt"]
+
+            val query = StringBuilder("SELECT * FROM positive_emotion_table WHERE 1 = 1 ")
+            if (expectedTitle != null)
+                query.append("AND what = '$expectedTitle' ")
+            if (expectedDescription != null)
+                query.append("AND why = '$expectedDescription' ")
+            if (expectedTag != null)
+                query.append("AND type = '$expectedTag' ")
+            if (expectedIsFavorite != null)
+                query.append("AND is_favorite = $expectedIsFavorite ")
+            if (expectedCreatedAt != null)
+                query.append("AND strftime('%Y-%m-%dT%H:%M:%S', created_at / 1000, 'unixepoch', '+0 hours') = '$expectedCreatedAt' ")
+            if (expectedUpdatedAt != null)
+                query.append("AND strftime('%Y-%m-%dT%H:%M:%S', updated_at / 1000, 'unixepoch', '+0 hours') = '$expectedUpdatedAt' ")
 
             assertThat(diaryDao.getDiaries(SimpleSQLiteQuery(
-                "SELECT * FROM positive_emotion_table "
-            )).filter { diary ->
-                val createdAtStr = diary.createdAt.toTestDateString(formatter)
-                val updatedAtStr = diary.updatedAt.toTestDateString(formatter)
-
-                diary.what == expectedTitle &&
-                diary.why == expectedDescription &&
-                diary.type == expectedTag &&
-                diary.isFavorite == expectedIsFavorite &&
-                createdAtStr == expectedCreatedAt &&
-                updatedAtStr == expectedUpdatedAt
-            }, hasSize(1))
-        }
-    }
-
-    private fun Long.toTestDateString(format: DateFormat) : String {
-        return with(Calendar.getInstance()){
-            timeZone = timeProvider.getCurrentTimezone()
-            timeInMillis = this@toTestDateString
-            format.format(this.time)
+                query.toString()
+            )), hasSize(1))
         }
     }
 }

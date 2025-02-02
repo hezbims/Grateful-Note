@@ -77,8 +77,10 @@ class MainViewModel @Inject constructor(
 
     fun onToogleIsFavorite(id: Long){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.toogleIsFavorite(id)
-            refreshDiaryList()
+            repository.toogleIsFavorite(id).collect { response ->
+                if (response is ResponseWrapper.Succeed)
+                    refreshDiaryList()
+            }
         }
     }
 

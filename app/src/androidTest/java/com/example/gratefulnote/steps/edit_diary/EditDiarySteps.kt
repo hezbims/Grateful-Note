@@ -1,10 +1,12 @@
 package com.example.gratefulnote.steps.edit_diary
 
+import com.example.gratefulnote.R
 import com.example.gratefulnote.robot.edit_screen.EditScreenRobot
 import com.example.gratefulnote.robot.main_home.MainHomeRobot
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 
 @HiltAndroidTest
 class EditDiarySteps {
@@ -41,5 +43,18 @@ class EditDiarySteps {
     @And("the diary description in edit screen is {string}")
     fun assertDiaryDescription(expectedDescription: String){
         editDiaryRobot.descTextField.assertContent(expectedDescription)
+    }
+
+    @When("toggle favorite icon of {int}-th diary with title {string}")
+    fun toogleFavoriteIcon(n : Int, title: String){
+        mainHomeRobot.diaryList.apply {
+            val index = n - 1
+            scrollToIndex(index)
+            assertTitleAtIndex(title = title, index = index)
+            getDiaryCardWithTitle(title).favoriteIcon.apply {
+                assertTag(R.drawable.ic_outline_star_border)
+                performClick()
+            }
+        }
     }
 }

@@ -17,4 +17,9 @@ class DiaryCard(matcher: Matcher<View>) : EspressoInteractor(matcher) {
         ViewMatchers.isDescendantOfA(this.viewMatcher),
         ViewMatchers.withId(R.id.delete_diary_icon)
     ))
+
+    val favoriteIcon = EspressoInteractor(allOf(
+        ViewMatchers.isDescendantOfA(this.viewMatcher),
+        ViewMatchers.withId(R.id.favorite_symbol)
+    ))
 }

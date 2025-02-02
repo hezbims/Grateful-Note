@@ -6,6 +6,7 @@ import com.example.gratefulnote.common.diary.data.cqrs.GetDiaryDetails
 import com.example.gratefulnote.common.diary.data.cqrs.GetDistinctYears
 import com.example.gratefulnote.common.diary.data.cqrs.GetPreviewDiaries
 import com.example.gratefulnote.common.diary.data.cqrs.SaveDiary
+import com.example.gratefulnote.common.diary.data.cqrs.ToggleFavoriteDiary
 import com.example.gratefulnote.common.diary.data.cqrs.UpdateDiaryDetails
 import com.example.gratefulnote.common.diary.domain.model.DiaryDetails
 import com.example.gratefulnote.common.diary.domain.model.DiaryUserInput
@@ -25,6 +26,8 @@ class DiaryRepositoryImpl @Inject constructor(
     private val updateDiaryDetails: UpdateDiaryDetails,
     private val deleteDiary: DeleteDiary,
     private val saveDiary: SaveDiary,
+    private val toggleFavoriteDiary: ToggleFavoriteDiary,
+
 ) : IDiaryRepository {
     override suspend fun getPreviewDiary(
         filterState: FilterState,
@@ -47,9 +50,8 @@ class DiaryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun toogleIsFavorite(id: Long): Flow<ResponseWrapper<Unit>> {
-        throw NotImplementedError()
-    }
+    override suspend fun toogleIsFavorite(id: Long) =
+        toggleFavoriteDiary.execute(id)
 
     override suspend fun updateDetails(data: DiaryDetails): Flow<ResponseWrapper<Unit>> = flow {
         emit(ResponseWrapper.Loading())
