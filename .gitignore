@@ -10,6 +10,7 @@
 
 /.idea/
 key.properties
+.kotlin
 
 .DS_Store
 /build
